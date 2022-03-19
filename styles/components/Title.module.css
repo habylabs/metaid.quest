@@ -1,0 +1,37 @@
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8vmin;
+  padding-bottom: 4vmin;
+}
+
+.titleHeaderText {
+  text-align: center;
+  font-size: 3.75rem;
+  color: #FFF;
+  font-weight: 400;
+}
+
+.titleDescription100 {
+  width: 100%;
+  line-height: 1.75rem;
+}
+
+.titleDescription75 {
+  width: 75%;
+  line-height: 2rem;
+}
+
+.titleDescription50 {
+  width: 50%;
+  line-height: 2rem;
+}
+
+.titleDescriptionText {
+  margin-bottom: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #BFBFBF;
+}
+

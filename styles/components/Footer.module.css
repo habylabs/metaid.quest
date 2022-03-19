@@ -1,0 +1,100 @@
+/* General Classes */
+
+.appFooter {
+  background-color: #000;
+  justify-content: space-between;
+  padding-top: 8vmin;
+  padding-bottom: 8vmin;
+}
+
+/* Styling for left half of footer */
+
+.footerLeftSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.footerLeftSectionColumnPadding {
+  padding-top: 4vmax;
+}
+
+.footerLeftSectionTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.habyLabsLogo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.habyLogoFooterSvg {
+  display: block;
+  width: 4vmin;
+}
+
+.habyLogoText {
+  font-size: 2rem;
+  padding-left: 0.4em;
+  color: #FFF;
+}
+
+.habyDescription {
+  color: #FFF;
+  font-size: 1rem;
+  padding-top: 1.5vmin;
+}
+
+.copyright {
+  color: #aaa;
+  font-size: 1rem;
+  padding-top: 2vmax;
+}
+
+/* Styling for right half of footer */
+
+.footerRightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.footerRightSectionLinks {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 2vmax;
+}
+
+.footerLink {
+  padding-bottom: 1vmin;
+}
+
+.footerButtonsRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.footerIconButton {
+  border: 1px solid rgba(244, 102, 146, 0.6);
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 1em;
+  padding: 0.8em;
+}
+
+.footerIconButtonLink {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footerSvg {
+  width: 40%;
+}

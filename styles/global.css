@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inconsolata:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Inconsolata', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.serif-font {
+  font-family: 'EB Garamond', serif;
+}
+
+.monospace-font {
+  font-family: 'Inconsolata', monospace;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.link {
+  color: #bb7a8e;
+  text-decoration: none;
+}
+
+.link.inactive:hover{
+  color: #bb7a8e;
+}
+
+.link:hover {
+  color: #4753d6;
+}
+
+.side-padding {
+  padding-left: 8vmax;
+  padding-right: 8vmax;
+}
+
+.side-padding-mobile {
+  padding-left: 4vmax;
+  padding-right: 4vmax;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.white-text {
+  color: #FFF;
+}

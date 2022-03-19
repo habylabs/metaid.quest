@@ -1,0 +1,48 @@
+.ctaButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.enabledButtonPointer {
+  cursor: pointer;
+}
+
+.disabledButtonPointer {
+  cursor: auto;
+}
+
+.large {
+  padding: 1vmax 2vmax;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.small {
+  padding: 0.5vmin 1vmax;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.primary {
+  background-color: rgb(250,88,83);
+  background-image: linear-gradient(90deg, rgba(250,88,83,1) 0%, rgba(244,102,146,1) 50%, rgba(255,196,68,1) 100%);
+  border: none;
+  color: #FFF;
+}
+
+.outline {
+  background-color: #000;
+  border-width: 1px;
+  border-color: #BFBFBF;
+  border-style: solid;
+  color: #BFBFBF;
+}
+
+.disabled {
+  background-color: #999;
+  color: #FFF;
+  border: none;
+}
