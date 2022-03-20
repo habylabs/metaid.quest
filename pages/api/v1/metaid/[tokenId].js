@@ -7,6 +7,45 @@ import {
   getNFTCount,
 } from "../../../../util/alchemy"
 
+// Characteristics of Token URI
+// Name (Meta ID #xx)
+// Description (taken from copy)
+// Image (SVG created using information from below)
+// Animation (SVG with animation created using information from below)
+
+// Attributes
+// * Identity
+// - Race
+// - Role
+// - Element Affinity
+
+// * Equipment (should use same attributes style as Loot)
+// - Weapon
+// - Chest Armor
+// - Head Armor
+// - Waist Armor
+// - Foot Armor
+// - Hand Armor
+// - Necklace
+// - Ring
+
+// * Stats (Pull base stats using Alchemy API and then add based on Identity and Equipment)
+// - Level
+// - HP
+// - MP
+// - baseSTR
+// - bonusSTR
+// - baseDEX
+// - bonusDEX
+// - baseCON
+// - bonusCON
+// - baseINT
+// - bonusINT
+// - baseWIS
+// - bonusWIS
+// - baseCHA
+// - bonusCHA
+
 function logCalc(t, multiple = 1) {
   const logx = Math.log2(t + 1)
   return Math.round(multiple * Math.pow(logx, 2)) + 5
