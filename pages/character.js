@@ -9,7 +9,7 @@ import {
 import styles from '../styles/pages/index.module.css';
 
 
-export default function Home() {
+export default function Character() {
   const [windowReady, setWindowReady] = useState(false);
 
   useEffect(() => {

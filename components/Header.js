@@ -13,10 +13,13 @@ function Header() {
     >
       <div>
         <Link href='/'>
-          <a className={styles.headerLink}>Loot Adventure</a>
+          <a className={styles.headerLink}>Meta ID</a>
         </Link>
       </div>
       <div>
+        <Link href='/character'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
+        </Link>
         <Link href='/stats'>
           <a className={`${styles.headerLink} ${styles.navLink}`}>Stats</a>
         </Link>

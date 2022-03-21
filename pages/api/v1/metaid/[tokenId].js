@@ -1,12 +1,3 @@
-import {
-  get6mBlock,
-  getFirstTx,
-  getFromTx,
-  getToTx,
-  getTokens,
-  getNFTCount,
-} from "../../../../util/alchemy"
-
 // Characteristics of Token URI
 // Name (Meta ID #xx)
 // Description (taken from copy)
@@ -46,80 +37,208 @@ import {
 // - baseCHA
 // - bonusCHA
 
-function logCalc(t, multiple = 1) {
-  const logx = Math.log2(t + 1)
-  return Math.round(multiple * Math.pow(logx, 2)) + 5
-}
+import {
+  getTokenByTokenId
+} from "../../../../util/db"
 
-function getSTR(fromTx) {
-  return logCalc(fromTx.length)
-}
-
-function getDEX(tokens) {
-  const ownedTokens = tokens.filter(({ tokenBalance }) => parseInt(tokenBalance, 16) > 0)
-  return logCalc(ownedTokens.length, 2)
-}
-
-function getCON(toTx) {
-  return logCalc(toTx.length)
-}
-
-function getINT(nftCount) {
-  return logCalc(nftCount)
-}
-
-function getWIS(firstTx, fromTx, toTx) {
-  if (firstTx) {
-    const latestFromTx = fromTx.length > 0 ? fromTx[fromTx.length - 1].blockNum : 0
-    const latestToTx = toTx.length > 0 ? toTx[toTx.length - 1].blockNum : 0
-
-    const latestFromTxInt = parseInt(latestFromTx, 16)
-    const latestToTxInt = parseInt(latestToTx, 16)
-
-    const latestTx = (latestFromTxInt > latestToTxInt) ? latestFromTxInt : latestToTxInt
-
-    const blockDiff = latestTx - parseInt(firstTx.blockNum, 16)
-    return logCalc(blockDiff / 10000)
+function parseDb(db) {
+  return {
+    identity: {
+      race: db.race,
+      role: db.role,
+      element: db.element
+    },
+    equipment: {
+      weapon: db.weapon,
+      chestArmor: db["chest_armor"],
+      headArmor: db["head_armor"],
+      waistArmor: db["waist_armor"],
+      footArmor: db["foot_armor"],
+      handAmor: db["hand_armor"],
+      necklace: db.necklace,
+      ring: db.ring
+    },
+    baseStats: {
+      str: db["base_str"],
+      dex: db["base_dex"],
+      con: db["base_con"],
+      int: db["base_int"],
+      wis: db["base_wis"],
+      cha: db["base_cha"],
+    }
   }
-  
-  return logCalc(0)
 }
 
-function getCHA(fromTx, toTx) {
-  const toAddresses = fromTx.map(tx => tx.to);
-  const fromAddresses = toTx.map(tx => tx.from);
+function getEquipmentBonus(item) {
+  if (item) {
+    if (item.includes("of")) {
+      if (item.startsWith("\"")) {
+        if (item.includes("+1")) {
+          return 10
+        }
+        return 8
+      }
+      return 6
+    }
+    return 4
+  }
+  return 0
+}
 
-  const dedupAddresses = [...new Set([...toAddresses, ...fromAddresses])];
-  return logCalc(dedupAddresses.length)
+function getBonusStats(identity, equipment) {
+  const { 
+    weapon,
+    chestArmor,
+    headArmor,
+    waistArmor,
+    footArmor,
+    handAmor,
+    necklace,
+    ring
+  } = equipment
+
+  return {
+    str: getEquipmentBonus(weapon),
+    dex: getEquipmentBonus(footArmor) + getEquipmentBonus(handAmor),
+    con: getEquipmentBonus(chestArmor),
+    int: getEquipmentBonus(headArmor),
+    wis: getEquipmentBonus(waistArmor),
+    cha: getEquipmentBonus(necklace) + getEquipmentBonus(ring),
+  }
+}
+
+function getLevel({ str, dex, con, int, wis, cha }) {
+  return Math.round((str + dex + con + int + wis + cha) / 6) - 4
+}
+
+function getHP(baseStats, bonusStats) {
+  const baseSum = baseStats.str + baseStats.dex + baseStats.con
+  const bonusSum = bonusStats.str + bonusStats.dex + bonusStats.con
+  return 10 * (baseSum + bonusSum) + 50
+}
+
+function getMP(baseStats, bonusStats) {
+  const baseSum = baseStats.int + baseStats.wis + baseStats.cha
+  const bonusSum = bonusStats.int + bonusStats.wis + bonusStats.cha
+  return 10 * (baseSum + bonusSum) + 50
 }
 
 export default async function handler(req, res) {
-  const { address } = req.query
-  const firstTx = await getFirstTx(address)
-  const fromBlock = await get6mBlock()
-  const fromTx = await getFromTx(fromBlock, address)
-  const toTx = await getToTx(fromBlock, address)
-  const tokens = await getTokens(address)
-  const nftCount = await getNFTCount(address)
+  const { tokenId } = req.query
+  const db = await getTokenByTokenId(parseInt(tokenId))
+  const { identity, equipment, baseStats } = parseDb(db) 
+  const bonusStats = getBonusStats(identity, equipment)
 
-  const STR = getSTR(fromTx)
-  const DEX = getDEX(tokens)
-  const CON = getCON(toTx)
-  const INT = getINT(nftCount)
-  const WIS = getWIS(firstTx, fromTx, toTx)
-  const CHA = getCHA(fromTx, toTx)
-
-  const ability = {
-    LVL: Math.round((STR + DEX + CON + INT + WIS + CHA) / 6) - 4,
-    HP: 10 * (STR + DEX + CON) + 50,
-    MP: 10 * (INT + WIS + CHA) + 50,
-    STR,
-    DEX,
-    CON,
-    INT,
-    WIS,
-    CHA
-  }
-
-  res.status(200).json({ address: ability })
+  return res.status(200).json({
+    name: `Meta ID #${tokenId}`,
+    description: `Meta ID #${tokenId}`,
+    image: "",
+    animation: "",
+    attributes: [
+      {
+        "trait_type": "Race",
+        "value": identity.race
+      },
+      {
+        "trait_type": "Role",
+        "value": identity.role
+      },
+      {
+        "trait_type": "Element",
+        "value": identity.element
+      },
+      {
+        "trait_type": "Weapon",
+        "value": equipment.weapon
+      },
+      {
+        "trait_type": "Chest Armor",
+        "value": equipment.chestArmor
+      },
+      {
+        "trait_type": "Head Armor",
+        "value": equipment.headArmor
+      },
+      {
+        "trait_type": "Waist Armor",
+        "value": equipment.waistArmor
+      },
+      {
+        "trait_type": "Foot Armor",
+        "value": equipment.footArmor
+      },
+      {
+        "trait_type": "Hand Armor",
+        "value": equipment.handAmor
+      },
+      {
+        "trait_type": "Necklace",
+        "value": equipment.necklace
+      },
+      {
+        "trait_type": "Ring",
+        "value": equipment.ring
+      },
+      {
+        "trait_type": "Level",
+        "value": getLevel(baseStats)
+      },
+      {
+        "trait_type": "HP",
+        "value": getHP(baseStats, bonusStats)
+      },
+      {
+        "trait_type": "MP",
+        "value": getMP(baseStats, bonusStats)
+      },
+      {
+        "trait_type": "Base STR",
+        "value": baseStats.str
+      },
+      {
+        "trait_type": "Bonus STR",
+        "value": bonusStats.str
+      },
+      {
+        "trait_type": "Base DEX",
+        "value": baseStats.dex
+      },
+      {
+        "trait_type": "Bonus DEX",
+        "value": bonusStats.dex
+      },
+      {
+        "trait_type": "Base CON",
+        "value": baseStats.con
+      },
+      {
+        "trait_type": "Bonus CON",
+        "value": bonusStats.con
+      },
+      {
+        "trait_type": "Base INT",
+        "value": baseStats.int
+      },
+      {
+        "trait_type": "Bonus INT",
+        "value": bonusStats.int
+      },
+      {
+        "trait_type": "Base WIS",
+        "value": baseStats.wis
+      },
+      {
+        "trait_type": "Bonus WIS",
+        "value": bonusStats.wis
+      },
+      {
+        "trait_type": "Base CHA",
+        "value": baseStats.cha
+      },
+      {
+        "trait_type": "Bonus CHA",
+        "value": bonusStats.cha
+      },
+    ]
+  })
 }

@@ -30,7 +30,7 @@ function Stats() {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`api/v1/stats/${account}`)
+    fetch(`api/v1/metaid/${account}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data)
