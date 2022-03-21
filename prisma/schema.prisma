@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model token {
+  id              Int       @default(autoincrement()) @id
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  token_id        Int
+  owner_address   String
+  pfp_contract    String
+  pfp_id          Int
+  pfp_img         String
+  race            String
+  role            String
+  element         String
+  equip_contract  String
+  equip_id        Int
+  weapon          String
+  chest_armor     String
+  head_armor      String
+  waist_armor     String
+  foot_armor      String
+  hand_armor      String
+  necklace        String
+  ring            String
+  base_str        Int
+  base_dex        Int
+  base_con        Int
+  base_int        Int
+  base_wis        Int
+  base_cha        Int
+}
