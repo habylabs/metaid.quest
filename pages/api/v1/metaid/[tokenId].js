@@ -41,9 +41,14 @@ import {
   getTokenByTokenId
 } from "../../../../util/db"
 
+import {
+  getImage
+} from "../../../../util/image"
+
 function parseDb(db) {
   return {
     identity: {
+      image: db["pfp_img"],
       race: db.race,
       role: db.role,
       element: db.element
@@ -132,8 +137,7 @@ export default async function handler(req, res) {
   return res.status(200).json({
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
-    image: "",
-    animation: "",
+    image: getImage(identity, equipment, baseStats, bonusStats),
     attributes: [
       {
         "trait_type": "Race",
