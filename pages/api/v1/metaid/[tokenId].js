@@ -1,4 +1,5 @@
-// Characteristics of Token URI
+// Characteristics of Token URI:
+
 // Name (Meta ID #xx)
 // Description (taken from copy)
 // Image (SVG created using information from below)
@@ -6,6 +7,10 @@
 
 // Attributes
 // * Identity
+// - Name (ENS)
+// - Guild
+// - PFP ID
+// - Character ID
 // - Race
 // - Role
 // - Element Affinity

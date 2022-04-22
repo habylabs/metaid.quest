@@ -14,14 +14,18 @@ model token {
   id              Int       @default(autoincrement()) @id
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  token_id        Int       @unique
+  token_id        Int       @unique // This is the ID provided by the contract when minted
   owner_address   String
   pfp_contract    String
   pfp_id          Int
   pfp_img         String
-  race            String
-  role            String
-  element         String
+  pfp_race        String
+  pfp_role        String
+  pfp_element     String
+  char_id         Int
+  char_race       String
+  char_role       String
+  char_element    String
   equip_contract  String
   equip_id        Int
   weapon          String
