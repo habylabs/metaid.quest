@@ -46,16 +46,42 @@ import {
 } from "../../../../util/db"
 
 import {
-  getImage
+  getContractImage
 } from "../../../../util/image"
+
+import {
+  getGuild,
+  getId,
+  getRace,
+  getRole,
+  getElement
+} from "../../../../util/identity"
+
+import {
+  getBonusStats,
+  getLevel,
+  getHP,
+  getMP
+} from "../../../../util/stats"
 
 function parseDb(db) {
   return {
     identity: {
-      image: db["pfp_img"],
-      race: db.race,
-      role: db.role,
-      element: db.element
+      name: db["ens_name"],
+      pfp: {
+        contract: db["pfp_contract"],
+        id: db["pfp_id"],
+        image: db["pfp_img"],
+        race: db["pfp_race"],
+        role: db["pfp_role"],
+        element: db["pfp_element"]
+      },
+      character: {
+        id: db["char_id"],
+        race: db["char_race"],
+        role: db["char_role"],
+        element: db["char_element"]
+      },
     },
     equipment: {
       weapon: db.weapon,
@@ -78,60 +104,6 @@ function parseDb(db) {
   }
 }
 
-function getEquipmentBonus(item) {
-  if (item) {
-    if (item.includes("of")) {
-      if (item.startsWith("\"")) {
-        if (item.includes("+1")) {
-          return 10
-        }
-        return 8
-      }
-      return 6
-    }
-    return 4
-  }
-  return 0
-}
-
-function getBonusStats(identity, equipment) {
-  const { 
-    weapon,
-    chestArmor,
-    headArmor,
-    waistArmor,
-    footArmor,
-    handAmor,
-    necklace,
-    ring
-  } = equipment
-
-  return {
-    str: getEquipmentBonus(weapon),
-    dex: getEquipmentBonus(footArmor) + getEquipmentBonus(handAmor),
-    con: getEquipmentBonus(chestArmor),
-    int: getEquipmentBonus(headArmor),
-    wis: getEquipmentBonus(waistArmor),
-    cha: getEquipmentBonus(necklace) + getEquipmentBonus(ring),
-  }
-}
-
-function getLevel({ str, dex, con, int, wis, cha }) {
-  return Math.round((str + dex + con + int + wis + cha) / 6) - 4
-}
-
-function getHP(baseStats, bonusStats) {
-  const baseSum = baseStats.str + baseStats.dex + baseStats.con
-  const bonusSum = bonusStats.str + bonusStats.dex + bonusStats.con
-  return 10 * (baseSum + bonusSum) + 50
-}
-
-function getMP(baseStats, bonusStats) {
-  const baseSum = baseStats.int + baseStats.wis + baseStats.cha
-  const bonusSum = bonusStats.int + bonusStats.wis + bonusStats.cha
-  return 10 * (baseSum + bonusSum) + 50
-}
-
 export default async function handler(req, res) {
   const { tokenId } = req.query
   const db = await getTokenByTokenId(parseInt(tokenId))
@@ -141,19 +113,31 @@ export default async function handler(req, res) {
   return res.status(200).json({
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
-    image: getImage(identity, equipment, baseStats, bonusStats),
+    image: getContractImage(identity, equipment, baseStats, bonusStats),
     attributes: [
       {
+        "trait_type": "Name",
+        "value": identity.name
+      },
+      {
+        "trait_type": "Guild",
+        "value": getGuild(identity)
+      },
+      {
+        "trait_type": "ID",
+        "value": getId(identity)
+      },
+      {
         "trait_type": "Race",
-        "value": identity.race
+        "value": getRace(identity)
       },
       {
         "trait_type": "Role",
-        "value": identity.role
+        "value": getRole(identity)
       },
       {
         "trait_type": "Element",
-        "value": identity.element
+        "value": getElement(identity)
       },
       {
         "trait_type": "Weapon",
