@@ -16,6 +16,7 @@ model token {
   updatedAt       DateTime  @updatedAt
   token_id        Int       @unique // This is the ID provided by the contract when minted
   owner_address   String
+  ens_name        String
   pfp_contract    String
   pfp_id          Int
   pfp_img         String

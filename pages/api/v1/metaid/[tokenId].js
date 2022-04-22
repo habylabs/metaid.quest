@@ -10,7 +10,6 @@
 // - Name (ENS)
 // - Guild
 // - PFP ID
-// - Character ID
 // - Race
 // - Role
 // - Element Affinity
