@@ -6,6 +6,13 @@ import {
   getElement
 } from "./identity"
 
+import {
+  raceBonusMap,
+  roleCategoryMap,
+  roleBonusMap,
+  elementBonusMap
+} from "./mapping"
+
 function getEquipmentBonus(item) {
   if (item) {
     if (item.includes("of")) {
@@ -23,36 +30,66 @@ function getEquipmentBonus(item) {
 }
 
 function getRaceBonus(race) {
-  return {
-    str: 0,
-    dex: 0,
-    con: 0,
-    int: 0,
-    wis: 0,
-    cha: 0
+  if (race.includes(" + ")) {
+    const races = race.split(" + ")
+    const bonuses = [
+      raceBonusMap[races[0]],
+      raceBonusMap[races[1]]
+    ]
+
+    return {
+      str: bonuses[0].str + bonuses[1].str,
+      dex: bonuses[0].dex + bonuses[1].dex,
+      con: bonuses[0].con + bonuses[1].con,
+      int: bonuses[0].int + bonuses[1].int,
+      wis: bonuses[0].wis + bonuses[1].wis,
+      cha: bonuses[0].cha + bonuses[1].cha
+    }
   }
+
+  return raceBonusMap[race]
 }
 
 function getRoleBonus(role) {
-  return {
-    str: 0,
-    dex: 0,
-    con: 0,
-    int: 0,
-    wis: 0,
-    cha: 0
+  if (role.includes(" + ")) {
+    const roles = role.split(" + ")
+    const bonuses = [
+      roleBonusMap[roleCategoryMap[roles[0]]],
+      roleBonusMap[roleCategoryMap[roles[1]]]
+    ]
+
+    return {
+      str: bonuses[0].str + bonuses[1].str,
+      dex: bonuses[0].dex + bonuses[1].dex,
+      con: bonuses[0].con + bonuses[1].con,
+      int: bonuses[0].int + bonuses[1].int,
+      wis: bonuses[0].wis + bonuses[1].wis,
+      cha: bonuses[0].cha + bonuses[1].cha
+    }
   }
+
+  return roleBonusMap[roleCategoryMap[role]]
 }
 
 function getElementBonus(element) {
-  return {
-    str: 0,
-    dex: 0,
-    con: 0,
-    int: 0,
-    wis: 0,
-    cha: 0
+  if (element.includes(" + ")) {
+    const elements = element.split(" + ")
+    const bonuses = [
+      elementBonusMap[elements[0]],
+      elementBonusMap[elements[1]]
+    ]
+
+    return {
+      str: bonuses[0].str + bonuses[1].str,
+      dex: bonuses[0].dex + bonuses[1].dex,
+      con: bonuses[0].con + bonuses[1].con,
+      int: bonuses[0].int + bonuses[1].int,
+      wis: bonuses[0].wis + bonuses[1].wis,
+      cha: bonuses[0].cha + bonuses[1].cha
+    }
   }
+
+  return elementBonusMap[element]
 }
 
 function getIdentityBonus(identity) {
