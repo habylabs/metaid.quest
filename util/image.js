@@ -28,6 +28,8 @@ function getContractImage(identity, equipment, baseStats, bonusStats) {
         }
       </style>
       <rect width="1500" height="500" fill="#002B36"/>
+      <image href="${identity.pfp.image}" height="428" width="428" x="41" y="36"/>
+      <rect x="41" y="36" width="428" height="428" stroke="#002B36" stroke-width="30"/>
       <rect x="41" y="36" width="428" height="428" class="rect-border"/>
       <rect x="46" y="41" width="418" height="418" class="rect-border"/>
       <path d="M433.077 305.292L401.155 250L433.077 194.708H496.923L528.845 250L496.923 305.292H433.077Z" fill="#002B36" class="rect-border"/>
