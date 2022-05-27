@@ -104,13 +104,12 @@ function parseDb(db) {
   }
 }
 
-export default async function handler(req, res) {
-  const { tokenId } = req.query
+async function get(tokenId) {
   const db = await getTokenByTokenId(parseInt(tokenId))
-  const { identity, equipment, baseStats } = parseDb(db) 
+  const { identity, equipment, baseStats } = parseDb(db)
   const bonusStats = getBonusStats(identity, equipment)
 
-  return res.status(200).json({
+  return {
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
     image: getContractImage(identity, equipment, baseStats, bonusStats),
@@ -232,5 +231,20 @@ export default async function handler(req, res) {
         "value": bonusStats.cha
       },
     ]
-  })
+  }
+}
+
+async function post(tokenId) {
+  return {}
+}
+
+export default async function handler(req, res) {
+  const { tokenId } = req.query
+  if (req.method === 'POST') {
+    const postJson = await post(tokenId)
+    return res.status(200).json(postJson)
+  } else {
+    const getJson = await get(tokenId)
+    return res.status(200).json(getJson)
+  }
 }
