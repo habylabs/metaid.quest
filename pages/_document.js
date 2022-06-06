@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
-            content="Haby Labs explorers unique and interesting implementation of NFTs and smart contracts"
+            content="Meta ID is an id card for the game Metaverse based on the NFTs you own and your on-chain activity."
           />
           <link rel="apple-touch-icon" href="/logo192.png" />
           <link rel="manifest" href="/manifest.json" />

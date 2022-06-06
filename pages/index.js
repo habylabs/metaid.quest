@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useWeb3React } from "@web3-react/core";
+import Head from 'next/head';
 import { Connect } from '.';
 import styles from '../styles/components/Stats.module.css';
 
@@ -47,16 +48,23 @@ function Home() {
   );
 
   return (
-    <div className={`${styles.title} ${isMobile ? "side-padding-mobile" : "side-padding"}`}>
-      <div className={styles.titleHeader}>
-        <h1 className={`no-margin serif-font ${styles.titleHeaderText}`}>
-          {active ? 'Here are your Stats!' : 'Check your Stats!'}
-        </h1>
+    <>
+      <Head>
+        <title>
+          Meta ID | Your NFT id for the metaverse!
+        </title>
+      </Head>
+      <div className={`${styles.title} ${isMobile ? "side-padding-mobile" : "side-padding"}`}>
+        <div className={styles.titleHeader}>
+          <h1 className={`no-margin serif-font ${styles.titleHeaderText}`}>
+            {active ? 'Here are your Stats!' : 'Check your Stats!'}
+          </h1>
+        </div>
+        <div>
+          {active ? dataComponent : <Connect />}
+        </div>
       </div>
-      <div>
-        {active ? dataComponent : <Connect />}
-      </div>
-    </div>
+    </>
   );
 };
 
