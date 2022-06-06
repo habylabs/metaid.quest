@@ -1,4 +1,5 @@
 import Button from './Button.js';
+import Disconnect from './Disconnect.js';
 import Connect from './Connect.js';
 import Header from './Header.js';
 import Layout from './Layout.js';
@@ -9,6 +10,7 @@ import Title from './Title.js';
 
 export {
   Button,
+  Disconnect,
   Connect,
   Header,
   Layout,

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
+import { Disconnect } from '../components'
 import styles from '../styles/components/Header.module.css'
 
 function Header() {
@@ -20,25 +21,12 @@ function Header() {
         <Link href='/character'>
           <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
         </Link>
-        <Link href='/stats'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Stats</a>
+        <Link href='/castle'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Castle</a>
         </Link>
-        <a
-          href="https://habylabs.notion.site/Adventure-4f87d1d22f4a4429bed314240ae5f02e"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${styles.headerLink} ${styles.navLink}`}
-        >
-          Roadmap
-        </a>
-        <a
-          href="https://habylabs.notion.site/FAQs-da5e0e5851d74d029b70007aa1e2ec61"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${styles.headerLink} ${styles.navLink}`}
-        >
-          FAQ
-        </a>
+      </div>
+      <div>
+        <Disconnect />
       </div>
     </header>
   )
