@@ -6,7 +6,7 @@ import {
   Connect,
   Mint,
 } from '../components';
-import styles from '../styles/pages/index.module.css';
+import styles from '../styles/pages/character.module.css';
 
 
 export default function Character() {

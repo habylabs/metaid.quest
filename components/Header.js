@@ -18,8 +18,8 @@ function Header() {
         </Link>
       </div>
       <div>
-        <Link href='/character'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
+        <Link href='/leaderboard'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Leaderboard</a>
         </Link>
         <Link href='/castle'>
           <a className={`${styles.headerLink} ${styles.navLink}`}>Castle</a>
