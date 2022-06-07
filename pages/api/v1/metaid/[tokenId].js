@@ -112,7 +112,7 @@ async function get(tokenId) {
   return {
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
-    image: getContractImage(identity, equipment, baseStats, bonusStats),
+    image: getContractImage(identity, baseStats),
     attributes: [
       {
         "trait_type": "Name",
