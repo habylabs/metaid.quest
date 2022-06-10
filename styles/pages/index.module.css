@@ -1,0 +1,15 @@
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8vmin;
+  padding-bottom: 4vmin;
+  color: #FFF;
+}
+
+.titleHeaderText {
+  text-align: center;
+  font-size: 3.75rem;
+  color: #FFF;
+  font-weight: 400;
+}
