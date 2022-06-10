@@ -18,12 +18,20 @@ function Header() {
         </Link>
       </div>
       <div>
-        <Link href='/leaderboard'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Leaderboard</a>
+        <Link href='/character'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
         </Link>
-        <Link href='/castle'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Castle</a>
+        <Link href='/castles'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Castles</a>
         </Link>
+        <a 
+          href='https://docs.metaid.quest/'
+          target='_blank'
+          rel='noreferrer'
+          className={`${styles.headerLink} ${styles.navLink}`}
+        >
+          Docs
+        </a>
       </div>
       <div>
         <Disconnect />
