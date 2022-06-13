@@ -6,7 +6,6 @@ import Layout from './Layout.js';
 import MetaId from './MetaId.js';
 import Mint from './Mint.js';
 import Footer from './Footer.js';
-import Stats from './Stats.js';
 import Title from './Title.js';
 
 export {
@@ -18,6 +17,5 @@ export {
   MetaId,
   Mint,
   Footer,
-  Stats,
   Title,
 };

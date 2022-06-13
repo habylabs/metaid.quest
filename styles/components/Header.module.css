@@ -6,6 +6,7 @@
   padding-top: 1.5vmax;
   padding-bottom: 1.5vmax;
   z-index: 100;
+  background-color: #000;
 }
 
 .headerLink {

@@ -1,15 +1,49 @@
-.title {
+.page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 8vmin;
-  padding-bottom: 4vmin;
+  justify-content: center;
   color: #FFF;
 }
 
-.titleHeaderText {
+.primarySection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #002B36;
+  padding-top: 8vmin;
+  padding-bottom: 8vmin;
+}
+
+.primarySectionContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.primarySectionContentHeaderText {
   text-align: center;
   font-size: 3.75rem;
   color: #FFF;
   font-weight: 400;
+}
+
+.primarySectionContentSubText {
+  color: #BBB;
+  font-weight: 400;
+  padding-top: 1vmin;
+}
+
+.primarySectionContentButton {
+  padding-top: 4vmax;
+}
+
+.primarySectionContentButtonLink {
+  text-decoration: none;
+  color: #FFF;
+}
+
+.primarySectionAnimation {
+  width: 40%;
 }
