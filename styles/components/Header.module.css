@@ -6,11 +6,11 @@
   padding-top: 1.5vmax;
   padding-bottom: 1.5vmax;
   z-index: 100;
-  background-color: #000;
+  background-color: #FDF6E3;
 }
 
 .headerLink {
-  color: #FFF;
+  color: #000;
   text-decoration: none;
   cursor: pointer;
   font-size: 1.2em;
