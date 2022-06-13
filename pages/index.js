@@ -15,7 +15,7 @@ function Home() {
           Meta ID | Your NFT id for the metaverse!
         </title>
       </Head>
-      <div className={`${styles.page} ${isMobile ? "side-padding-mobile" : "side-padding"}`}>
+      <div className={`${styles.homepageContainer} ${isMobile ? "side-padding-mobile" : "side-padding"}`}>
         <div className={styles.primarySection}>
           <div className={styles.primarySectionContent}>
             <h1 className={`no-margin serif-font ${styles.primarySectionContentHeaderText}`}>

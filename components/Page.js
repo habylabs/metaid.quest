@@ -12,7 +12,7 @@ export default function Page({ children }) {
   return (
     <>
       <main>
-        <div className={styles.layoutContainer}>
+        <div className={styles.pageContainer}>
           {windowReady ? <Header /> : null}
           {children}
         </div>

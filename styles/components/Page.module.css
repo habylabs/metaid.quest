@@ -1,6 +1,6 @@
-.layoutContainer {
+.pageContainer {
   min-height: 100vh;
-  background-color: #000;
+  background-color: #FFF;
   display: flex;
   flex-direction: column;
 }
