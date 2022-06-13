@@ -1,7 +1,7 @@
 import React from 'react';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ethers } from "ethers";
-import { Layout } from '../components';
+import { Page } from '../components';
 import '../styles/global.css';
 
 function getLibrary(provider, connector) {
@@ -13,9 +13,9 @@ function getLibrary(provider, connector) {
 function MyApp({ Component, pageProps }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Layout>
+      <Page>
         <Component {...pageProps} />
-      </Layout>
+      </Page>
     </Web3ReactProvider>
   )
 };

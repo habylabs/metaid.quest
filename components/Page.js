@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import styles from '../styles/components/Layout.module.css';
+import styles from '../styles/components/Page.module.css';
 import { Header, Footer } from '.'
 
-export default function Layout({ children }) {
+export default function Page({ children }) {
   const [windowReady, setWindowReady] = useState(false);
   
   useEffect(() => {
