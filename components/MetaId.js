@@ -19,6 +19,7 @@ function MetaId({ data }) {
   return (
     <svg width="1500" height="500" viewBox="0 0 1500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="1500" height="500" fill="#002B36"/>
+      <image href={identity.pfp.image} height="428" width="428" x="41" y="36"/>
       <rect x="41" y="36" width="428" height="428" stroke="#002B36" strokeWidth="30"/>
       <rect x="41" y="36" width="428" height="428" className={styles.rectBorder}/>
       <rect x="46" y="41" width="418" height="418" className={styles.rectBorder}/>
