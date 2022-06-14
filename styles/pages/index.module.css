@@ -48,12 +48,3 @@
 .primaryContainerAnimation {
   width: 40%;
 }
-
-.overflowContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #002B36;
-  padding-top: 8vmin;
-  padding-bottom: 8vmin;
-}
