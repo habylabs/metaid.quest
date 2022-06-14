@@ -25,16 +25,16 @@ code {
 }
 
 .link {
-  color: #bb7a8e;
+  color: #002B36;
   text-decoration: none;
 }
 
 .link.inactive:hover{
-  color: #bb7a8e;
+  color: #002B36;
 }
 
 .link:hover {
-  color: #4753d6;
+  color: #FA5853;
 }
 
 .side-padding {

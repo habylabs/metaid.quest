@@ -1,6 +1,7 @@
 import Button from './Button.js';
-import Disconnect from './Disconnect.js';
+import Card from './Card.js';
 import Connect from './Connect.js';
+import Disconnect from './Disconnect.js';
 import Header from './Header.js';
 import Page from './Page.js';
 import MetaId from './MetaId.js';
@@ -10,8 +11,9 @@ import Title from './Title.js';
 
 export {
   Button,
-  Disconnect,
+  Card,
   Connect,
+  Disconnect,
   Header,
   Page,
   MetaId,
