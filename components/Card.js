@@ -6,7 +6,7 @@ function Card({ children, tanBackground = false }) {
 
   return (
     <div className={`${styles.cardContainer} ${tanBackground ? styles.cardTanBackground : styles.cardWhiteBackground}`}>
-      <div className={isMobile ? 'side-padding-mobile' : 'side-padding'}>
+      <div className={`column ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
         { children }
       </div>
     </div>

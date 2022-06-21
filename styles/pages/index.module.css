@@ -48,3 +48,8 @@
 .primaryContainerAnimation {
   width: 40%;
 }
+
+.homepageList {
+  list-style-type: none;
+  padding-left: 0;
+}

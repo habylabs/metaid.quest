@@ -91,6 +91,26 @@ function Home() {
           <div>
             <MetaId data={exampleData} />
           </div>
+          <ul className={styles.homepageList}>
+            <li>
+              <div>
+                <h3>Identity</h3>
+                <p>Bring your favorite PFP NFT with you across the metaverse.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Equipment</h3>
+                <p>Use your Loot or mLoot bag to strengthen your character.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Stats</h3>
+                <p>Participate on-chain to improve your stats and prove yourself.</p>
+              </div>
+            </li>
+          </ul>
         </Card>
         <Card tanBackground>
           Test Card 2

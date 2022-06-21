@@ -17,7 +17,7 @@ import styles from '../styles/components/MetaId.module.css';
 function MetaId({ data }) {
   const { identity, equipment, baseStats, bonusStats } = data
   return (
-    <svg width="100%" height="500" viewBox="0 0 1500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 1500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="1500" height="500" fill="#002B36"/>
       <image href={identity.pfp.image} height="428" width="428" x="41" y="36"/>
       <rect x="41" y="36" width="428" height="428" stroke="#002B36" strokeWidth="30"/>
