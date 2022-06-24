@@ -1,7 +1,42 @@
 .aboveTheFold {
   min-height: 100vh;
-  background-image: linear-gradient(rgba(0,0,0,1),rgba(0,0,0,.7)),url(../../public/title-background-grayscale.jpg);
-  background-size: cover;
-  background-position: center;
+  background-color: rgba(253, 246, 227, 0.5);
   overflow: hidden;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8vmin;
+  padding-bottom: 4vmin;
+}
+
+.titleHeaderText {
+  text-align: center;
+  font-size: 3.75rem;
+  color: #002B36;
+  font-weight: 400;
+}
+
+.titleDescription100 {
+  width: 100%;
+  line-height: 1.75rem;
+}
+
+.titleDescription75 {
+  width: 75%;
+  line-height: 2rem;
+}
+
+.titleDescription50 {
+  width: 50%;
+  line-height: 2rem;
+}
+
+.titleDescriptionText {
+  margin-bottom: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
 }
