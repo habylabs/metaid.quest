@@ -37,6 +37,20 @@ code {
   color: #FA5853;
 }
 
+.link-bright {
+  color: #FA5853;
+  text-decoration: none;
+}
+
+.link-bright.inactive:hover{
+  color: #FA5853;
+}
+
+.link-bright:hover {
+  color: #FFC444;
+}
+
+
 .side-padding {
   padding-left: 8vmax;
   padding-right: 8vmax;
@@ -55,6 +69,10 @@ code {
 .column {
   display: flex;
   flex-direction: column;
+}
+
+.flex1 {
+  flex: 1;
 }
 
 .justify-center {

@@ -21,9 +21,6 @@ function Header() {
         <Link href='/character'>
           <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
         </Link>
-        <Link href='/castles'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Castles</a>
-        </Link>
         <a 
           href='https://docs.metaid.quest/'
           target='_blank'

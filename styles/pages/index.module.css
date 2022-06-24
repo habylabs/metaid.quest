@@ -52,8 +52,8 @@
 .homepageList {
   list-style-type: none;
   padding-left: 0;
-  padding-top: 2vmax;
-  align-items: center;
+  padding-top: 1vmax;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -65,4 +65,8 @@
 .homepageListText {
   font-size: 1.1em;
   line-height: 1.5;
+}
+
+.homepageCardHeader {
+  margin-bottom: 0;
 }

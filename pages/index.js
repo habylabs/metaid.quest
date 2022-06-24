@@ -94,47 +94,133 @@ function Home() {
           <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
             <li className={styles.homepageListItem}>
               <div>
-                <h3>
+                <h3 className='monospace-font'>
                   Identity
                 </h3>
-                <p className={styles.homepageListText}>
+                <p className={`monospace-font ${styles.homepageListText}`}>
                   Bring your favorite PFP NFT with you across the metaverse.
                 </p>
-              </div>
-            </li>
-            <li className={styles.homepageListItem}>
-              <div>
-                <h3>
-                  Equipment
-                </h3>
-                <p className={styles.homepageListText}>
-                  Use your Loot or mLoot bag to strengthen your character.
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Mint and edit your Meta ID with your BAYC, Crypto Coven, 
+                  Doodles, Nouns, and&nbsp;
+                  <a
+                    href='https://docs.metaid.quest/overview/identity/eligible-projects'
+                    target='_blank'
+                    rel='noreferrer'
+                    className='link-bright'
+                  >
+                    more
+                  </a>.
+                </p>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Right now, all these vibrant communities exist in their own silos, 
+                  but Meta ID brings them together to have one large, diverse metaverse.
                 </p>
               </div>
             </li>
             <li className={styles.homepageListItem}>
               <div>
-                <h3>
+                <h3 className='monospace-font'>
+                  Equipment
+                </h3>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Use your favorite Loot or mLoot bag to customize 
+                  and strengthen your character.
+                </p>
+              </div>
+            </li>
+            <li className={styles.homepageListItem}>
+              <div>
+                <h3 className='monospace-font'>
                   Stats
                 </h3>
-                <p className={styles.homepageListText}>
+                <p className={`monospace-font ${styles.homepageListText}`}>
                   Participate on-chain to improve your stats and prove yourself.
+                </p>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Your stats are a&nbsp;
+                  <a
+                    href='https://docs.metaid.quest/overview/stats'
+                    target='_blank'
+                    rel='noreferrer'
+                    className='link-bright'
+                  >
+                    reflection
+                  </a>
+                  &nbsp;of everything you do on-chain. How many
+                  different NFTs do you own? How many ERC-20 tokens? How old is your
+                  address? How many transactions has it done?
+                </p>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  As you engage in the metaverse, your stats naturally change and grow
+                  with you. There is no artifical rarity to your stats. <strong>It is truly
+                  unique to you.</strong>
                 </p>
               </div>
             </li>
           </ul>
         </Card>
         <Card tanBackground>
-          Test Card 2
+          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
+            Developer Friendly
+          </h2>
+          <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
+            <li className={styles.homepageListItem}>
+              <div>
+                <h3 className='monospace-font'>
+                  &#127760; CC0
+                </h3>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  With the CC0 license, Meta ID allows you to build anything on top of Meta ID. 
+                  No limitation. Maximum creativity.
+                </p>
+              </div>
+            </li>
+            <li className={styles.homepageListItem}>
+              <div>
+                <h3 className='monospace-font'>
+                  &#128214; Open Source
+                </h3>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Everything we do is open source from our codebase to the roadmap. We want
+                  to make it as easy as possible for developers and artists to build on top
+                  of Meta ID and will.
+                </p>
+              </div>
+            </li>
+            <li className={styles.homepageListItem}>
+              <div>
+                <h3 className='monospace-font'>
+                  &#128101; Large User Base
+                </h3>
+                <p className={`monospace-font ${styles.homepageListText}`}>
+                  Meta ID brings together numerous active NFT communities together, each with
+                  tens of thousands of members. When you build on Meta ID, you&#x27;re building for
+                  all of them.
+                </p>
+              </div>
+            </li>
+          </ul>
         </Card>
         <Card>
-          Test Card 3
-        </Card>
-        <Card tanBackground>
-          Test Card 4
-        </Card>
-        <Card>
-          Test Card 5
+          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
+            Join the Adventure
+          </h2>
+          <p className='monospace-font'>
+            Meta ID will be launching this summer. In the meantime, join the community to learn more!
+          </p>
+          <div className='row align-center justify-center'>
+            <Button>
+              <a 
+                href='https://discord.gg/TXgaBwYZep'
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.primaryContainerContentButtonLink}
+              >
+                Join the Discord! 
+              </a>
+            </Button>
+          </div>
         </Card>
       </div>
     </>

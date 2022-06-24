@@ -66,7 +66,7 @@ function Footer() {
       </div>
 
       <p className={`monospace-font no-margin ${styles.copyright}`}>
-        © 2021 - 2022 Haby, LLC. All rights reserved.
+        © 2021 - 2022 Haby, LLC
       </p>
     </footer>
   );
