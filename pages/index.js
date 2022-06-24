@@ -91,23 +91,35 @@ function Home() {
           <div>
             <MetaId data={exampleData} />
           </div>
-          <ul className={styles.homepageList}>
-            <li>
+          <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
+            <li className={styles.homepageListItem}>
               <div>
-                <h3>Identity</h3>
-                <p>Bring your favorite PFP NFT with you across the metaverse.</p>
+                <h3>
+                  Identity
+                </h3>
+                <p className={styles.homepageListText}>
+                  Bring your favorite PFP NFT with you across the metaverse.
+                </p>
               </div>
             </li>
-            <li>
+            <li className={styles.homepageListItem}>
               <div>
-                <h3>Equipment</h3>
-                <p>Use your Loot or mLoot bag to strengthen your character.</p>
+                <h3>
+                  Equipment
+                </h3>
+                <p className={styles.homepageListText}>
+                  Use your Loot or mLoot bag to strengthen your character.
+                </p>
               </div>
             </li>
-            <li>
+            <li className={styles.homepageListItem}>
               <div>
-                <h3>Stats</h3>
-                <p>Participate on-chain to improve your stats and prove yourself.</p>
+                <h3>
+                  Stats
+                </h3>
+                <p className={styles.homepageListText}>
+                  Participate on-chain to improve your stats and prove yourself.
+                </p>
               </div>
             </li>
           </ul>
