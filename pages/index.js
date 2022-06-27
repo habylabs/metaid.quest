@@ -102,7 +102,7 @@ function Home() {
                 </p>
                 <p className={`monospace-font ${styles.homepageListText}`}>
                   Mint and edit your Meta ID with your BAYC, Crypto Coven, 
-                  Doodles, Nouns, and&nbsp;
+                  Doodles, Nouns, and{' '}
                   <a
                     href='https://docs.metaid.quest/overview/identity/eligible-projects'
                     target='_blank'
@@ -138,7 +138,7 @@ function Home() {
                   Participate on-chain to improve your stats and prove yourself.
                 </p>
                 <p className={`monospace-font ${styles.homepageListText}`}>
-                  Your stats are a&nbsp;
+                  Your stats are a{' '}
                   <a
                     href='https://docs.metaid.quest/overview/stats'
                     target='_blank'
@@ -147,7 +147,7 @@ function Home() {
                   >
                     reflection
                   </a>
-                  &nbsp;of everything you do on-chain. How many
+                  {' '}of everything you do on-chain. How many
                   different NFTs do you own? How many ERC-20 tokens? How old is your
                   address? How many transactions has it done?
                 </p>
@@ -207,7 +207,19 @@ function Home() {
             Join the Adventure
           </h2>
           <p className='monospace-font'>
-            Meta ID will be launching this summer. In the meantime, join the community to learn more!
+            Meta ID will be launching this summer. The initial prototype won the{' '}
+            <a
+              href='https://www.ethdenver.com/virtual-winners/#top30'
+              target='_blank'
+              rel='noreferrer'
+              className='link-bright'
+            >
+              2022 ETH Denver Virtual Hackathon
+            </a>{' '}
+            for the Gaming and Metaverse track.
+          </p>
+          <p className='monospace-font'>
+            Join the community to learn more!
           </p>
           <div className='row align-center justify-center'>
             <Button>
