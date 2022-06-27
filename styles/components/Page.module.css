@@ -1,6 +1,6 @@
 .pageContainer {
   min-height: 100vh;
-  background-color: #FFF;
+  background-color: #FDF6E3;
   display: flex;
   flex-direction: column;
 }

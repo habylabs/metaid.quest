@@ -9,12 +9,20 @@ export default function Page({ children }) {
     setWindowReady(true);
   }, []);
 
+  function loadingScreen() {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
+
   return (
     <>
       <main>
         <div className={styles.pageContainer}>
           {windowReady ? <Header /> : null}
-          {children}
+          {windowReady ? children : loadingScreen()}
         </div>
       </main>
       {windowReady ? <Footer /> : null}

@@ -54,6 +54,24 @@ function Home() {
     }
   }
 
+  function getAnimation() {
+    const animationContainer = (
+      <div className={styles.primaryContainerAnimation}>
+        <Image src={exampleGif} alt="meta id examples" />
+      </div>
+    )
+
+    if (isMobile) {
+      return (
+        <div className='row align-center justify-center'>
+          {animationContainer}
+        </div>
+      )
+    }
+
+    return animationContainer
+  }
+
   return (
     <>
       <Head>
@@ -62,12 +80,12 @@ function Home() {
         </title>
       </Head>
       <div className={styles.homepageContainer}>
-        <div className={`${styles.primaryContainer} ${isMobile ? "side-padding-mobile" : "side-padding"}`}>
-          <div className={styles.primaryContainerContent}>
-            <h1 className={`no-margin serif-font ${styles.primaryContainerContentHeaderText}`}>
+        <div className={`${styles.primaryContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
+          <div className={`column ${isMobile ? 'align-center' : 'align-start'}`}>
+            <h1 className={`no-margin serif-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentHeaderText}`}>
               Play in the Metaverse!
             </h1>
-            <h2 className={`no-margin monospace-font ${styles.primaryContainerContentSubText}`}>
+            <h2 className={`no-margin monospace-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentSubText}`}>
               Build your profile with Meta ID
             </h2>
             <div className={styles.primaryContainerContentButton}>
@@ -83,9 +101,7 @@ function Home() {
               </Button>
             </div>
           </div>
-          <div className={styles.primaryContainerAnimation}>
-            <Image src={exampleGif} alt="meta id examples" />
-          </div>
+          {getAnimation()}
         </div>
         <Card>
           <div>

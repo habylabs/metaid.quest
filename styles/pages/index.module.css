@@ -17,12 +17,6 @@
   padding-bottom: 8vmin;
 }
 
-.primaryContainerContent {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
 .primaryContainerContentHeaderText {
   font-size: 3.75rem;
   color: #002B36;
