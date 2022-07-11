@@ -234,15 +234,15 @@ async function get(tokenId) {
   }
 }
 
-async function post(tokenId) {
+async function put(tokenId) {
   return {}
 }
 
 export default async function handler(req, res) {
   const { tokenId } = req.query
-  if (req.method === 'POST') {
-    const postJson = await post(tokenId)
-    return res.status(200).json(postJson)
+  if (req.method === 'PUT') {
+    const putJson = await put(tokenId)
+    return res.status(200).json(putJson)
   } else {
     const getJson = await get(tokenId)
     return res.status(200).json(getJson)
