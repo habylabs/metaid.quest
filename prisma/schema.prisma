@@ -43,4 +43,10 @@ model token {
   base_int        Int
   base_wis        Int
   base_cha        Int
+  bonus_str       Int
+  bonus_dex       Int
+  bonus_con       Int
+  bonus_int       Int
+  bonus_wis       Int
+  bonus_cha       Int
 }
