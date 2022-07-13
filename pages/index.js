@@ -1,12 +1,14 @@
 import { useMediaQuery } from 'react-responsive'
+import { useWeb3React } from "@web3-react/core"
 import Head from 'next/head'
 import Image from 'next/image'
-import { Button, Card, MetaId } from '../components'
+import { Card, Connect, MetaId, Mint } from '../components'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
 
 function Home() {
   const isMobile = useMediaQuery({ maxWidth: 480 })
+  const { active } = useWeb3React();
 
   const exampleData = {
     identity: {
@@ -72,6 +74,10 @@ function Home() {
     return animationContainer
   }
 
+  function getCta() {
+    return (active ? <Mint /> : <Connect />)
+  }
+
   return (
     <>
       <Head>
@@ -89,16 +95,7 @@ function Home() {
               Build your profile with Meta ID
             </h2>
             <div className={styles.primaryContainerContentButton}>
-              <Button>
-                <a 
-                  href='https://discord.gg/TXgaBwYZep'
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.primaryContainerContentButtonLink}
-                >
-                  Join the Discord! 
-                </a>
-              </Button>
+              {getCta()}
             </div>
           </div>
           {getAnimation()}
@@ -238,16 +235,7 @@ function Home() {
             Join the community to learn more!
           </p>
           <div className='row align-center justify-center'>
-            <Button>
-              <a 
-                href='https://discord.gg/TXgaBwYZep'
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.primaryContainerContentButtonLink}
-              >
-                Join the Discord! 
-              </a>
-            </Button>
+            {getCta()}
           </div>
         </Card>
       </div>

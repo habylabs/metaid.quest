@@ -10,7 +10,7 @@ function Mint() {
   const [ numToMint, setNumToMint ] = useState(1);
   const [ contractStatus, setContractStatus ] = useState("");
   const [ contractError, setContractError ] = useState("");
-  const { account, deactivate, library } = useWeb3React();
+  const { account, library } = useWeb3React();
 
   // Define Character contract
   const characterContractAddress = '0xE600AFed52558f0c1F8Feeeb128c9b932B7ae4e3';
@@ -48,16 +48,6 @@ function Mint() {
       setContractStatus("");
     }
   }
-
-  async function disconnect() {
-    try {
-      setContractError("");
-      deactivate();
-    } catch (error) {
-      console.error(error);
-      setContractError(error.message);
-    }
-  }
   
   async function withdraw() {
     try {
@@ -72,10 +62,6 @@ function Mint() {
       setContractError(error.message);
       setContractStatus("");
     }
-  }
-
-  function formatAccount() {
-    return `${account.slice(0,3)}...${account.slice(account.length - 3)}`
   }
 
   return (
@@ -118,9 +104,6 @@ function Mint() {
           { contractError }
         </p>
       </div>
-      <Button onClick={disconnect} small outline>
-        {formatAccount()} [ disconnect ]
-      </Button>
       { 
         account === ownerAddress ? (
           <Button onClick={withdraw} small outline disabled={(contractStatus === "Withdrawing...")}>
