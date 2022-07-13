@@ -144,11 +144,22 @@ async function getNFTCount(address) {
   }
 }
 
+async function getNFTMetadata(contractAddress, contractId) {
+  try {
+    const res = await fetchAlchemyData('getNFTMetadata')
+    return res.result.metadata
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
 export {
   get6mBlock,
   getFirstTx,
   getFromTx,
   getToTx,
   getTokens,
-  getNFTCount
+  getNFTCount,
+  getNFTMetadata
 }
