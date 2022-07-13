@@ -1,48 +1,6 @@
-// Characteristics of Token URI:
-
-// Name (Meta ID #xx)
-// Description (taken from copy)
-// Image (SVG created using information from below)
-// Animation (SVG with animation created using information from below)
-
-// Attributes
-// * Identity
-// - Name (ENS)
-// - Guild
-// - PFP ID
-// - Race
-// - Role
-// - Element Affinity
-
-// * Equipment (should use same attributes style as Loot)
-// - Weapon
-// - Chest Armor
-// - Head Armor
-// - Waist Armor
-// - Foot Armor
-// - Hand Armor
-// - Necklace
-// - Ring
-
-// * Stats (Pull base stats using Alchemy API and then add based on Identity and Equipment)
-// - Level
-// - HP
-// - MP
-// - baseSTR
-// - bonusSTR
-// - baseDEX
-// - bonusDEX
-// - baseCON
-// - bonusCON
-// - baseINT
-// - bonusINT
-// - baseWIS
-// - bonusWIS
-// - baseCHA
-// - bonusCHA
-
 import {
-  getTokenByTokenId
+  getTokenByTokenId,
+  putTokenByTokenId
 } from "../../../../util/db"
 
 import {
@@ -54,10 +12,16 @@ import {
   getId,
   getRace,
   getRole,
-  getElement
+  getElement,
+  getIdentity
 } from "../../../../util/identity"
 
 import {
+  getEquipment
+} from "../../../../util/equipment"
+
+import {
+  getBaseStats,
   getBonusStats,
   getLevel,
   getHP,
@@ -100,15 +64,19 @@ function parseDb(db) {
       int: db["base_int"],
       wis: db["base_wis"],
       cha: db["base_cha"],
+    },
+    bonusStats: {
+      str: db["bonus_str"],
+      dex: db["bonus_dex"],
+      con: db["bonus_con"],
+      int: db["bonus_int"],
+      wis: db["bonus_wis"],
+      cha: db["bonus_cha"],
     }
   }
 }
 
-async function get(tokenId) {
-  const db = await getTokenByTokenId(parseInt(tokenId))
-  const { identity, equipment, baseStats } = parseDb(db)
-  const bonusStats = getBonusStats(identity, equipment)
-
+function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
   return {
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
@@ -234,14 +202,27 @@ async function get(tokenId) {
   }
 }
 
-async function put(tokenId) {
-  return {}
+async function get(tokenId) {
+  const db = await getTokenByTokenId(parseInt(tokenId))
+  const { identity, equipment, baseStats, bonusStats } = parseDb(db)
+  return formatRes(tokenId, identity, equipment, baseStats, bonusStats)
+}
+
+async function put(tokenId, reqBody) {
+  const { ownerAddress, pfp, charId, equip } = reqBody
+  const identity = await getIdentity(ownerAddress, pfp, charId)
+  const equipment = getEquipment(identity, equip)
+  const baseStats = getBaseStats(ownerAddress)
+  const bonusStats = getBonusStats (identity, equipment)
+  
+  await putTokenByTokenId(tokenId, ownerAddress, identity, equipment, baseStats, bonusStats)
+  return formatRes(tokenId, identity, equipment, baseStats, bonusStats)
 }
 
 export default async function handler(req, res) {
   const { tokenId } = req.query
-  if (req.method === 'PUT') {
-    const putJson = await put(tokenId)
+  if (req.method === "PUT") {
+    const putJson = await put(tokenId, reqBody)
     return res.status(200).json(putJson)
   } else {
     const getJson = await get(tokenId)

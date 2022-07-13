@@ -1,8 +1,11 @@
 // Helper functions to populate Identity fields in Meta ID
-
 import {
   contractNameMap
 } from "./mapping"
+
+import {
+  getEnsName
+} from "./ens"
 
 function getGuild(identity) {
   return contractNameMap[identity.pfp.contract]
@@ -48,10 +51,28 @@ function getElement(identity) {
   return identity.pfp.element ? identity.pfp.element : 'None'
 }
 
+async function getIdentity(address, pfp, charId) {
+  const ensName = await getEnsName(address)
+  return {
+    ensName,
+    pfpContract: null,
+    pfpId: null,
+    pfpImg: null,
+    pfpRace: null,
+    pfpRole: null,
+    pfpElement: null,
+    charId,
+    charRace: null,
+    charRole: null,
+    charElement: null
+  }
+}
+
 export {
   getGuild,
   getId,
   getRace,
   getRole,
-  getElement
+  getElement,
+  getIdentity
 }
