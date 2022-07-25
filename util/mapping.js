@@ -1,34 +1,51 @@
-const contractNameMap = {
-  "0xE600AFed52558f0c1F8Feeeb128c9b932B7ae4e3": "Character",
-  "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D": "BAYC",
-  "0x60E4d786628Fea6478F785A6d7e704777c86a7c6": "MAYC",
-  "0x7Bd29408f11D2bFC23c34f18275bBf23bB716Bc7": "Meebits",
-  "0x1A92f7381B9F03921564a437210bB9396471050C": "CoolCats",
-  "0x7E6Bc952d4b4bD814853301bEe48E99891424de0": "Jungle Freaks",
-  "0x439cac149B935AE1D726569800972E1669d17094": "The Idols",
-  "0x508d06B8f3A4B0Fd363239Ce61e0C4b0B82f3626": "Loot Explorers",
-  "0x5180db8F5c931aaE63c74266b211F580155ecac8": "Crypto Coven",
-  "0x8a90CAb2b38dba80c64b7734e58Ee1dB38B8992e": "Doodles",
-  "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03": "Nouns",
-  "0x0290d49f53A8d186973B82faaFdaFe696B29AcBb": "HyperLoot",
-  "0xED5AF388653567Af2F388E6224dC7C4b3241C544": "Azuki",
-  "0x23581767a106ae21c074b2276D25e5C3e136a68b": "Moonbirds",
-  "0xe785E82358879F061BC3dcAC6f0444462D4b5330": "World of Women"
-}
+import {
+  CHARACTER_CONTRACT_ADDRESS,
+  BAYC_CONTRACT_ADDRESS,
+  MAYC_CONTRACT_ADDRESS,
+  MEEBITS_CONTRACT_ADDRESS,
+  COOLCATS_CONTRACT_ADDRESS,
+  JUNGLE_FREAKS_CONTRACT_ADDRESS,
+  IDOLS_CONTRACT_ADDRESS,
+  LOOT_EXPLORERS_CONTRACT_ADDRESS,
+  CRYPTO_COVEN_CONTRACT_ADDRESS,
+  DOODLES_CONTRACT_ADDRESS,
+  NOUNS_CONTRACT_ADDRESS,
+  HYPERLOOT_CONTRACT_ADDRESS,
+  AZUKI_CONTRACT_ADDRESS,
+  MOONBIRDS_CONTRACT_ADDRESS,
+  WOW_CONTRACT_ADDRESS,
+} from './constants'
+
+const contractNameMap = {}
+contractNameMap[CHARACTER_CONTRACT_ADDRESS] = 'Character'
+contractNameMap[BAYC_CONTRACT_ADDRESS] = 'BAYC'
+contractNameMap[MAYC_CONTRACT_ADDRESS] = 'MAYC'
+contractNameMap[MEEBITS_CONTRACT_ADDRESS] = 'Meebits'
+contractNameMap[COOLCATS_CONTRACT_ADDRESS] = 'CoolCats'
+contractNameMap[JUNGLE_FREAKS_CONTRACT_ADDRESS] = 'Jungle Freaks'
+contractNameMap[IDOLS_CONTRACT_ADDRESS] = 'The Idols'
+contractNameMap[LOOT_EXPLORERS_CONTRACT_ADDRESS] = 'Loot Explorers'
+contractNameMap[CRYPTO_COVEN_CONTRACT_ADDRESS] = 'Crypto Coven'
+contractNameMap[DOODLES_CONTRACT_ADDRESS] = 'Doodles'
+contractNameMap[NOUNS_CONTRACT_ADDRESS] = 'Nouns'
+contractNameMap[HYPERLOOT_CONTRACT_ADDRESS] = 'HyperLoot'
+contractNameMap[AZUKI_CONTRACT_ADDRESS] = 'Azuki'
+contractNameMap[MOONBIRDS_CONTRACT_ADDRESS] = 'Moonbirds'
+contractNameMap[WOW_CONTRACT_ADDRESS] = 'World of Women'
 
 const raceBonusMap = {
   "Human": {
     str: 0,
     dex: 0,
     con: 0,
-    int: 1,
+    int: 2,
     wis: 0,
-    cha: 1
+    cha: 2
   },
   "Orc": {
-    str: 1,
+    str: 2,
     dex: 0,
-    con: 1,
+    con: 2,
     int: 0,
     wis: 0,
     cha: 0
@@ -36,14 +53,14 @@ const raceBonusMap = {
   "Undead": {
     str: 0,
     dex: 0,
-    con: 1,
+    con: 2,
     int: 0,
-    wis: 1,
+    wis: 2,
     cha: 0
   },
   "Ape Folk": {
-    str: 1,
-    dex: 1,
+    str: 2,
+    dex: 2,
     con: 0,
     int: 0,
     wis: 0,
@@ -51,105 +68,105 @@ const raceBonusMap = {
   },
   "Cat Folk": {
     str: 0,
-    dex: 1,
+    dex: 2,
     con: 0,
     int: 0,
-    wis: 1,
+    wis: 2,
     cha: 0
   },
   "Lizard Folk": {
     str: 0,
     dex: 0,
-    con: 1,
-    int: 1,
+    con: 2,
+    int: 2,
     wis: 0,
     cha: 0
   },
   "Elf": {
     str: 0,
-    dex: 1,
+    dex: 2,
     con: 0,
     int: 0,
-    wis: 2,
-    cha: 1
+    wis: 4,
+    cha: 2
   },
   "Dwarf": {
-    str: 2,
+    str: 4,
     dex: 0,
-    con: 1,
-    int: 1,
+    con: 2,
+    int: 2,
     wis: 0,
     cha: 0
   },
   "Gnome": {
     str: 0,
-    dex: 2,
+    dex: 4,
     con: 0,
-    int: 1,
-    wis: 1,
+    int: 2,
+    wis: 2,
     cha: 0
   },
   "Goblin": {
     str: 0,
     dex: 0,
     con: 0,
-    int: 1,
-    wis: 1,
-    cha: 2
+    int: 2,
+    wis: 2,
+    cha: 4
   },
   "Robot": {
-    str: 1,
+    str: 2,
     dex: 0,
-    con: 1,
-    int: 2,
+    con: 2,
+    int: 4,
     wis: 0,
     cha: 0
   },
   "Dark Elf": {
-    str: 1,
-    dex: 2,
+    str: 3,
+    dex: 6,
     con: 0,
-    int: 2,
+    int: 6,
     wis: 0,
-    cha: 1
+    cha: 3
   },
   "Centaur": {
     str: 0,
-    dex: 1,
-    con: 2,
-    int: 1,
-    wis: 2,
+    dex: 3,
+    con: 6,
+    int: 3,
+    wis: 6,
     cha: 0
   },
   "Giant": {
-    str: 3,
+    str: 9,
     dex: 0,
-    con: 3,
+    con: 9,
     int: 0,
     wis: 0,
     cha: 0
   },
   "Halfling": {
     str: 0,
-    dex: 2,
-    con: 3,
+    dex: 6,
+    con: 9,
     int: 0,
     wis: 0,
-    cha: 1
+    cha: 3
   },
   "Vampire": {
     str: 0,
-    dex: 1,
-    con: 2,
+    dex: 3,
+    con: 6,
     int: 0,
-    wis: 1,
-    cha: 2
+    wis: 3,
+    cha: 6
   },
   "Alien": {
     str: 0,
     dex: 0,
     con: 0,
-    int: 6,
+    int: 18,
     wis: 0,
     cha: 0
   },
@@ -157,33 +174,33 @@ const raceBonusMap = {
     str: 0,
     dex: 0,
     con: 0,
-    int: 3,
-    wis: 3,
-    cha: 4
+    int: 12,
+    wis: 12,
+    cha: 16
   },
   "Djinn": {
-    str: 3,
-    dex: 3,
+    str: 12,
+    dex: 12,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 4
+    cha: 16
   },
   "Demon": {
     str: 0,
-    dex: 3,
+    dex: 12,
     con: 0,
-    int: 3,
+    int: 12,
     wis: 0,
-    cha: 4
+    cha: 16
   },
   "Angel": {
     str: 0,
     dex: 0,
-    con: 3,
+    con: 12,
     int: 0,
-    wis: 3,
-    cha: 4
+    wis: 12,
+    cha: 16
   },
 }
 
@@ -242,22 +259,22 @@ const roleBonusMap = {
     str: 0,
     dex: 0,
     con: 0,
-    int: 3,
-    wis: 3,
+    int: 6,
+    wis: 6,
     cha: 0
   },
   "Hunter": {
     str: 0,
-    dex: 3,
+    dex: 6,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 3
+    cha: 6
   },
   "Warrior": {
-    str: 3,
+    str: 6,
     dex: 0,
-    con: 3,
+    con: 6,
     int: 0,
     wis: 0,
     cha: 0
@@ -266,25 +283,25 @@ const roleBonusMap = {
 
 const elementBonusMap = {
   "Fire": {
-    str: 1,
+    str: 2,
     dex: 0,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 1
+    cha: 2
   },
   "Wind": {
     str: 0,
-    dex: 1,
+    dex: 2,
     con: 0,
-    int: 1,
+    int: 2,
     wis: 0,
     cha: 0
   },
   "Earth": {
-    str: 1,
+    str: 2,
     dex: 0,
-    con: 1,
+    con: 2,
     int: 0,
     wis: 0,
     cha: 0
@@ -292,73 +309,73 @@ const elementBonusMap = {
   "Water": {
     str: 0,
     dex: 0,
-    con: 1,
+    con: 2,
     int: 0,
-    wis: 1,
+    wis: 2,
     cha: 0
   },
   "Lightning": {
-    str: 2,
-    dex: 1,
+    str: 4,
+    dex: 2,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 1
+    cha: 2
   },
   "Metal": {
-    str: 1,
+    str: 2,
     dex: 0,
-    con: 2,
-    int: 1,
+    con: 4,
+    int: 2,
     wis: 0,
     cha: 0
   },
   "Poison": {
     str: 0,
-    dex: 1,
+    dex: 2,
     con: 0,
-    int: 1,
-    wis: 2,
+    int: 2,
+    wis: 4,
     cha: 0
   },
   "Light": {
-    str: 3,
+    str: 9,
     dex: 0,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 3
+    cha: 9
   },
   "Dark": {
     str: 0,
-    dex: 3,
+    dex: 9,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 3
+    cha: 9
   },
   "Chaos": {
     str: 0,
-    dex: 5,
+    dex: 20,
     con: 0,
     int: 0,
     wis: 0,
-    cha: 5
+    cha: 20
   },
   "Gravity": {
     str: 0,
     dex: 0,
-    con: 5,
-    int: 5,
+    con: 20,
+    int: 20,
     wis: 0,
     cha: 0
   },
   "Time": {
-    str: 5,
+    str: 20,
     dex: 0,
     con: 0,
     int: 0,
-    wis: 5,
+    wis: 20,
     cha: 0
   },
 }

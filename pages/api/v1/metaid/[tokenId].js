@@ -209,8 +209,8 @@ async function get(tokenId) {
 }
 
 async function put(tokenId, reqBody) {
-  const { ownerAddress, pfp, charId, equip } = reqBody
-  const identity = await getIdentity(ownerAddress, pfp, charId)
+  const { ownerAddress, ensName, pfp, charId, equip } = reqBody
+  const identity = await getIdentity(ensName, pfp, charId)
   const equipment = getEquipment(identity, equip)
   const baseStats = getBaseStats(ownerAddress)
   const bonusStats = getBonusStats (identity, equipment)

@@ -1,9 +1,21 @@
+import { 
+  Network,
+  initializeAlchemy,
+  getNftsForOwner,
+  getNftMetadata,
+  NftExcludeFilters,
+} from '@alch/alchemy-sdk';
+
+const settings = {
+  apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
+  network: Network.ETH_MAINNET, // Replace with your network.
+  maxRetries: 10
+};
+
+const alchemy = initializeAlchemy(settings);
+
 function getAlchemyURL() {
   return `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`
-}
-
-function getAlchemyNFTUrl(address) {
-  return `https://eth-mainnet.g.alchemy.com/${process.env.ALCHEMY_API_KEY}/v1/getNFTs/?owner=${address}`
 }
 
 async function fetchAlchemyData(method, params) {
@@ -132,12 +144,11 @@ async function getTokens(address) {
 
 async function getNFTCount(address) {
   try {
-    const res = await fetch(getAlchemyNFTUrl(address), {
-      method: 'GET',
-      redirect: 'follow'
-    })
-    const json = await res.json()
-    return json.totalCount
+    const nfts = await getNftsForOwner(alchemy, address, {
+      omitMetadata: true,
+      excludeFilters: [ NftExcludeFilters.SPAM ] 
+    });
+    return nfts.totalCount
   } catch (error) {
     console.log(error)
     return 0
@@ -146,8 +157,8 @@ async function getNFTCount(address) {
 
 async function getNFTMetadata(contractAddress, contractId) {
   try {
-    const res = await fetchAlchemyData('getNFTMetadata')
-    return res.result.metadata
+    const nftMetadata = await getNftMetadata(alchemy, contractAddress, contractId);
+    return nftMetadata.metadata
   } catch (error) {
     console.error(error)
     return null
