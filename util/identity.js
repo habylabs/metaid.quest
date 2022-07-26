@@ -1,6 +1,5 @@
 import _ from 'lodash'
 
-// Helper functions to populate Identity fields in Meta ID
 import {
   contractNameMap
 } from './mapping'
@@ -28,6 +27,7 @@ import {
   CHAR_PFP_IMG_URL
 } from './constants'
 
+// Helper functions to populate Identity fields in Meta ID
 // The functions below take information stored in the DB and format them to be
 // provided in the contract attributes response
 
@@ -99,7 +99,19 @@ function getPfpRace(contractAddress, { attributes }) {
         return 'Ape Folk'
       }
     case MAYC_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      const maycFurTrait = attributes[index].value
+      if (maycFurTrait === 'Cheetah') {
+        return 'Ape Folk + Cat Folk'
+      } else if (maycFurTrait === 'Zombie') {
+        return 'Ape Folk + Zombie'
+      } else if (maycFurTrait === 'Robot') {
+        return 'Ape Folk + Robot'
+      } else if (maycFurTrait === 'Death Bot') {
+        return 'Ape Folk + Robot'
+      } else {
+        return 'Ape Folk'
+      }
     case MEEBITS_CONTRACT_ADDRESS:
       return null
     case COOLCATS_CONTRACT_ADDRESS:
@@ -180,7 +192,12 @@ function getPfpElement(contractAddress, { attributes }) {
         return null
       }
     case MAYC_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      if (attributes[index.value === 'Solid Gold']) {
+        return 'Metal'
+      } else {
+        return null
+      }
     case MEEBITS_CONTRACT_ADDRESS:
       return null
     case COOLCATS_CONTRACT_ADDRESS:
