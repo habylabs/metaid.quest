@@ -150,6 +150,20 @@ function getPfpRace(contractAddress, { attributes }) {
         return 'Human'
       }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
+      index = _.findIndex(attributes, ['trait_type', 'Race'])
+      if (index > -1) {
+        const lootExplorerRace = attributes[index].value
+        if (lootExplorerRace === 'Beasts') {
+          return 'Cat Folk'
+        } else if (lootExplorerRace === 'Naturals') {
+          return 'Fairy'
+        } else if (lootExplorerRace === 'Noctii') {
+          return 'Undead'
+        } else if (lootExplorerRace === 'DeepTides') {
+          return 'Lizard Folk'
+        }
+      }
+      
       return null
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
       return 'Human'
@@ -167,14 +181,26 @@ function getPfpRace(contractAddress, { attributes }) {
       } else {
         return 'Human'
       }
-    case HYPERLOOT_CONTRACT_ADDRESS:
-      return null
     case AZUKI_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Type'])
+      if (attributes[index].value === 'Spirit') {
+        return 'Fairy'
+      } else {
+        return 'Human'
+      }
     case MOONBIRDS_CONTRACT_ADDRESS:
+      index = _.findIndex(attributes, ['trait_type', 'Type'])
+      const moonbirdType = attributes[index].value
+
+      if (moonbirdType === 'Robot') {
+        return 'Bird Folk + Robot'
+      } else if (moonbirdType.includes('Skeleton')) {
+        return 'Bird Folk + Undead'
+      }
+
       return 'Bird Folk'
     case WOW_CONTRACT_ADDRESS:
-      return null
+      return 'Human'
     default:
       return null
   }
@@ -192,6 +218,50 @@ function getPfpRole(contractAddress, { attributes }) {
     default:
       return null
   }
+}
+
+function getAzukiTypeElement(value) {
+  if (value === 'Blue') {
+    return 'Water'
+  } else if (value === 'Red') {
+    return 'Fire'
+  } else {
+    return null
+  }
+}
+
+function getAzukiSpecialElement(value) {
+  if (value === 'Smoke') {
+    return 'Poison'
+  } else if (value === 'Fox Fire') {
+    return 'Fire'
+  } else if (value === 'Sakura') {
+    return 'Wind'
+  } else if (value === 'Fire') {
+    return 'Fire'
+  } else if (value === 'Earth') {
+    return 'Earth'
+  } else if (value === 'Water') {
+    return 'Water'
+  } else if (value === 'Lightning') {
+    return 'Lightning'
+  }
+
+  return null
+}
+
+function getAzukiEyeElement(value) {
+  if (value === 'Fire') {
+    return 'Fire'
+  } else if (value === 'Lightning') {
+    return 'Lightning'
+  } else if (value === 'Glowing') {
+    return 'Light'
+  } else if (value === 'Red') {
+    return 'Dark'
+  }
+
+  return null
 }
 
 function getPfpElement(contractAddress, { attributes }) {
@@ -212,17 +282,20 @@ function getPfpElement(contractAddress, { attributes }) {
       } else {
         return null
       }
-    case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case HYPERLOOT_CONTRACT_ADDRESS:
-      return null
     case AZUKI_CONTRACT_ADDRESS:
-      return null
+      const typeIndex = _.findIndex(attributes, ['trait_type', 'Type'])
+      const specialIndex = _.findIndex(attributes, ['trait_type', 'Special'])
+      const eyeIndex = _.findIndex(attributes, ['trait_type', 'Eyes'])
+
+      const azukiTypeElement = getAzukiTypeElement(attributes[typeIndex].value)
+      const azukiSpecialElement = getAzukiSpecialElement(attributes[specialIndex].value)
+      const azukiEyeElement = getAzukiEyeElement(attributes[eyeIndex].value)
+      const elements = _.remove(_.uniq([azukiTypeElement, azukiSpecialElement, azukiEyeElement]), (n) => (n != null))
+
+      return _.replace(_.toString(elements), ',', ' + ')
     case MOONBIRDS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Eyes'])
       return attributes[index].value === 'Fire' ? 'Fire' : null
-    case WOW_CONTRACT_ADDRESS:
-      return null
     default:
       return null
   }
