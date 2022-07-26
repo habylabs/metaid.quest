@@ -40,51 +40,64 @@ function getId(identity) {
 }
 
 function getRace(identity) {
-  if (identity.character.race) {
-    if (identity.pfp.race) {
+  if (identity.pfp.race) {
+    if (identity.character.race) {
       return `${identity.pfp.race} + ${identity.character.race}`
     }
 
-    return identity.character.race
+    return identity.pfp.race
   }
-  
-  return identity.pfp.race ? identity.pfp.race : 'None'
+
+  return 'None'
 }
 
 function getRole(identity) {
-  if (identity.character.role) {
-    if (identity.pfp.role) {
+  if (identity.pfp.role) {
+    if (identity.character.role) {
       return `${identity.pfp.role} + ${identity.character.role}`
     }
 
-    return identity.character.role
+    return identity.pfp.role
   }
-  
-  return identity.pfp.role ? identity.pfp.role : 'None'
+
+  return 'None'
 }
 
 function getElement(identity) {
-  if (identity.character.element) {
-    if (identity.pfp.element) {
+  if (identity.pfp.element) {
+    if (identity.character.element) {
       return `${identity.pfp.element} + ${identity.character.element}`
     }
 
-    return identity.character.element
+    return identity.pfp.element
   }
-  
-  return identity.pfp.element ? identity.pfp.element : 'None'
+
+  return 'None'
 }
 
 // The functions below take the users PFP and Character selections to determine
 // values regarding identity to be stored in the DB
 
 function getPfpRace(contractAddress, { attributes }) {
+  let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
-      const index = _.findIndex(attributes, ['trait_type', 'Race'])
+      index = _.findIndex(attributes, ['trait_type', 'Race'])
       return attributes[index].value
     case BAYC_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      const baycFurTrait = attributes[index].value
+      if (baycFurTrait === 'Cheetah') {
+        return 'Ape Folk + Cat Folk'
+      } else if (baycFurTrait === 'Zombie') {
+        return 'Ape Folk + Zombie'
+      } else if (baycFurTrait === 'Robot') {
+        return 'Ape Folk + Robot'
+      } else if (baycFurTrait === 'Death Bot') {
+        return 'Ape Folk + Robot'
+      } else {
+        return 'Ape Folk'
+      }
     case MAYC_CONTRACT_ADDRESS:
       return null
     case MEEBITS_CONTRACT_ADDRESS:
@@ -117,12 +130,11 @@ function getPfpRace(contractAddress, { attributes }) {
 }
 
 function getPfpRole(contractAddress, { attributes }) {
+  let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
-      const index = _.findIndex(attributes, ['trait_type', 'Role'])
+      index = _.findIndex(attributes, ['trait_type', 'Role'])
       return attributes[index].value
-    case BAYC_CONTRACT_ADDRESS:
-      return null
     case MAYC_CONTRACT_ADDRESS:
       return null
     case MEEBITS_CONTRACT_ADDRESS:
@@ -155,12 +167,18 @@ function getPfpRole(contractAddress, { attributes }) {
 }
 
 function getPfpElement(contractAddress, { attributes }) {
+  let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
-      const index = _.findIndex(attributes, ['trait_type', 'Element'])
+      index = _.findIndex(attributes, ['trait_type', 'Element'])
       return attributes[index].value
     case BAYC_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      if (attributes[index.value === 'Solid Gold']) {
+        return 'Metal'
+      } else {
+        return null
+      }
     case MAYC_CONTRACT_ADDRESS:
       return null
     case MEEBITS_CONTRACT_ADDRESS:
