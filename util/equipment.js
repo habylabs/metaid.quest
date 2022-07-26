@@ -8,7 +8,6 @@ import {
   LOOT_EXPLORERS_CONTRACT_ADDRESS,
   CRYPTO_COVEN_CONTRACT_ADDRESS,
   DOODLES_CONTRACT_ADDRESS,
-  NOUNS_CONTRACT_ADDRESS,
   HYPERLOOT_CONTRACT_ADDRESS,
   AZUKI_CONTRACT_ADDRESS,
   MOONBIRDS_CONTRACT_ADDRESS,
@@ -37,24 +36,20 @@ function getPfpWeapon(identity) {
   let index
   switch (contractAddress) {
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Weapon'])
+      return index > -1 ? attributes[index].value : null
     case IDOLS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Accessory'])
+      if (index > -1 && attributes[index].value != 'None') {
+        return attributes[index].value
+      } else {
+        return null
+      }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
       return null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
-      return null
-    case MOONBIRDS_CONTRACT_ADDRESS:
-      return null
-    case WOW_CONTRACT_ADDRESS:
       return null
     default:
       return null
@@ -83,17 +78,23 @@ function getPfpChestArmor(identity) {
       index = _.findIndex(attributes, ['trait_type', 'shirt'])
       return index > -1 ? attributes[index].value : null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Clothing'])
+      return index > -1 ? attributes[index].value : null
     case IDOLS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Clothing'])
+      if (index > -1 && attributes[index].value != 'None') {
+        return attributes[index].value
+      } else {
+        return null
+      }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       return null
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Top'])
+      return index > -1 ? attributes[index].value : null
     case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Body'])
+      return index > -1 ? attributes[index].value : null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
@@ -123,17 +124,28 @@ function getPfpHeadArmor(identity) {
       index = _.findIndex(attributes, ['trait_type', 'hats'])
       return index > -1 ? attributes[index].value : null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Head'])
+      if (index > -1) {
+        if (attributes[index].value.includes('HAIR')) {
+          return null
+        } else {
+          return attributes[index].value
+        }
+      } else {
+        return null
+      }
     case IDOLS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Headwear'])
+      if (index > -1 && attributes[index].value != 'None') {
+        return attributes[index].value
+      } else {
+        return null
+      }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       return null
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Hat'])
+      return index > -1 ? attributes[index].value : null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
@@ -150,27 +162,11 @@ function getPfpHeadArmor(identity) {
 function getPfpWaistArmor(identity) {
   let index
   switch (contractAddress) {
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
       return null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
-      return null
-    case MOONBIRDS_CONTRACT_ADDRESS:
       return null
     case WOW_CONTRACT_ADDRESS:
       return null
@@ -185,27 +181,9 @@ function getPfpFootArmor(identity) {
     case MEEBITS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Shoes'])
       return index > -1 ? attributes[index].value : null
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
     case HYPERLOOT_CONTRACT_ADDRESS:
-      return null
-    case AZUKI_CONTRACT_ADDRESS:
-      return null
-    case MOONBIRDS_CONTRACT_ADDRESS:
-      return null
-    case WOW_CONTRACT_ADDRESS:
       return null
     default:
       return null
@@ -215,25 +193,11 @@ function getPfpFootArmor(identity) {
 function getPfpHandArmor(identity) {
   let index
   switch (contractAddress) {
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
       return null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
-      return null
-    case MOONBIRDS_CONTRACT_ADDRESS:
       return null
     case WOW_CONTRACT_ADDRESS:
       return null
@@ -260,20 +224,11 @@ function getPfpNecklace(identity) {
     case MEEBITS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Necklace'])
       return index > -1 ? attributes[index].value : null
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       return null
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Necklace'])
+      return index > -1 ? attributes[index].value : null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
@@ -290,19 +245,7 @@ function getPfpNecklace(identity) {
 function getPfpRing(identity) {
   let index
   switch (contractAddress) {
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
       return null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null

@@ -19,7 +19,6 @@ import {
   LOOT_EXPLORERS_CONTRACT_ADDRESS,
   CRYPTO_COVEN_CONTRACT_ADDRESS,
   DOODLES_CONTRACT_ADDRESS,
-  NOUNS_CONTRACT_ADDRESS,
   HYPERLOOT_CONTRACT_ADDRESS,
   AZUKI_CONTRACT_ADDRESS,
   MOONBIRDS_CONTRACT_ADDRESS,
@@ -90,10 +89,8 @@ function getPfpRace(contractAddress, { attributes }) {
       if (baycFurTrait === 'Cheetah') {
         return 'Ape Folk + Cat Folk'
       } else if (baycFurTrait === 'Zombie') {
-        return 'Ape Folk + Zombie'
-      } else if (baycFurTrait === 'Robot') {
-        return 'Ape Folk + Robot'
-      } else if (baycFurTrait === 'Death Bot') {
+        return 'Ape Folk + Undead'
+      } else if (baycFurTrait === 'Robot' || baycFurTrait === 'Death Bot' || baycFurTrait === 'Solid Gold') {
         return 'Ape Folk + Robot'
       } else {
         return 'Ape Folk'
@@ -104,10 +101,8 @@ function getPfpRace(contractAddress, { attributes }) {
       if (maycFurTrait === 'Cheetah') {
         return 'Ape Folk + Cat Folk'
       } else if (maycFurTrait === 'Zombie') {
-        return 'Ape Folk + Zombie'
-      } else if (maycFurTrait === 'Robot') {
-        return 'Ape Folk + Robot'
-      } else if (maycFurTrait === 'Death Bot') {
+        return 'Ape Folk + Undead'
+      } else if (maycFurTrait === 'Robot' || maycFurTrait === 'Death Bot' || maycFurTrait === 'Solid Gold') {
         return 'Ape Folk + Robot'
       } else {
         return 'Ape Folk'
@@ -137,23 +132,47 @@ function getPfpRace(contractAddress, { attributes }) {
         return 'Cat Folk'
       }
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Species'])
+      const jfSpecies = attributes[index].value
+      return jfSpecies === 'ZOMBIE' ? 'Undead' : 'Ape Folk'
     case IDOLS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Skin'])
+      const idolsSkin = attributes[index].value
+      if (idolsSkin === 'Ape') {
+        return 'Ape Folk'
+      } else if (idolsSkin === 'Zombie') {
+        return 'Undead'
+      } else if (idolsSkin === 'Ethereal') {
+        return 'Djinn'
+      } else if (idolsSkin === 'Silver' || idolsSkin === 'Gold') {
+        return 'Robot'
+      } else {
+        return 'Human'
+      }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       return null
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
+      return 'Human'
     case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Face'])
+      const doodlesFace = attributes[index].value
+      if (doodlesFace === 'Ape' || doodlesFace.includes('ape')) {
+        return 'Ape Folk'
+      } else if (doodlesFace === 'Alien' || doodlesFace.includes('alien') ) {
+        return 'Alien'
+      } else if (doodlesFace === 'Cat' || doodlesFace === 'Cat note' || doodlesFace === 'Catnip') {
+        return 'Cat Folk'
+      } else if (doodlesFace === 'Devil cat') {
+        return 'Cat Folk + Demon'
+      } else {
+        return 'Human'
+      }
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
       return null
     case MOONBIRDS_CONTRACT_ADDRESS:
-      return null
+      return 'Bird Folk'
     case WOW_CONTRACT_ADDRESS:
       return null
     default:
@@ -167,6 +186,9 @@ function getPfpRole(contractAddress, { attributes }) {
     case CHARACTER_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Role'])
       return attributes[index].value
+    case CRYPTO_COVEN_CONTRACT_ADDRESS:
+      index = _.findIndex(attributes, ['trait_type', 'Archetype of Power'])
+      return attributes[index].value
     default:
       return null
   }
@@ -178,38 +200,27 @@ function getPfpElement(contractAddress, { attributes }) {
     case CHARACTER_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Element'])
       return attributes[index].value
-    case BAYC_CONTRACT_ADDRESS:
-      index = _.findIndex(attributes, ['trait_type', 'Fur'])
-      if (attributes[index.value === 'Solid Gold']) {
-        return 'Metal'
-      } else {
-        return null
-      }
-    case MAYC_CONTRACT_ADDRESS:
-      index = _.findIndex(attributes, ['trait_type', 'Fur'])
-      if (attributes[index.value === 'Solid Gold']) {
-        return 'Metal'
-      } else {
-        return null
-      }
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
     case IDOLS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Eyes'])
+      const idolsEyes = attributes[index].value
+      if (idolsEyes === 'Fire Eyes') {
+        return 'Fire'
+      } else if (idolsEyes === 'Ice Eyes') {
+        return 'Water'
+      } else if (idolsEyes === 'Lightning Eyes') {
+        return 'Lightning'
+      } else {
+        return null
+      }
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
       return null
     case HYPERLOOT_CONTRACT_ADDRESS:
       return null
     case AZUKI_CONTRACT_ADDRESS:
       return null
     case MOONBIRDS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Eyes'])
+      return attributes[index].value === 'Fire' ? 'Fire' : null
     case WOW_CONTRACT_ADDRESS:
       return null
     default:
