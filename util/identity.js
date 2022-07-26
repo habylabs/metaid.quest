@@ -113,7 +113,17 @@ function getPfpRace(contractAddress, { attributes }) {
         return 'Ape Folk'
       }
     case MEEBITS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Type'])
+      const meebitType = attributes[index].value
+      if (meebitType === 'Skeleton') {
+        return 'Undead'
+      } else if (meebitType === 'Visitor') {
+        return 'Alien'
+      } else if (meebitType === 'Dissected') {
+        return 'Demon'
+      } else {
+        return meebitType
+      }
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -147,10 +157,6 @@ function getPfpRole(contractAddress, { attributes }) {
     case CHARACTER_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Role'])
       return attributes[index].value
-    case MAYC_CONTRACT_ADDRESS:
-      return null
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -198,8 +204,6 @@ function getPfpElement(contractAddress, { attributes }) {
       } else {
         return null
       }
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:

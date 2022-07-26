@@ -36,8 +36,6 @@ function getEquipMetadata(equip) {
 function getPfpWeapon(identity) {
   let index
   switch (contractAddress) {
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -81,7 +79,8 @@ function getPfpChestArmor(identity) {
       }
       return attributes[index].value
     case MEEBITS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Shirt'])
+      return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -119,7 +118,8 @@ function getPfpHeadArmor(identity) {
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
       return attributes[index].value
     case MEEBITS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Hat'])
+      return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -183,7 +183,8 @@ function getPfpFootArmor(identity) {
   let index
   switch (contractAddress) {
     case MEEBITS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Shoes'])
+      return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -214,8 +215,6 @@ function getPfpFootArmor(identity) {
 function getPfpHandArmor(identity) {
   let index
   switch (contractAddress) {
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -259,7 +258,8 @@ function getPfpNecklace(identity) {
       }
       return null
     case MEEBITS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'Necklace'])
+      return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
@@ -290,8 +290,6 @@ function getPfpNecklace(identity) {
 function getPfpRing(identity) {
   let index
   switch (contractAddress) {
-    case MEEBITS_CONTRACT_ADDRESS:
-      return null
     case COOLCATS_CONTRACT_ADDRESS:
       return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
