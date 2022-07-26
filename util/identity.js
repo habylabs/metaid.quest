@@ -125,7 +125,17 @@ function getPfpRace(contractAddress, { attributes }) {
         return meebitType
       }
     case COOLCATS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'face'])
+      const coolCatFace = attributes[index].value
+      if (coolCatFace === 'Alien' || coolCatFace === 'Angel' || coolCatFace === 'Demon' || coolCatFace === 'Robot') {
+        return `Cat Folk + ${coolCatFace}`
+      } else if (coolCatFace === 'Celestial') {
+        return 'Cat Folk + Djinn'
+      } else if (coolCatFace === 'Skeleton' || coolCatFace === 'Special zombie') {
+        return 'Cat Folk + Undead'
+      } else {
+        return 'Cat Folk'
+      }
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       return null
     case IDOLS_CONTRACT_ADDRESS:
@@ -157,28 +167,6 @@ function getPfpRole(contractAddress, { attributes }) {
     case CHARACTER_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Role'])
       return attributes[index].value
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
-    case JUNGLE_FREAKS_CONTRACT_ADDRESS:
-      return null
-    case IDOLS_CONTRACT_ADDRESS:
-      return null
-    case LOOT_EXPLORERS_CONTRACT_ADDRESS:
-      return null
-    case CRYPTO_COVEN_CONTRACT_ADDRESS:
-      return null
-    case DOODLES_CONTRACT_ADDRESS:
-      return null
-    case NOUNS_CONTRACT_ADDRESS:
-      return null
-    case HYPERLOOT_CONTRACT_ADDRESS:
-      return null
-    case AZUKI_CONTRACT_ADDRESS:
-      return null
-    case MOONBIRDS_CONTRACT_ADDRESS:
-      return null
-    case WOW_CONTRACT_ADDRESS:
-      return null
     default:
       return null
   }
@@ -204,8 +192,6 @@ function getPfpElement(contractAddress, { attributes }) {
       } else {
         return null
       }
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       return null
     case IDOLS_CONTRACT_ADDRESS:

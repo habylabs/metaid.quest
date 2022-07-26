@@ -36,8 +36,6 @@ function getEquipMetadata(equip) {
 function getPfpWeapon(identity) {
   let index
   switch (contractAddress) {
-    case COOLCATS_CONTRACT_ADDRESS:
-      return null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       return null
     case IDOLS_CONTRACT_ADDRESS:
@@ -82,7 +80,8 @@ function getPfpChestArmor(identity) {
       index = _.findIndex(attributes, ['trait_type', 'Shirt'])
       return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'shirt'])
+      return index > -1 ? attributes[index].value : null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       return null
     case IDOLS_CONTRACT_ADDRESS:
@@ -121,7 +120,8 @@ function getPfpHeadArmor(identity) {
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
       return index > -1 ? attributes[index].value : null
     case COOLCATS_CONTRACT_ADDRESS:
-      return null
+      index = _.findIndex(attributes, ['trait_type', 'hats'])
+      return index > -1 ? attributes[index].value : null
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       return null
     case IDOLS_CONTRACT_ADDRESS:
