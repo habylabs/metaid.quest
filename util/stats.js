@@ -1,4 +1,7 @@
 // Helper functions to populate Stats fields in Meta ID
+
+import _ from "lodash"
+
 import {
   getRace,
   getRole,
@@ -112,64 +115,28 @@ function getEquipmentBonus(item) {
 function getRaceBonus(race) {
   if (race.includes(" + ")) {
     const races = race.split(" + ")
-    const bonuses = [
-      raceBonusMap[races[0]],
-      raceBonusMap[races[1]]
-    ]
-
-    return {
-      str: bonuses[0].str + bonuses[1].str,
-      dex: bonuses[0].dex + bonuses[1].dex,
-      con: bonuses[0].con + bonuses[1].con,
-      int: bonuses[0].int + bonuses[1].int,
-      wis: bonuses[0].wis + bonuses[1].wis,
-      cha: bonuses[0].cha + bonuses[1].cha
-    }
+    return _.map(races, (race) => (raceBonusMap[race]))
   }
 
-  return raceBonusMap[race]
+  return [raceBonusMap[race]]
 }
 
 function getRoleBonus(role) {
   if (role.includes(" + ")) {
     const roles = role.split(" + ")
-    const bonuses = [
-      roleBonusMap[roleCategoryMap[roles[0]]],
-      roleBonusMap[roleCategoryMap[roles[1]]]
-    ]
-
-    return {
-      str: bonuses[0].str + bonuses[1].str,
-      dex: bonuses[0].dex + bonuses[1].dex,
-      con: bonuses[0].con + bonuses[1].con,
-      int: bonuses[0].int + bonuses[1].int,
-      wis: bonuses[0].wis + bonuses[1].wis,
-      cha: bonuses[0].cha + bonuses[1].cha
-    }
+    return _.map(roles, (role) => (roleBonusMap[roleCategoryMap[role]]))
   }
 
-  return roleBonusMap[roleCategoryMap[role]]
+  return [roleBonusMap[roleCategoryMap[role]]]
 }
 
 function getElementBonus(element) {
   if (element.includes(" + ")) {
     const elements = element.split(" + ")
-    const bonuses = [
-      elementBonusMap[elements[0]],
-      elementBonusMap[elements[1]]
-    ]
-
-    return {
-      str: bonuses[0].str + bonuses[1].str,
-      dex: bonuses[0].dex + bonuses[1].dex,
-      con: bonuses[0].con + bonuses[1].con,
-      int: bonuses[0].int + bonuses[1].int,
-      wis: bonuses[0].wis + bonuses[1].wis,
-      cha: bonuses[0].cha + bonuses[1].cha
-    }
+    return _.map(elements, (element) => (elementBonusMap[element]))
   }
 
-  return elementBonusMap[element]
+  return [elementBonusMap[element]]
 }
 
 function getIdentityBonus(identity) {
@@ -181,13 +148,15 @@ function getIdentityBonus(identity) {
   const roleBonus = getRoleBonus(role)
   const elementBonus = getElementBonus(element)
 
+  const bonuses = _.concat(raceBonus, roleBonus, elementBonus)
+
   return {
-    str: raceBonus.str + roleBonus.str + elementBonus.str,
-    dex: raceBonus.dex + roleBonus.dex + elementBonus.dex,
-    con: raceBonus.con + roleBonus.con + elementBonus.con,
-    int: raceBonus.int + roleBonus.int + elementBonus.int,
-    wis: raceBonus.wis + roleBonus.wis + elementBonus.wis,
-    cha: raceBonus.cha + roleBonus.cha + elementBonus.cha
+    str: _.sum(_.map(bonuses, 'str')),
+    dex: _.sum(_.map(bonuses, 'dex')),
+    con: _.sum(_.map(bonuses, 'con')),
+    int: _.sum(_.map(bonuses, 'int')),
+    wis: _.sum(_.map(bonuses, 'wis')),
+    cha: _.sum(_.map(bonuses, 'cha'))
   }
 }
 
