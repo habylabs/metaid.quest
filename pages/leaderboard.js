@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-function Castles() {
+function Leaderboard() {
   return (
     <>
       <Head>
@@ -9,10 +9,10 @@ function Castles() {
         </title>
       </Head>
       <div>
-        Castles
+        Leaderboard
       </div>
     </>
   )
 }
 
-export default Castles
+export default Leaderboard

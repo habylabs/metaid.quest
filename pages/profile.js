@@ -1,6 +1,17 @@
+import Head from 'next/head'
+
 function Profile() {
   return (
-    <div></div>
+    <>
+      <Head>
+        <title>
+          Meta ID | Your NFT profile for the metaverse!
+        </title>
+      </Head>
+      <div>
+        Profile
+      </div>
+    </>
   )
 }
 
