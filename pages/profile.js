@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Mint, Withdraw } from '../components'
 
 function Profile() {
   return (
@@ -9,7 +11,9 @@ function Profile() {
         </title>
       </Head>
       <div>
-        Profile
+        <Mint />
+        <Withdraw />
+        <ConnectButton />
       </div>
     </>
   )

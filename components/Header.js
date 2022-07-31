@@ -1,14 +1,17 @@
 import React from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi'
+import { useAccount, useEnsName } from 'wagmi'
 import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
 import styles from '../styles/components/Header.module.css'
 
 function Header() {
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
+  const { data: ensName } = useEnsName({ address })
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const paddingClass = isMobile ? 'side-padding-mobile' : 'side-padding'
+
+  const formattedAddress = `${address.slice(0,4)}...${address.slice(address.length - 4)}`
 
   return (
     <header
@@ -33,7 +36,11 @@ function Header() {
         </a>
       </div>
       <div>
-        {isConnected ? <ConnectButton /> : null}
+        {isConnected && (
+          <Link href='/profile'>
+            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formattedAddress}</a>
+          </Link>
+        )}
       </div>
     </header>
   )

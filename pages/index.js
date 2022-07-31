@@ -3,7 +3,8 @@ import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Head from 'next/head'
 import Image from 'next/image'
-import { Card, MetaId, Mint, Withdraw } from '../components'
+import Link from 'next/link'
+import { Button, Card, MetaId } from '../components'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
 
@@ -76,7 +77,13 @@ function Home() {
   }
 
   function getCta() {
-    return (isConnected ? <Mint /> : <ConnectButton />)
+    return (isConnected ? (
+      <Button>
+        <Link href='/profile'>
+          <a>Mint</a>
+        </Link>
+      </Button>
+    ) : <ConnectButton />)
   }
 
   return (
@@ -97,7 +104,6 @@ function Home() {
             </h2>
             <div className={styles.primaryContainerContentButton}>
               {getCta()}
-              {isConnected && <Withdraw />}
             </div>
           </div>
           {getAnimation()}
