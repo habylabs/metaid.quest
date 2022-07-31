@@ -19,7 +19,6 @@ import {
   LOOT_EXPLORERS_CONTRACT_ADDRESS,
   CRYPTO_COVEN_CONTRACT_ADDRESS,
   DOODLES_CONTRACT_ADDRESS,
-  HYPERLOOT_CONTRACT_ADDRESS,
   AZUKI_CONTRACT_ADDRESS,
   MOONBIRDS_CONTRACT_ADDRESS,
   WOW_CONTRACT_ADDRESS,
@@ -31,11 +30,12 @@ import {
 // provided in the contract attributes response
 
 function getGuild(identity) {
-  return contractNameMap[identity.pfp.contract]
+  return (identity.pfp.contract ? contractNameMap[identity.pfp.contract] : '???')
 }
 
 function getId(identity) {
-  return `${getGuild(identity)} #${identity.pfp.id}`
+  return (identity.pfp.contract ?
+    `${getGuild(identity)} #${identity.pfp.id}` : '???')
 }
 
 function getRace(identity) {

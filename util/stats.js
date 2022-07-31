@@ -186,16 +186,25 @@ function getBonusStats(identity, equipment) {
 
 function getLevel(baseStats) {
   const { str, dex, con, int, wis, cha } = baseStats
-  return Math.round((str + dex + con + int + wis + cha) / 6) - 4
+  return ( str === '???' ? '??' :
+    Math.round((str + dex + con + int + wis + cha) / 6) - 4)
 }
 
 function getHP(baseStats, bonusStats) {
+  if (baseStats.str === '???') {
+    return '???'
+  }
+
   const baseSum = baseStats.str + baseStats.dex + baseStats.con
   const bonusSum = bonusStats.str + bonusStats.dex + bonusStats.con
   return 10 * (baseSum + bonusSum) + 50
 }
 
 function getMP(baseStats, bonusStats) {
+  if (baseStats.str === '???') {
+    return '???'
+  }
+
   const baseSum = baseStats.int + baseStats.wis + baseStats.cha
   const bonusSum = bonusStats.int + bonusStats.wis + bonusStats.cha
   return 10 * (baseSum + bonusSum) + 50

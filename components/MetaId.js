@@ -1,3 +1,5 @@
+import { useAccount, useEnsName } from 'wagmi'
+
 import {
   getGuild,
   getId,
@@ -16,7 +18,6 @@ import styles from '../styles/components/MetaId.module.css';
 
 const exampleData = {
   identity: {
-    name: 'michaelcjoseph.eth',
     pfp: {
       contract: '0x439cac149B935AE1D726569800972E1669d17094',
       id: 9392,
@@ -60,8 +61,59 @@ const exampleData = {
   }
 }
 
-function MetaId({ data, example = false }) {
-  const { identity, equipment, baseStats, bonusStats } = (example ? exampleData : data)
+const emptyData = {
+  identity: {
+    pfp: {
+      contract: null,
+      id: null,
+      image: null,
+      race: '???',
+      role: '???',
+      element: '???'
+    },
+    character: {
+      id: null,
+      race: null,
+      role: null,
+      element: null
+    },
+  },
+  equipment: {
+    weapon: '???',
+    chestArmor: '???',
+    headArmor: '???',
+    waistArmor: '???',
+    footArmor: '???',
+    handAmor: '???',
+    necklace: '???',
+    ring: '???'
+  },
+  baseStats: {
+    str: '???',
+    dex: '???',
+    con: '???',
+    int: '???',
+    wis: '???',
+    cha: '???',
+  },
+  bonusStats: {
+    str: '???',
+    dex: '???',
+    con: '???',
+    int: '???',
+    wis: '???',
+    cha: '???',
+  }
+}
+
+function MetaId({ data, example = false, empty = false }) {
+  const idData = example ? exampleData : empty ? emptyData : data
+  const { identity, equipment, baseStats, bonusStats } = idData
+  const { address } = useAccount()
+  const { data: ensName } = useEnsName({ address })
+
+  const name = example ? 'michaelcjoseph.eth' : (ensName ?? 'None')
+
   return (
     <svg width="100%" viewBox="0 0 1500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="1500" height="500" fill="#002B36"/>
@@ -75,8 +127,8 @@ function MetaId({ data, example = false }) {
       <rect x="581" y="36" width="258" height="428" className={styles.rectBorder}/>
       <rect x="586" y="41" width="248" height="418" className={styles.rectBorder}/>
       <text x="652" y="80" className={styles.headText}>IDENTITY</text>
-      <text x="600" y="110" className={styles.titleText}>{identity.name}</text>
-      <text x="600" y="125" className={styles.baseText}>michaelcjoseph.eth</text>
+      <text x="600" y="110" className={styles.titleText}>NAME</text>
+      <text x="600" y="125" className={styles.baseText}>{name}</text>
       <text x="600" y="150" className={styles.titleText}>GUILD</text>
       <text x="600" y="165" className={styles.baseText}>{getGuild(identity)}</text>
       <text x="600" y="190" className={styles.titleText}>ID</text>
