@@ -1,14 +1,15 @@
 import { useMediaQuery } from 'react-responsive'
-import { useWeb3React } from "@web3-react/core"
+import { useAccount } from 'wagmi'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Head from 'next/head'
 import Image from 'next/image'
-import { Card, Connect, MetaId, Mint } from '../components'
+import { Card, MetaId, Mint, Withdraw } from '../components'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
 
 function Home() {
   const isMobile = useMediaQuery({ maxWidth: 480 })
-  const { active } = useWeb3React();
+  const { isConnected } = useAccount()
 
   const exampleData = {
     identity: {
@@ -75,7 +76,7 @@ function Home() {
   }
 
   function getCta() {
-    return (active ? <Mint /> : <Connect />)
+    return (isConnected ? <Mint /> : <ConnectButton />)
   }
 
   return (
@@ -96,6 +97,7 @@ function Home() {
             </h2>
             <div className={styles.primaryContainerContentButton}>
               {getCta()}
+              {isConnected && <Withdraw />}
             </div>
           </div>
           {getAnimation()}

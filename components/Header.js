@@ -1,10 +1,12 @@
 import React from 'react'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi'
 import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
-import { Disconnect } from '../components'
 import styles from '../styles/components/Header.module.css'
 
 function Header() {
+  const { isConnected } = useAccount()
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const paddingClass = isMobile ? 'side-padding-mobile' : 'side-padding'
 
@@ -31,7 +33,7 @@ function Header() {
         </a>
       </div>
       <div>
-        <Disconnect />
+        {isConnected ? <ConnectButton /> : null}
       </div>
     </header>
   )
