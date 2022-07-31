@@ -4,6 +4,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import Router from 'next/router'
 import { Button, Card, MetaId } from '../components'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
@@ -11,6 +12,9 @@ import styles from '../styles/pages/index.module.css'
 function Home() {
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const { isConnected } = useAccount()
+  if (isConnected) {
+    Router.push('/profile')
+  }
 
   function getAnimation() {
     const animationContainer = (

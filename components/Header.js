@@ -5,13 +5,15 @@ import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
 import styles from '../styles/components/Header.module.css'
 
+function formatAddress(address) {
+  return `${address.slice(0,4)}...${address.slice(address.length - 4)}`
+}
+
 function Header() {
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const paddingClass = isMobile ? 'side-padding-mobile' : 'side-padding'
-
-  const formattedAddress = `${address.slice(0,4)}...${address.slice(address.length - 4)}`
 
   return (
     <header
@@ -38,7 +40,7 @@ function Header() {
       <div>
         {isConnected && (
           <Link href='/profile'>
-            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formattedAddress}</a>
+            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
           </Link>
         )}
       </div>
