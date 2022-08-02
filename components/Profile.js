@@ -59,8 +59,6 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ pfp, setPfp ] = useState(dbData.identity.pfp)
   const [ extraChar, setExtraChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
-  
-  console.log(pfp)
 
   const equipmentContract = getEquipmentContractInterface(equipment)
   const { data } = useContractReads({
@@ -109,7 +107,6 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
       },
     ]
   })
-  console.log(data)
 
   return (
     <div>

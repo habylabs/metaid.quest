@@ -39,7 +39,7 @@ function getId(identity) {
 }
 
 function getRace(identity) {
-  if (identity.pfp.race) {
+  if (identity && identity.pfp.race) {
     if (identity.character.race) {
       return `${identity.pfp.race} + ${identity.character.race}`
     }
@@ -51,7 +51,7 @@ function getRace(identity) {
 }
 
 function getRole(identity) {
-  if (identity.pfp.role) {
+  if (identity && identity.pfp.role) {
     if (identity.character.role) {
       return `${identity.pfp.role} + ${identity.character.role}`
     }
@@ -63,7 +63,7 @@ function getRole(identity) {
 }
 
 function getElement(identity) {
-  if (identity.pfp.element) {
+  if (identity && identity.pfp.element) {
     if (identity.character.element) {
       return `${identity.pfp.element} + ${identity.character.element}`
     }

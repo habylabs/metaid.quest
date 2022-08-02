@@ -14,10 +14,11 @@ import {
 } from "./mapping"
 
 import {
-  get6mBlock,
+  getLatestBlockNum,
+  get6mBlockNum,
   getFirstTx,
-  getFromTx,
-  getToTx,
+  getAllFromTx,
+  getAllToTx,
   getTokens,
   getNFTCount,
 } from "./alchemy"
@@ -101,7 +102,7 @@ async function getBaseStats(address) {
   }
 }
 
-function getEquipmentBonus(item) {
+const getEquipmentBonus = (item) => {
   if (item) {
     if (item.includes("of")) {
       if (item.startsWith("\"")) {
@@ -117,7 +118,7 @@ function getEquipmentBonus(item) {
   return 0
 }
 
-function getRaceBonus(race) {
+const getRaceBonus = (race) => {
   if (race === 'None') {
     return 0
   }
@@ -128,7 +129,7 @@ function getRaceBonus(race) {
   return _.sum(races.map((race) => (raceBonusMap[race])))
 }
 
-function getRoleBonus(role) {
+const getRoleBonus = (role) => {
   if (role === 'None') {
     return 0
   } 
@@ -139,7 +140,7 @@ function getRoleBonus(role) {
   return 2 * roles.length
 }
 
-function getElementBonus(element) {
+const getElementBonus = (element) => {
   if (element === 'None') {
     return 0
   } 
@@ -150,7 +151,7 @@ function getElementBonus(element) {
   return _.sum(elements.map((element) => (elementBonusMap[element])))
 }
 
-function getIdentityBonus(identity) {
+const getIdentityBonus = (identity) => {
   const race = getRace(identity)
   const role = getRole(identity)
   const element = getElement(identity)
@@ -158,14 +159,29 @@ function getIdentityBonus(identity) {
   return getRaceBonus(race) + getRoleBonus(role) + getElementBonus(element)
 }
 
-function getBonusStats(identity, equipment) {
+const getBonusStats = (identity, equipment) => {
   const equipmentBonus = _.sum(_.map(equipment, (item) => (getEquipmentBonus(item))))
   const identityBonus = getIdentityBonus(identity)
 
   return equipmentBonus + identityBonus
 }
 
-const getStats = (address, identity, equipment) => {
+const getStats = async (address, identity, equipment) => {
+  const latestBlockNum = await getLatestBlockNum()
+  const blockNum6mAgo = get6mBlockNum(latestBlockNum)
+  const firstTx = await getFirstTx(address)
+  const allFromTx = await getAllFromTx(blockNum6mAgo, latestBlockNum, address)
+  const allToTx = await getAllToTx(blockNum6mAgo, latestBlockNum, address)
+  // I need allTokens and uniqueTokens
+  //const tokens = await getTokens(address)
+  //const nftCount = await getNFTCount(address)
+
+  console.log(latestBlockNum)
+  console.log(blockNum6mAgo)
+  console.log(firstTx)
+  console.log(allFromTx.length)
+  console.log(allToTx.length)
+
   return {
     level: 0,
     nftLevel: 0,

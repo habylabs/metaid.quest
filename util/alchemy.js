@@ -18,38 +18,44 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
-function getCategoryAll() {
-  return ['external', 'internal', 'token']
+const getCategoryAll = () => {
+  return ['external', 'internal', 'erc20', 'erc721', 'erc1155', 'specialnft']
 }
 
-async function getLatestBlock() {
-  return await alchemy.core.getBlockNumber()
-}
+const intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
 
-async function get6mBlock() {
+const getLatestBlockNum = async () => {
   try {
-    const latestBlock = await getLatestBlock()
-    return `0x${(parseInt(latestBlock, 16) - 1000000).toString(16)}`
+    const latestBlock = await alchemy.core.getBlockNumber()
+    // Use the latestBlock - 5 so to void potential data processing lags
+    // from Alchemy
+    return intToHex(latestBlock - 5)
   } catch (error) {
     console.log(error)
+    return -1
   }
+  
 }
 
-async function getFirstTx(address) {
+const get6mBlockNum = (latestBlock) => {
+  return intToHex(parseInt(latestBlock, 16) - 1000000)
+}
+
+const getFirstTx = async (address) => {
   try {
-    const resFrom = await alchemy.core.getAssetTransfers([{
+    const resFrom = await alchemy.core.getAssetTransfers({
       'fromAddress': address,
       'category': getCategoryAll()
-    }])
-    const resTo = await alchemy.core.getAssetTransfers([{
+    })
+    const resTo = await alchemy.core.getAssetTransfers({
       'toAddress': address,
       'category': getCategoryAll()
-    }])
+    })
 
-    const firstFromTx = resFrom.result.transfers[0]
-    const firstToTx = resTo.result.transfers[0]
+    const firstFromTx = resFrom.transfers[0]
+    const firstToTx = resTo.transfers[0]
 
-    if (parseInt(firstFromTx, 16) > parseInt(firstToTx, 16)) {
+    if (parseInt(firstFromTx.blockNum, 16) > parseInt(firstToTx.blockNum, 16)) {
       return firstToTx
     }
 
@@ -60,32 +66,32 @@ async function getFirstTx(address) {
   }
 }
 
-async function getFromTx(fromBlock, address) {
+const getAllFromTx = async (fromBlock, toBlock, address) => {
   try {
-    const res = await alchemy.core.getAssetTransfers([{
-      'fromBlock': fromBlock,
-      'toBlock': "latest",
+    const res = await alchemy.core.getAssetTransfers({
+      fromBlock,
+      toBlock,
       'fromAddress': address,
       'category': getCategoryAll()
-    }])
+    })
 
-    return res.result.transfers
+    return res.transfers
   } catch (error) {
    console.log(error)
    return 0 
   }  
 }
 
-async function getToTx(fromBlock, address) {
+const getAllToTx = async (fromBlock, toBlock, address) => {
   try {
-    const res = await alchemy.core.getAssetTransfers([{
-      'fromBlock': fromBlock,
-      'toBlock': "latest",
+    const res = await alchemy.core.getAssetTransfers({
+      fromBlock,
+      toBlock,
       'toAddress': address,
       'category': getCategoryAll()
-    }])
+    })
 
-    return res.result.transfers
+    return res.transfers
   } catch (error) {
    console.log(error)
    return 0 
@@ -179,10 +185,11 @@ async function getNFTMetadata(contractAddress, contractId) {
 }
 
 export {
-  get6mBlock,
+  getLatestBlockNum,
+  get6mBlockNum,
   getFirstTx,
-  getFromTx,
-  getToTx,
+  getAllFromTx,
+  getAllToTx,
   getTokens,
   getNFTCount,
   getNFTs,
