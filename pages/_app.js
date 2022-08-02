@@ -11,6 +11,7 @@ import {
 } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { MantineProvider } from '@mantine/core';
 import { Page } from '../components';
 
 import '@rainbow-me/rainbowkit/styles.css';
@@ -39,9 +40,18 @@ function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} coolMode>
-        <Page>
-          <Component {...pageProps} />
-        </Page>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme: 'light',
+          }}
+        >
+          <Page>
+            <Component {...pageProps} />
+          </Page>
+        </MantineProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )

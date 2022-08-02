@@ -1,50 +1,35 @@
 import { 
   Network,
-  initializeAlchemy,
-  getNftsForOwner,
-  getNftMetadata,
+  Alchemy,
   NftExcludeFilters,
-} from '@alch/alchemy-sdk';
+} from 'alchemy-sdk';
+
+import _ from 'lodash'
+
+import {
+  IDENTITY_NFT_CONTRACTS,
+  EQUIPMENT_NFT_CONTRACTS
+} from './constants'
 
 const settings = {
   apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
   network: Network.ETH_MAINNET, // Replace with your network.
-  maxRetries: 10
 };
 
-const alchemy = initializeAlchemy(settings);
+const alchemy = new Alchemy(settings);
 
-function getAlchemyURL() {
-  return `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`
+function getCategoryAll() {
+  return ['external', 'internal', 'token']
 }
 
-async function fetchAlchemyData(method, params) {
-  try {
-    const alchemyRes = await fetch(getAlchemyURL(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "jsonrpc": "2.0",
-        "id": 0,
-        "method": method,
-        "params": params,
-      })
-    })
-  
-    const json = await alchemyRes.json()
-    return json
-  } catch (error) {
-    console.log(error)
-  }
+async function getLatestBlock() {
+  return await alchemy.core.getBlockNumber()
 }
 
 async function get6mBlock() {
   try {
-    const res = await fetchAlchemyData('eth_getBlockByNumber', ['latest', false])
-    const { number } = res.result
-    return `0x${(parseInt(number, 16) - 1000000).toString(16)}`
+    const latestBlock = await getLatestBlock()
+    return `0x${(parseInt(latestBlock, 16) - 1000000).toString(16)}`
   } catch (error) {
     console.log(error)
   }
@@ -52,14 +37,13 @@ async function get6mBlock() {
 
 async function getFirstTx(address) {
   try {
-    const resFrom = await fetchAlchemyData('alchemy_getAssetTransfers', [{
-      "fromBlock": "0x1",
-      "fromAddress": address,
+    const resFrom = await alchemy.core.getAssetTransfers([{
+      'fromAddress': address,
+      'category': getCategoryAll()
     }])
-
-    const resTo = await fetchAlchemyData('alchemy_getAssetTransfers', [{
-      "fromBlock": "0x1",
-      "toAddress": address,
+    const resTo = await alchemy.core.getAssetTransfers([{
+      'toAddress': address,
+      'category': getCategoryAll()
     }])
 
     const firstFromTx = resFrom.result.transfers[0]
@@ -78,10 +62,11 @@ async function getFirstTx(address) {
 
 async function getFromTx(fromBlock, address) {
   try {
-    const res = await fetchAlchemyData('alchemy_getAssetTransfers', [{
-      "fromBlock": fromBlock,
-      "toBlock": "latest",
-      "fromAddress": address,
+    const res = await alchemy.core.getAssetTransfers([{
+      'fromBlock': fromBlock,
+      'toBlock': "latest",
+      'fromAddress': address,
+      'category': getCategoryAll()
     }])
 
     return res.result.transfers
@@ -93,10 +78,11 @@ async function getFromTx(fromBlock, address) {
 
 async function getToTx(fromBlock, address) {
   try {
-    const res = await fetchAlchemyData('alchemy_getAssetTransfers', [{
-      "fromBlock": fromBlock,
-      "toBlock": "latest",
-      "toAddress": address,
+    const res = await alchemy.core.getAssetTransfers([{
+      'fromBlock': fromBlock,
+      'toBlock': "latest",
+      'toAddress': address,
+      'category': getCategoryAll()
     }])
 
     return res.result.transfers
@@ -106,16 +92,15 @@ async function getToTx(fromBlock, address) {
   }  
 }
 
-async function getContractAddresses(address) {
+async function getTokenContractAddresses(address) {
   try {
-    const resFrom = await fetchAlchemyData('alchemy_getAssetTransfers', [{
-      "fromBlock": "0x1",
+    const resFrom = await alchemy.core.getAssetTransfers([{
       "fromAddress": address,
       "excludeZeroValue": true,
       "category": ["erc20"],
     }])
 
-    const resTo = await fetchAlchemyData('alchemy_getAssetTransfers', [{
+    const resTo = await alchemy.core.getAssetTransfers([{
       "fromBlock": "0x1",
       "toAddress": address,
       "excludeZeroValue": true,
@@ -133,8 +118,8 @@ async function getContractAddresses(address) {
 
 async function getTokens(address) {
   try {
-    const contractAddresses = await getContractAddresses(address)
-    const res = await fetchAlchemyData('alchemy_getTokenBalances', [address, contractAddresses])
+    const contractAddresses = await getTokenContractAddresses(address)
+    const res = await alchemy.core.getTokenBalances(address, contractAddresses)
     return res.result.tokenBalances
   } catch (error) {
     console.log(error)
@@ -144,7 +129,7 @@ async function getTokens(address) {
 
 async function getNFTCount(address) {
   try {
-    const nfts = await getNftsForOwner(alchemy, address, {
+    const nfts = await alchemy.nft.getNftsForOwner(address, {
       omitMetadata: true,
       excludeFilters: [ NftExcludeFilters.SPAM ] 
     });
@@ -155,9 +140,37 @@ async function getNFTCount(address) {
   }
 }
 
+function getNftContractAddresses(type) {
+  if (type === 'all') {
+    return _.concat(IDENTITY_NFT_CONTRACTS, EQUIPMENT_NFT_CONTRACTS)
+  } else if (type === 'equipment') {
+    return EQUIPMENT_NFT_CONTRACTS
+  } else {
+    return IDENTITY_NFT_CONTRACTS
+  }
+}
+
+async function getNFTs(address, type = 'all') {
+  try {
+    const nfts = await alchemy.nft.getNftsForOwner(address, {
+      contractAddresses: getNftContractAddresses(type)
+    });
+    return nfts.ownedNfts.map((nft) => ({
+      contract: nft.contract,
+      tokenId: nft.tokenId,
+      tokenType: nft.tokenType,
+      metaData: nft.rawMetadata,
+      media: nft.media
+    }))
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
 async function getNFTMetadata(contractAddress, contractId) {
   try {
-    const nftMetadata = await getNftMetadata(alchemy, contractAddress, contractId);
+    const nftMetadata = await alchemy.nft.getNftMetadata(contractAddress, contractId);
     return nftMetadata.metadata
   } catch (error) {
     console.error(error)
@@ -172,5 +185,6 @@ export {
   getToTx,
   getTokens,
   getNFTCount,
+  getNFTs,
   getNFTMetadata
 }

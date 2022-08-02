@@ -14,24 +14,28 @@ import {
   AZUKI_CONTRACT_ADDRESS,
   MOONBIRDS_CONTRACT_ADDRESS,
   WOW_CONTRACT_ADDRESS,
+  LOOT_CONTRACT_ADDRESS,
+  MLOOT_CONTRACT_ADDRESS,
 } from './constants'
 
 const contractNameMap = {}
-contractNameMap[CHARACTER_CONTRACT_ADDRESS] = 'Character'
-contractNameMap[BAYC_CONTRACT_ADDRESS] = 'BAYC'
-contractNameMap[MAYC_CONTRACT_ADDRESS] = 'MAYC'
-contractNameMap[MEEBITS_CONTRACT_ADDRESS] = 'Meebits'
-contractNameMap[COOLCATS_CONTRACT_ADDRESS] = 'CoolCats'
-contractNameMap[JUNGLE_FREAKS_CONTRACT_ADDRESS] = 'Jungle Freaks'
-contractNameMap[IDOLS_CONTRACT_ADDRESS] = 'The Idols'
-contractNameMap[LOOT_EXPLORERS_CONTRACT_ADDRESS] = 'Loot Explorers'
-contractNameMap[CRYPTO_COVEN_CONTRACT_ADDRESS] = 'Crypto Coven'
-contractNameMap[DOODLES_CONTRACT_ADDRESS] = 'Doodles'
-contractNameMap[NOUNS_CONTRACT_ADDRESS] = 'Nouns'
-contractNameMap[HYPERLOOT_CONTRACT_ADDRESS] = 'HyperLoot'
-contractNameMap[AZUKI_CONTRACT_ADDRESS] = 'Azuki'
-contractNameMap[MOONBIRDS_CONTRACT_ADDRESS] = 'Moonbirds'
-contractNameMap[WOW_CONTRACT_ADDRESS] = 'World of Women'
+contractNameMap[CHARACTER_CONTRACT_ADDRESS.toLowerCase()] = 'Character'
+contractNameMap[BAYC_CONTRACT_ADDRESS.toLowerCase()] = 'BAYC'
+contractNameMap[MAYC_CONTRACT_ADDRESS.toLowerCase()] = 'MAYC'
+contractNameMap[MEEBITS_CONTRACT_ADDRESS.toLowerCase()] = 'Meebits'
+contractNameMap[COOLCATS_CONTRACT_ADDRESS.toLowerCase()] = 'CoolCats'
+contractNameMap[JUNGLE_FREAKS_CONTRACT_ADDRESS.toLowerCase()] = 'Jungle Freaks'
+contractNameMap[IDOLS_CONTRACT_ADDRESS.toLowerCase()] = 'The Idols'
+contractNameMap[LOOT_EXPLORERS_CONTRACT_ADDRESS.toLowerCase()] = 'Loot Explorers'
+contractNameMap[CRYPTO_COVEN_CONTRACT_ADDRESS.toLowerCase()] = 'Crypto Coven'
+contractNameMap[DOODLES_CONTRACT_ADDRESS.toLowerCase()] = 'Doodles'
+contractNameMap[NOUNS_CONTRACT_ADDRESS.toLowerCase()] = 'Nouns'
+contractNameMap[HYPERLOOT_CONTRACT_ADDRESS.toLowerCase()] = 'HyperLoot'
+contractNameMap[AZUKI_CONTRACT_ADDRESS.toLowerCase()] = 'Azuki'
+contractNameMap[MOONBIRDS_CONTRACT_ADDRESS.toLowerCase()] = 'Moonbirds'
+contractNameMap[WOW_CONTRACT_ADDRESS.toLowerCase()] = 'World of Women'
+contractNameMap[LOOT_CONTRACT_ADDRESS.toLowerCase()] = 'Loot Bag'
+contractNameMap[MLOOT_CONTRACT_ADDRESS.toLowerCase()] = 'mLoot Bag'
 
 const raceBonusMap = {
   "Human": {

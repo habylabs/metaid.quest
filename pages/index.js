@@ -11,9 +11,9 @@ import styles from '../styles/pages/index.module.css'
 
 function Home() {
   const isMobile = useMediaQuery({ maxWidth: 480 })
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
   if (isConnected) {
-    Router.push('/profile')
+    Router.push(`/profile/${address}`)
   }
 
   function getAnimation() {

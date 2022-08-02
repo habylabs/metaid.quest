@@ -24,6 +24,13 @@ import {
   getNFTCount,
 } from "./alchemy"
 
+// # of transactions over last 6m
+// count of ownership
+// count of uniques
+// first transaction
+// most recent transaction
+// # of addresses interacted with over last 6m
+
 function logCalc(t, multiple = 1) {
   const logx = Math.log2(t + 1)
   return Math.round(multiple * Math.pow(logx, 2)) + 5
@@ -64,8 +71,8 @@ function getWIS(firstTx, fromTx, toTx) {
 }
 
 function getCHA(fromTx, toTx) {
-  const toAddresses = fromTx.map(tx => tx.to);
-  const fromAddresses = toTx.map(tx => tx.from);
+  const toAddresses = fromTx ? fromTx.map(tx => tx.to) : [];
+  const fromAddresses = toTx ? toTx.map(tx => tx.from) : [];
 
   const dedupAddresses = [...new Set([...toAddresses, ...fromAddresses])];
   return logCalc(dedupAddresses.length)

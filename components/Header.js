@@ -24,8 +24,11 @@ function Header() {
         </Link>
       </div>
       <div>
-        <Link href='/character'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
+        <Link href='/leaderboard'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Leaderboard</a>
+        </Link>
+        <Link href='/castles'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Castles</a>
         </Link>
         <a 
           href='https://docs.metaid.quest/'
@@ -38,7 +41,7 @@ function Header() {
       </div>
       <div>
         {isConnected && (
-          <Link href='/profile'>
+          <Link href={`/profile/${address}`}>
             <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
           </Link>
         )}

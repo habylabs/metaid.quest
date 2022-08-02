@@ -1,11 +1,12 @@
 import {
+  parseDb,
   getTokenByTokenId,
   putTokenByTokenId
-} from "../../../../util/db"
+} from '../../../../../util/db'
 
 import {
   getContractImage
-} from "../../../../util/image"
+} from '../../../../../util/image'
 
 import {
   getGuild,
@@ -14,11 +15,11 @@ import {
   getRole,
   getElement,
   getIdentity
-} from "../../../../util/identity"
+} from '../../../../../util/identity'
 
 import {
   getEquipment
-} from "../../../../util/equipment"
+} from '../../../../../util/equipment'
 
 import {
   getBaseStats,
@@ -26,55 +27,7 @@ import {
   getLevel,
   getHP,
   getMP
-} from "../../../../util/stats"
-
-function parseDb(db) {
-  return {
-    identity: {
-      name: db["ens_name"],
-      pfp: {
-        contract: db["pfp_contract"],
-        id: db["pfp_id"],
-        image: db["pfp_img"],
-        race: db["pfp_race"],
-        role: db["pfp_role"],
-        element: db["pfp_element"]
-      },
-      character: {
-        id: db["char_id"],
-        race: db["char_race"],
-        role: db["char_role"],
-        element: db["char_element"]
-      },
-    },
-    equipment: {
-      weapon: db.weapon,
-      chestArmor: db["chest_armor"],
-      headArmor: db["head_armor"],
-      waistArmor: db["waist_armor"],
-      footArmor: db["foot_armor"],
-      handAmor: db["hand_armor"],
-      necklace: db.necklace,
-      ring: db.ring
-    },
-    baseStats: {
-      str: db["base_str"],
-      dex: db["base_dex"],
-      con: db["base_con"],
-      int: db["base_int"],
-      wis: db["base_wis"],
-      cha: db["base_cha"],
-    },
-    bonusStats: {
-      str: db["bonus_str"],
-      dex: db["bonus_dex"],
-      con: db["bonus_con"],
-      int: db["bonus_int"],
-      wis: db["bonus_wis"],
-      cha: db["bonus_cha"],
-    }
-  }
-}
+} from '../../../../../util/stats'
 
 function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
   return {
@@ -205,7 +158,7 @@ function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
 async function get(tokenId) {
   const db = await getTokenByTokenId(parseInt(tokenId))
   const { identity, equipment, baseStats, bonusStats } = parseDb(db)
-  return formatRes(tokenId, identity, equipment, baseStats, bonusStats)
+  return formatRes(tokenId, identity, equipment.items, baseStats, bonusStats)
 }
 
 async function put(tokenId, reqBody) {
