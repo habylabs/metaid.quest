@@ -10,8 +10,6 @@ import {
 
 import {
   raceBonusMap,
-  roleCategoryMap,
-  roleBonusMap,
   elementBonusMap
 } from "./mapping"
 
@@ -120,30 +118,36 @@ function getEquipmentBonus(item) {
 }
 
 function getRaceBonus(race) {
-  if (race.includes(" + ")) {
-    const races = race.split(" + ")
-    return _.map(races, (race) => (raceBonusMap[race]))
+  if (race === 'None') {
+    return 0
   }
 
-  return [raceBonusMap[race]]
+  // Split the race text up by ' + ' because there might be more than 1 race
+  // If there is only 1 race, it creates an array of 1
+  const races = race.split(' + ')
+  return _.sum(races.map((race) => (raceBonusMap[race])))
 }
 
 function getRoleBonus(role) {
-  if (role.includes(" + ")) {
-    const roles = role.split(" + ")
-    return _.map(roles, (role) => (roleBonusMap[roleCategoryMap[role]]))
-  }
-
-  return [roleBonusMap[roleCategoryMap[role]]]
+  if (role === 'None') {
+    return 0
+  } 
+  
+  // Split the role text up by ' + ' because there might be more than 1 role
+  // If there is only 1 role, it creates an array of 1
+  const roles = role.split(' + ')
+  return 2 * roles.length
 }
 
 function getElementBonus(element) {
-  if (element.includes(" + ")) {
-    const elements = element.split(" + ")
-    return _.map(elements, (element) => (elementBonusMap[element]))
-  }
-
-  return [elementBonusMap[element]]
+  if (element === 'None') {
+    return 0
+  } 
+  
+  // Split the element text up by ' + ' because there might be more than 1 element
+  // If there is only 1 element, it creates an array of 1
+  const elements = element.split(' + ')
+  return _.sum(elements.map((element) => (elementBonusMap[element])))
 }
 
 function getIdentityBonus(identity) {
@@ -151,86 +155,25 @@ function getIdentityBonus(identity) {
   const role = getRole(identity)
   const element = getElement(identity)
 
-  const raceBonus = getRaceBonus(race)
-  const roleBonus = getRoleBonus(role)
-  const elementBonus = getElementBonus(element)
-
-  const bonuses = _.concat(raceBonus, roleBonus, elementBonus)
-
-  return {
-    str: _.sum(_.map(bonuses, 'str')),
-    dex: _.sum(_.map(bonuses, 'dex')),
-    con: _.sum(_.map(bonuses, 'con')),
-    int: _.sum(_.map(bonuses, 'int')),
-    wis: _.sum(_.map(bonuses, 'wis')),
-    cha: _.sum(_.map(bonuses, 'cha'))
-  }
+  return getRaceBonus(race) + getRoleBonus(role) + getElementBonus(element)
 }
 
 function getBonusStats(identity, equipment) {
-  const { 
-    weapon,
-    chestArmor,
-    headArmor,
-    waistArmor,
-    footArmor,
-    handAmor,
-    necklace,
-    ring
-  } = equipment
+  const equipmentBonus = _.sum(_.map(equipment, (item) => (getEquipmentBonus(item))))
+  const identityBonus = getIdentityBonus(identity)
 
-  const idBonus = getIdentityBonus(identity)
-
-  return {
-    str: getEquipmentBonus(weapon) + idBonus.str,
-    dex: getEquipmentBonus(footArmor) + getEquipmentBonus(handAmor) + idBonus.dex,
-    con: getEquipmentBonus(chestArmor) + idBonus.con,
-    int: getEquipmentBonus(headArmor) + idBonus.int,
-    wis: getEquipmentBonus(waistArmor) + idBonus.wis,
-    cha: getEquipmentBonus(necklace) + getEquipmentBonus(ring) + idBonus.cha,
-  }
+  return equipmentBonus + identityBonus
 }
 
-function getLevel(baseStats) {
-  const { str, dex, con, int, wis, cha } = baseStats
-  return ( str === '???' ? '??' :
-    Math.round((str + dex + con + int + wis + cha) / 6) - 4)
-}
-
-function getHP(baseStats, bonusStats) {
-  if (baseStats.str === '???') {
-    return '???'
-  }
-
-  const baseSum = baseStats.str + baseStats.dex + baseStats.con
-  const bonusSum = bonusStats.str + bonusStats.dex + bonusStats.con
-  return 10 * (baseSum + bonusSum) + 50
-}
-
-function getMP(baseStats, bonusStats) {
-  if (baseStats.str === '???') {
-    return '???'
-  }
-
-  const baseSum = baseStats.int + baseStats.wis + baseStats.cha
-  const bonusSum = bonusStats.int + bonusStats.wis + bonusStats.cha
-  return 10 * (baseSum + bonusSum) + 50
-}
-
-const getStats = (address) => {
+const getStats = (address, identity, equipment) => {
   return {
     level: 0,
     nftLevel: 0,
     defiLevel: 0,
-    bonusLevel: 0
+    bonusLevel: getBonusStats(identity, equipment)
   }
 } 
 
 export {
   getStats,
-  getBaseStats,
-  getBonusStats,
-  getLevel,
-  getHP,
-  getMP
 }
