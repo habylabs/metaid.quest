@@ -1,8 +1,4 @@
-import {
-  getLevel,
-} from "./stats"
-
-function getContractImage(identity, baseStats) {
+function getContractImage(identity, stats) {
   // This should return a Base64 encoded string where the start of the string is `data:image/svg+xml;base64,`
   const svg = `
     <svg width="550" height="500" viewBox="0 0 550 500" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +17,7 @@ function getContractImage(identity, baseStats) {
       <rect x="46" y="41" width="418" height="418" class="rect-border"/>
       <path d="M433.077 305.292L401.155 250L433.077 194.708H496.923L528.845 250L496.923 305.292H433.077Z" fill="#002B36" class="rect-border"/>
       <text x="450" y="225" class="level-title">LVL</text>
-      <text x="430" y="280" class="level-num">${getLevel(baseStats)}</text>
+      <text x="430" y="280" class="level-num">${stats.level}</text>
     </svg>
   `
 

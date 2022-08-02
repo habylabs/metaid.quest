@@ -36,22 +36,12 @@ function parseDb(data) {
           ring: data.ring
         },
       },
-      baseStats: {
-        str: data["base_str"],
-        dex: data["base_dex"],
-        con: data["base_con"],
-        int: data["base_int"],
-        wis: data["base_wis"],
-        cha: data["base_cha"],
+      stats: {
+        level: data.level,
+        nftLevel: data["nft_level"],
+        defiLevel: data["defi_level"],
+        bonusLevel: data["bonus_level"],
       },
-      bonusStats: {
-        str: data["bonus_str"],
-        dex: data["bonus_dex"],
-        con: data["bonus_con"],
-        int: data["bonus_int"],
-        wis: data["bonus_wis"],
-        cha: data["bonus_cha"],
-      }
     }
   }
   
@@ -86,22 +76,12 @@ function parseDb(data) {
         ring: '???'
       }
     },
-    baseStats: {
-      str: '???',
-      dex: '???',
-      con: '???',
-      int: '???',
-      wis: '???',
-      cha: '???',
+    stats: {
+      level: '???',
+      nftLevel: '???',
+      defiLevel: '???',
+      bonusLevel: '???',
     },
-    bonusStats: {
-      str: '???',
-      dex: '???',
-      con: '???',
-      int: '???',
-      wis: '???',
-      cha: '???',
-    }
   }
 }
 
@@ -159,18 +139,10 @@ async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, bas
     hand_armor: equipment.handArmor,
     necklace: equipment.necklace,
     ring: equipment.ring,
-    base_str: baseStats.str,
-    base_dex: baseStats.dex,  
-    base_con: baseStats.con,
-    base_int: baseStats.int,
-    base_wis: baseStats.wis,
-    base_cha: baseStats.cha,
-    bonus_str: bonusStats.str,
-    bonus_dex: bonusStats.dex,
-    bonus_con: bonusStats.con,
-    bonus_int: bonusStats.int,
-    bonus_wis: bonusStats.wis,
-    bonus_cha: bonusStats.cha,
+    level: baseStats.level,
+    nft_level: baseStats.nftLevel,  
+    defi_level: baseStats.defiLevel,
+    bonus_level: baseStats.bonusLevel,
   }
 
   try {

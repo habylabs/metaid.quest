@@ -22,18 +22,14 @@ import {
 } from '../../../../../util/equipment'
 
 import {
-  getBaseStats,
-  getBonusStats,
-  getLevel,
-  getHP,
-  getMP
+  getStats,
 } from '../../../../../util/stats'
 
-function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
+function formatRes(tokenId, identity, equipment, stats) {
   return {
     name: `Meta ID #${tokenId}`,
     description: `Meta ID #${tokenId}`,
-    image: getContractImage(identity, baseStats),
+    image: getContractImage(identity, stats),
     attributes: [
       {
         "trait_type": "Name",
@@ -93,63 +89,19 @@ function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
       },
       {
         "trait_type": "Level",
-        "value": getLevel(baseStats)
+        "value": stats.level
       },
       {
-        "trait_type": "HP",
-        "value": getHP(baseStats, bonusStats)
+        "trait_type": "NFT Level",
+        "value": stats.nftLevel
       },
       {
-        "trait_type": "MP",
-        "value": getMP(baseStats, bonusStats)
+        "trait_type": "DeFi Level",
+        "value": stats.defiLevel
       },
       {
-        "trait_type": "Base STR",
-        "value": baseStats.str
-      },
-      {
-        "trait_type": "Bonus STR",
-        "value": bonusStats.str
-      },
-      {
-        "trait_type": "Base DEX",
-        "value": baseStats.dex
-      },
-      {
-        "trait_type": "Bonus DEX",
-        "value": bonusStats.dex
-      },
-      {
-        "trait_type": "Base CON",
-        "value": baseStats.con
-      },
-      {
-        "trait_type": "Bonus CON",
-        "value": bonusStats.con
-      },
-      {
-        "trait_type": "Base INT",
-        "value": baseStats.int
-      },
-      {
-        "trait_type": "Bonus INT",
-        "value": bonusStats.int
-      },
-      {
-        "trait_type": "Base WIS",
-        "value": baseStats.wis
-      },
-      {
-        "trait_type": "Bonus WIS",
-        "value": bonusStats.wis
-      },
-      {
-        "trait_type": "Base CHA",
-        "value": baseStats.cha
-      },
-      {
-        "trait_type": "Bonus CHA",
-        "value": bonusStats.cha
+        "trait_type": "Bonus Level",
+        "value": stats.bonusLevel
       },
     ]
   }
@@ -157,19 +109,18 @@ function formatRes(tokenId, identity, equipment, baseStats, bonusStats) {
 
 async function get(tokenId) {
   const db = await getTokenByTokenId(parseInt(tokenId))
-  const { identity, equipment, baseStats, bonusStats } = parseDb(db)
-  return formatRes(tokenId, identity, equipment.items, baseStats, bonusStats)
+  const { identity, equipment, stats } = parseDb(db)
+  return formatRes(tokenId, identity, equipment.items, stats)
 }
 
 async function put(tokenId, reqBody) {
   const { ownerAddress, ensName, pfp, charId, equip } = reqBody
   const identity = await getIdentity(ensName, pfp, charId)
   const equipment = getEquipment(identity, equip)
-  const baseStats = getBaseStats(ownerAddress)
-  const bonusStats = getBonusStats (identity, equipment)
+  const stats = getStats(ownerAddress)
   
-  await putTokenByTokenId(tokenId, ownerAddress, identity, equipment, baseStats, bonusStats)
-  return formatRes(tokenId, identity, equipment, baseStats, bonusStats)
+  await putTokenByTokenId(tokenId, ownerAddress, identity, equipment, stats)
+  return formatRes(tokenId, identity, equipment, stats)
 }
 
 export default async function handler(req, res) {

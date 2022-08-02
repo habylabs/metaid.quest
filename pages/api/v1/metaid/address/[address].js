@@ -4,7 +4,7 @@ import {
 } from '../../../../../util/db'
 
 import {
-  getBaseStats,
+  getStats,
 } from '../../../../../util/stats'
 
 import {
@@ -14,7 +14,7 @@ import {
 async function get(address) {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
-  dbData.baseStats = await getBaseStats(address)
+  dbData.stats = await getStats(address)
   const identityNftOptions = await getNFTs(address, 'identity')
   const equipmentNftOptions = await getNFTs(address, 'equipment')
 

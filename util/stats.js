@@ -108,13 +108,13 @@ function getEquipmentBonus(item) {
     if (item.includes("of")) {
       if (item.startsWith("\"")) {
         if (item.includes("+1")) {
-          return 10
+          return 8
         }
-        return 8
+        return 5
       }
-      return 6
+      return 3
     }
-    return 4
+    return 2
   }
   return 0
 }
@@ -217,7 +217,17 @@ function getMP(baseStats, bonusStats) {
   return 10 * (baseSum + bonusSum) + 50
 }
 
+const getStats = (address) => {
+  return {
+    level: 0,
+    nftLevel: 0,
+    defiLevel: 0,
+    bonusLevel: 0
+  }
+} 
+
 export {
+  getStats,
   getBaseStats,
   getBonusStats,
   getLevel,
