@@ -169,15 +169,15 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
         value={getEquipmentSelectValue(equipment)}
         onChange={(value) => {
           const valueArray = value.split('-')
-          const contract = valueArray[0]
-          const id = valueArray[1]
-          const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
-            ((nft.contract.address === contract) && nft.tokenId === id)
-          ))
-          setEquipment({
-            contract: {},
-            items: {}
-          })
+
+          // Add an if statement to see if contract should be set as null
+          // if the equipment being used is from the PFP project
+          const contract = {
+            address: valueArray[0],
+            id: valueArray[1]
+          }
+
+          setEquipment(contract)
         }}
         data={equipmentNftOptions.map((nft) => ({
           value: `${nft.contract.address}-${nft.tokenId}`,
