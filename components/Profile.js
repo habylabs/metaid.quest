@@ -27,7 +27,7 @@ import LootJson from '../contracts/Loot.json'
 import MLootJson from '../contracts/TemporalLoot.json'
 
 const getEquipmentContractInterface = (equipment) => {
-  if (equipment && equipment.contract.address.toLowerCase() === LOOT_CONTRACT_ADDRESS.toLowerCase()) {
+  if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS.toLowerCase()) {
     return {
       addressOrName: LOOT_CONTRACT_ADDRESS,
       contractInterface: LootJson.abi
@@ -40,7 +40,7 @@ const getEquipmentContractInterface = (equipment) => {
   }
 }
 
-const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.tokenId) : 0)
+const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
 
 const getPfpSelectValue = (pfp) => (
   pfp.contract ? `${pfp.contract}-${pfp.id}` : null
