@@ -174,14 +174,21 @@ const getStats = async (address, identity, equipment) => {
   const latestTx = getLatestTx(allFromTx, allToTx)
   const defiTokenCount = await getDeFiTokenCount(address, allFromTx.defi, allToTx.defi)
   const nftCount = await getNFTCount(address, allFromTx.nft, allToTx.nft)
+  const tokenCount = {
+    all: {
+      allTime: defiTokenCount.all + nftCount.all,
+      current: defiTokenCount.current + nftCount.current,
+    },
+    defi: defiTokenCount,
+    nft: nftCount
+  }
 
   console.log(latestBlockNum)
   console.log({ all: allFromTx.all.length, defi: allFromTx.defi.length, nft: allFromTx.nft.length })
   console.log({ all: allToTx.all.length, defi: allToTx.defi.length, nft: allToTx.nft.length })
   console.log(firstTx)
   console.log(latestTx)
-  console.log(defiTokenCount)
-  console.log(nftCount)
+  console.log(tokenCount)
 
   return {
     level: 0,

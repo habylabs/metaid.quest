@@ -136,7 +136,7 @@ const getDeFiTokenCount = async (address, fromTx, toTx) => {
       ({ tokenBalance }) => (parseInt(tokenBalance, 16) > 0)
     )
     return {
-      all: res.tokenBalances.length,
+      allTime: res.tokenBalances.length,
       current: currentDeFiTokens.length,
     }
   } catch (error) {
@@ -153,7 +153,7 @@ const getNFTCount = async (address, fromTx, toTx) => {
     });
 
     return {
-      all: _getContractAddresses(fromTx, toTx).length,
+      allTime: _getContractAddresses(fromTx, toTx).length,
       current: nfts.totalCount
     }
   } catch (error) {
