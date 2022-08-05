@@ -15,11 +15,11 @@ import {
 
 import {
   getLatestBlockNum,
-  get6mBlockNum,
+  getFromTx,
+  getToTx,
   getFirstTx,
-  getAllFromTx,
-  getAllToTx,
-  getTokens,
+  getLatestTx,
+  getDeFiTokenCount,
   getNFTCount,
 } from "./alchemy"
 
@@ -168,19 +168,20 @@ const getBonusStats = (identity, equipment) => {
 
 const getStats = async (address, identity, equipment) => {
   const latestBlockNum = await getLatestBlockNum()
-  const blockNum6mAgo = get6mBlockNum(latestBlockNum)
-  const firstTx = await getFirstTx(address)
-  const allFromTx = await getAllFromTx(blockNum6mAgo, latestBlockNum, address)
-  const allToTx = await getAllToTx(blockNum6mAgo, latestBlockNum, address)
-  // I need allTokens and uniqueTokens
-  //const tokens = await getTokens(address)
-  //const nftCount = await getNFTCount(address)
+  const allFromTx = await getFromTx(address, '0x1', latestBlockNum)
+  const allToTx = await getToTx(address, '0x1', latestBlockNum)
+  const firstTx = getFirstTx(allFromTx, allToTx)
+  const latestTx = getLatestTx(allFromTx, allToTx)
+  const defiTokenCount = await getDeFiTokenCount(address, allFromTx.defi, allToTx.defi)
+  const nftCount = await getNFTCount(address, allFromTx.nft, allToTx.nft)
 
   console.log(latestBlockNum)
-  console.log(blockNum6mAgo)
+  console.log({ all: allFromTx.all.length, defi: allFromTx.defi.length, nft: allFromTx.nft.length })
+  console.log({ all: allToTx.all.length, defi: allToTx.defi.length, nft: allToTx.nft.length })
   console.log(firstTx)
-  console.log(allFromTx.length)
-  console.log(allToTx.length)
+  console.log(latestTx)
+  console.log(defiTokenCount)
+  console.log(nftCount)
 
   return {
     level: 0,

@@ -18,18 +18,18 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
-const getCategoryAll = () => {
+const _getCategoryAll = () => {
   return ['external', 'internal', 'erc20', 'erc721', 'erc1155', 'specialnft']
 }
 
-const intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
+const _intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
 
 const getLatestBlockNum = async () => {
   try {
     const latestBlock = await alchemy.core.getBlockNumber()
     // Use the latestBlock - 5 so to void potential data processing lags
     // from Alchemy
-    return intToHex(latestBlock - 5)
+    return _intToHex(latestBlock - 5)
   } catch (error) {
     console.log(error)
     return -1
@@ -37,116 +37,132 @@ const getLatestBlockNum = async () => {
   
 }
 
-const get6mBlockNum = (latestBlock) => {
-  return intToHex(parseInt(latestBlock, 16) - 1000000)
-}
-
-const getFirstTx = async (address) => {
+const getFromTx = async (address, fromBlock, toBlock) => {
   try {
-    const resFrom = await alchemy.core.getAssetTransfers({
+    const res = await alchemy.core.getAssetTransfers({
+      fromBlock,
+      toBlock,
       'fromAddress': address,
-      'category': getCategoryAll()
-    })
-    const resTo = await alchemy.core.getAssetTransfers({
-      'toAddress': address,
-      'category': getCategoryAll()
+      'category': _getCategoryAll()
     })
 
-    const firstFromTx = resFrom.transfers[0]
-    const firstToTx = resTo.transfers[0]
+    const all = res.transfers
 
-    if (parseInt(firstFromTx.blockNum, 16) > parseInt(firstToTx.blockNum, 16)) {
-      return firstToTx
+    return {
+      all,
+      defi: _.filter(all, ['category', 'erc20']),
+      nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
     }
-
-    return firstFromTx
-  } catch (error) {
-    console.error(error)
-    return []
-  }
-}
-
-const getAllFromTx = async (fromBlock, toBlock, address) => {
-  try {
-    const res = await alchemy.core.getAssetTransfers({
-      fromBlock,
-      toBlock,
-      'fromAddress': address,
-      'category': getCategoryAll()
-    })
-
-    return res.transfers
   } catch (error) {
    console.log(error)
    return 0 
   }  
 }
 
-const getAllToTx = async (fromBlock, toBlock, address) => {
+const getToTx = async (address, fromBlock, toBlock) => {
   try {
     const res = await alchemy.core.getAssetTransfers({
       fromBlock,
       toBlock,
       'toAddress': address,
-      'category': getCategoryAll()
+      'category': _getCategoryAll()
     })
 
-    return res.transfers
+    const all = res.transfers
+
+    return {
+      all,
+      defi: _.filter(all, ['category', 'erc20']),
+      nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
+    }
   } catch (error) {
    console.log(error)
    return 0 
   }  
 }
 
-async function getTokenContractAddresses(address) {
-  try {
-    const resFrom = await alchemy.core.getAssetTransfers([{
-      "fromAddress": address,
-      "excludeZeroValue": true,
-      "category": ["erc20"],
-    }])
+const _compareFirstFromToTx = (firstFromTx, firstToTx) => {
+  if (parseInt(firstFromTx.blockNum, 16) > parseInt(firstToTx.blockNum, 16)) {
+    return firstToTx
+  }
 
-    const resTo = await alchemy.core.getAssetTransfers([{
-      "fromBlock": "0x1",
-      "toAddress": address,
-      "excludeZeroValue": true,
-      "category": ["erc20"],
-    }])
+  return firstFromTx
+}
 
-    const fromContractAddress = resFrom.result.transfers.map(tx => tx.rawContract.address)
-    const toContractAddress = resTo.result.transfers.map(tx => tx.rawContract.address)
-    return [...new Set([...fromContractAddress, ...toContractAddress])];
-  } catch (error) {
-    console.log(error)
-    return []
+const getFirstTx = (allFromTx, allToTx) => {
+  return {
+    all: _compareFirstFromToTx(allFromTx.all[0], allToTx.all[0]),
+    defi: _compareFirstFromToTx(allFromTx.defi[0], allToTx.defi[0]),
+    nft: _compareFirstFromToTx(allFromTx.nft[0], allToTx.nft[0])
   }
 }
 
-async function getTokens(address) {
+const _compareLatestFromToTx = (latestFromTx, latestToTx) => {
+  if (parseInt(latestFromTx.blockNum, 16) > parseInt(latestToTx.blockNum, 16)) {
+    return latestFromTx
+  }
+
+  return latestToTx
+}
+
+const getLatestTx = (allFromTx, allToTx) => {
+  const allFrom = allFromTx.all
+  const defiFrom = allFromTx.defi
+  const nftFrom = allFromTx.nft
+
+  const allTo = allToTx.all
+  const defiTo = allToTx.defi
+  const nftTo = allToTx.nft
+
+  return {
+    all: _compareLatestFromToTx(allFrom[allFrom.length - 1], allTo[allTo.length - 1]),
+    defi: _compareLatestFromToTx(defiFrom[defiFrom.length - 1], defiTo[defiTo.length - 1]),
+    nft: _compareLatestFromToTx(nftFrom[nftFrom.length - 1], nftTo[nftTo.length - 1])
+  }
+}
+
+const _getContractAddresses = (fromTx, toTx) => {
+  const fromContractAddress = fromTx.map(tx => tx.rawContract.address)
+  const toContractAddress = toTx.map(tx => tx.rawContract.address)
+  return [...new Set([...fromContractAddress, ...toContractAddress])];
+}
+
+const getDeFiTokenCount = async (address, fromTx, toTx) => {
   try {
-    const contractAddresses = await getTokenContractAddresses(address)
+    const contractAddresses = _getContractAddresses(fromTx, toTx)
     const res = await alchemy.core.getTokenBalances(address, contractAddresses)
-    return res.result.tokenBalances
+    const currentDeFiTokens = _.filter(
+      res.tokenBalances,
+      ({ tokenBalance }) => (parseInt(tokenBalance, 16) > 0)
+    )
+    return {
+      all: res.tokenBalances.length,
+      current: currentDeFiTokens.length,
+    }
   } catch (error) {
     console.log(error)
     return []
   }
 }
 
-async function getNFTCount(address) {
+const getNFTCount = async (address, fromTx, toTx) => {
   try {
     const nfts = await alchemy.nft.getNftsForOwner(address, {
       omitMetadata: true,
       excludeFilters: [ NftExcludeFilters.SPAM ] 
     });
-    return nfts.totalCount
+
+    return {
+      all: _getContractAddresses(fromTx, toTx).length,
+      current: nfts.totalCount
+    }
   } catch (error) {
     console.log(error)
     return 0
   }
 }
 
-function getNftContractAddresses(type) {
+function _getNftContractAddresses(type) {
   if (type === 'all') {
     return _.concat(IDENTITY_NFT_CONTRACTS, EQUIPMENT_NFT_CONTRACTS)
   } else if (type === 'equipment') {
@@ -159,7 +175,7 @@ function getNftContractAddresses(type) {
 async function getNFTs(address, type = 'all') {
   try {
     const nfts = await alchemy.nft.getNftsForOwner(address, {
-      contractAddresses: getNftContractAddresses(type)
+      contractAddresses: _getNftContractAddresses(type)
     });
     return nfts.ownedNfts.map((nft) => ({
       contract: nft.contract,
@@ -186,11 +202,11 @@ async function getNFTMetadata(contractAddress, contractId) {
 
 export {
   getLatestBlockNum,
-  get6mBlockNum,
+  getFromTx,
+  getToTx,
   getFirstTx,
-  getAllFromTx,
-  getAllToTx,
-  getTokens,
+  getLatestTx,
+  getDeFiTokenCount,
   getNFTCount,
   getNFTs,
   getNFTMetadata
