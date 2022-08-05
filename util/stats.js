@@ -1,5 +1,3 @@
-// Helper functions to populate Stats fields in Meta ID
-
 import _ from "lodash"
 
 import {
@@ -17,92 +15,16 @@ import {
   getLatestBlockNum,
   getFromTx,
   getToTx,
-  getFirstTx,
-  getLatestTx,
   getDeFiTokenCount,
   getNFTCount,
 } from "./alchemy"
 
-// # of transactions over last 6m
-// count of ownership
-// count of uniques
-// first transaction
-// most recent transaction
-// # of addresses interacted with over last 6m
-
-function logCalc(t, multiple = 1) {
+function _logCalc(t, multiple = 1) {
   const logx = Math.log2(t + 1)
-  return Math.round(multiple * Math.pow(logx, 2)) + 5
+  return Math.round(multiple * Math.pow(logx, 2)) + 1
 }
 
-function getSTR(fromTx) {
-  return logCalc(fromTx.length)
-}
-
-function getDEX(tokens) {
-  const ownedTokens = tokens.filter(({ tokenBalance }) => parseInt(tokenBalance, 16) > 0)
-  return logCalc(ownedTokens.length, 2)
-}
-
-function getCON(toTx) {
-  return logCalc(toTx.length)
-}
-
-function getINT(nftCount) {
-  return logCalc(nftCount)
-}
-
-function getWIS(firstTx, fromTx, toTx) {
-  if (firstTx) {
-    const latestFromTx = fromTx.length > 0 ? fromTx[fromTx.length - 1].blockNum : 0
-    const latestToTx = toTx.length > 0 ? toTx[toTx.length - 1].blockNum : 0
-
-    const latestFromTxInt = parseInt(latestFromTx, 16)
-    const latestToTxInt = parseInt(latestToTx, 16)
-
-    const latestTx = (latestFromTxInt > latestToTxInt) ? latestFromTxInt : latestToTxInt
-
-    const blockDiff = latestTx - parseInt(firstTx.blockNum, 16)
-    return logCalc(blockDiff / 10000)
-  }
-  
-  return logCalc(0)
-}
-
-function getCHA(fromTx, toTx) {
-  const toAddresses = fromTx ? fromTx.map(tx => tx.to) : [];
-  const fromAddresses = toTx ? toTx.map(tx => tx.from) : [];
-
-  const dedupAddresses = [...new Set([...toAddresses, ...fromAddresses])];
-  return logCalc(dedupAddresses.length)
-}
-
-async function getBaseStats(address) {
-  const firstTx = await getFirstTx(address)
-  const fromBlock = await get6mBlock()
-  const fromTx = await getFromTx(fromBlock, address)
-  const toTx = await getToTx(fromBlock, address)
-  const tokens = await getTokens(address)
-  const nftCount = await getNFTCount(address)
-
-  const str = getSTR(fromTx)
-  const dex = getDEX(tokens)
-  const con = getCON(toTx)
-  const int = getINT(nftCount)
-  const wis = getWIS(firstTx, fromTx, toTx)
-  const cha = getCHA(fromTx, toTx)
-
-  return {
-    str,
-    dex,
-    con,
-    int,
-    wis,
-    cha
-  }
-}
-
-const getEquipmentBonus = (item) => {
+const _getEquipmentBonus = (item) => {
   if (item) {
     if (item.includes("of")) {
       if (item.startsWith("\"")) {
@@ -118,7 +40,7 @@ const getEquipmentBonus = (item) => {
   return 0
 }
 
-const getRaceBonus = (race) => {
+const _getRaceBonus = (race) => {
   if (race === 'None') {
     return 0
   }
@@ -129,7 +51,7 @@ const getRaceBonus = (race) => {
   return _.sum(races.map((race) => (raceBonusMap[race])))
 }
 
-const getRoleBonus = (role) => {
+const _getRoleBonus = (role) => {
   if (role === 'None') {
     return 0
   } 
@@ -140,7 +62,7 @@ const getRoleBonus = (role) => {
   return 2 * roles.length
 }
 
-const getElementBonus = (element) => {
+const _getElementBonus = (element) => {
   if (element === 'None') {
     return 0
   } 
@@ -151,53 +73,93 @@ const getElementBonus = (element) => {
   return _.sum(elements.map((element) => (elementBonusMap[element])))
 }
 
-const getIdentityBonus = (identity) => {
+const _getIdentityBonus = (identity) => {
   const race = getRace(identity)
   const role = getRole(identity)
   const element = getElement(identity)
 
-  return getRaceBonus(race) + getRoleBonus(role) + getElementBonus(element)
+  return _getRaceBonus(race) + _getRoleBonus(role) + _getElementBonus(element)
 }
 
 const getBonusStats = (identity, equipment) => {
-  const equipmentBonus = _.sum(_.map(equipment, (item) => (getEquipmentBonus(item))))
-  const identityBonus = getIdentityBonus(identity)
+  const equipmentBonus = _.sum(_.map(equipment, (item) => (_getEquipmentBonus(item))))
+  const identityBonus = _getIdentityBonus(identity)
 
   return equipmentBonus + identityBonus
+}
+
+const _getFirstTx = (firstFromTx, firstToTx) => {
+  if (firstFromTx && firstToTx) {
+    if (parseInt(firstFromTx.blockNum, 16) > parseInt(firstToTx.blockNum, 16)) {
+      return firstToTx
+    }
+  
+    return firstFromTx
+  }
+
+  if (firstFromTx) return firstFromTx
+  if (firstToTx) return firstToTx
+  return null
+}
+
+const _getLatestTx = (latestFromTx, latestToTx) => {
+  if (latestFromTx && latestToTx) {
+    if (parseInt(latestFromTx.blockNum, 16) > parseInt(latestToTx.blockNum, 16)) {
+      return latestFromTx
+    }
+  
+    return latestToTx
+  }
+  
+  if (latestFromTx) return latestFromTx
+  if (latestToTx) return latestToTx
+  return null
+}
+
+const _getBlockNumDiff = (firstTx, latestTx) => {
+  if (firstTx && latestTx) {
+    return parseInt(latestTx.blockNum, 16) - parseInt(firstTx.blockNum, 16)
+  }
+  
+  return 0
+}
+
+const _getLevel = (fromTx, toTx, tokenCount) => {
+  const firstTx = _getFirstTx(fromTx[0], toTx[0])
+  const latestTx = _getLatestTx(fromTx[fromTx.length - 1], toTx[toTx.length - 1])
+
+  const activity = _logCalc(fromTx.length + toTx.length)
+  const experience = _logCalc(_getBlockNumDiff(firstTx, latestTx) / 10000)
+  const smartContracts = _logCalc(tokenCount.allTime, 2)
+  const tokens = _logCalc(tokenCount.current, 2)
+
+  return _.floor((activity + experience + smartContracts + tokens) / 4)
 }
 
 const getStats = async (address, identity, equipment) => {
   const latestBlockNum = await getLatestBlockNum()
   const allFromTx = await getFromTx(address, '0x1', latestBlockNum)
   const allToTx = await getToTx(address, '0x1', latestBlockNum)
-  const firstTx = getFirstTx(allFromTx, allToTx)
-  const latestTx = getLatestTx(allFromTx, allToTx)
   const defiTokenCount = await getDeFiTokenCount(address, allFromTx.defi, allToTx.defi)
   const nftCount = await getNFTCount(address, allFromTx.nft, allToTx.nft)
   const tokenCount = {
     all: {
-      allTime: defiTokenCount.all + nftCount.all,
+      allTime: defiTokenCount.allTime + nftCount.allTime,
       current: defiTokenCount.current + nftCount.current,
     },
     defi: defiTokenCount,
     nft: nftCount
   }
 
-  console.log(latestBlockNum)
-  console.log({ all: allFromTx.all.length, defi: allFromTx.defi.length, nft: allFromTx.nft.length })
-  console.log({ all: allToTx.all.length, defi: allToTx.defi.length, nft: allToTx.nft.length })
-  console.log(firstTx)
-  console.log(latestTx)
-  console.log(tokenCount)
-
   return {
-    level: 0,
-    nftLevel: 0,
-    defiLevel: 0,
+    level: _getLevel(allFromTx.all, allToTx.all, tokenCount.all),
+    nftLevel: _getLevel(allFromTx.nft, allToTx.nft, tokenCount.nft),
+    defiLevel: _getLevel(allFromTx.defi, allToTx.defi, tokenCount.defi),
     bonusLevel: getBonusStats(identity, equipment)
   }
 } 
 
 export {
+  getBonusStats,
   getStats,
 }

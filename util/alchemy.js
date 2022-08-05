@@ -22,6 +22,17 @@ const _getCategoryAll = () => {
   return ['external', 'internal', 'erc20', 'erc721', 'erc1155', 'specialnft']
 }
 
+const _getNoCount = () => ({
+  allTime: 0,
+  current: 0,
+})
+
+const _getNoTx = () => ({
+  all: [],
+  defi: [],
+  nft: []
+})
+
 const _intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
 
 const getLatestBlockNum = async () => {
@@ -34,7 +45,6 @@ const getLatestBlockNum = async () => {
     console.log(error)
     return -1
   }
-  
 }
 
 const getFromTx = async (address, fromBlock, toBlock) => {
@@ -54,8 +64,8 @@ const getFromTx = async (address, fromBlock, toBlock) => {
       nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
     }
   } catch (error) {
-   console.log(error)
-   return 0 
+    console.log(error)
+    return _getNoTx()
   }  
 }
 
@@ -76,49 +86,9 @@ const getToTx = async (address, fromBlock, toBlock) => {
       nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
     }
   } catch (error) {
-   console.log(error)
-   return 0 
+    console.log(error)
+    return _getNoTx()
   }  
-}
-
-const _compareFirstFromToTx = (firstFromTx, firstToTx) => {
-  if (parseInt(firstFromTx.blockNum, 16) > parseInt(firstToTx.blockNum, 16)) {
-    return firstToTx
-  }
-
-  return firstFromTx
-}
-
-const getFirstTx = (allFromTx, allToTx) => {
-  return {
-    all: _compareFirstFromToTx(allFromTx.all[0], allToTx.all[0]),
-    defi: _compareFirstFromToTx(allFromTx.defi[0], allToTx.defi[0]),
-    nft: _compareFirstFromToTx(allFromTx.nft[0], allToTx.nft[0])
-  }
-}
-
-const _compareLatestFromToTx = (latestFromTx, latestToTx) => {
-  if (parseInt(latestFromTx.blockNum, 16) > parseInt(latestToTx.blockNum, 16)) {
-    return latestFromTx
-  }
-
-  return latestToTx
-}
-
-const getLatestTx = (allFromTx, allToTx) => {
-  const allFrom = allFromTx.all
-  const defiFrom = allFromTx.defi
-  const nftFrom = allFromTx.nft
-
-  const allTo = allToTx.all
-  const defiTo = allToTx.defi
-  const nftTo = allToTx.nft
-
-  return {
-    all: _compareLatestFromToTx(allFrom[allFrom.length - 1], allTo[allTo.length - 1]),
-    defi: _compareLatestFromToTx(defiFrom[defiFrom.length - 1], defiTo[defiTo.length - 1]),
-    nft: _compareLatestFromToTx(nftFrom[nftFrom.length - 1], nftTo[nftTo.length - 1])
-  }
 }
 
 const _getContractAddresses = (fromTx, toTx) => {
@@ -130,18 +100,23 @@ const _getContractAddresses = (fromTx, toTx) => {
 const getDeFiTokenCount = async (address, fromTx, toTx) => {
   try {
     const contractAddresses = _getContractAddresses(fromTx, toTx)
-    const res = await alchemy.core.getTokenBalances(address, contractAddresses)
-    const currentDeFiTokens = _.filter(
-      res.tokenBalances,
-      ({ tokenBalance }) => (parseInt(tokenBalance, 16) > 0)
-    )
-    return {
-      allTime: res.tokenBalances.length,
-      current: currentDeFiTokens.length,
+
+    if (contractAddresses.length > 0) {
+      const res = await alchemy.core.getTokenBalances(address, contractAddresses)
+      const currentDeFiTokens = _.filter(
+        res.tokenBalances,
+        ({ tokenBalance }) => (parseInt(tokenBalance, 16) > 0)
+      )
+      return {
+        allTime: res.tokenBalances.length,
+        current: currentDeFiTokens.length,
+      }
     }
+
+    return _getNoCount()
   } catch (error) {
     console.log(error)
-    return []
+    return _getNoCount()
   }
 }
 
@@ -158,7 +133,7 @@ const getNFTCount = async (address, fromTx, toTx) => {
     }
   } catch (error) {
     console.log(error)
-    return 0
+    return _getNoCount()
   }
 }
 
@@ -204,8 +179,6 @@ export {
   getLatestBlockNum,
   getFromTx,
   getToTx,
-  getFirstTx,
-  getLatestTx,
   getDeFiTokenCount,
   getNFTCount,
   getNFTs,
