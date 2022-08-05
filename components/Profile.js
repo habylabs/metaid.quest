@@ -55,6 +55,45 @@ const getEquipmentSelectValue = (equipment) => (
   equipment ? `${equipment.address}-${equipment.id}` : null
 )
 
+const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
+  <Select
+    label="Identity"
+    placeholder="Choose Your PFP"
+    value={getPfpSelectValue(pfp)}
+    onChange={(value) => onChange(value)}
+    data={identityNftOptions.map((nft) => ({
+      value: `${nft.contract.address}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+    }))}
+  />
+)
+
+const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
+  <Select
+    label="Bonus Character"
+    placeholder="Choose Your Bonus Character"
+    value={getExtraCharSelectValue(bonusChar)}
+    onChange={(value) => onChange(value)}
+    data={identityNftOptions.map((nft) => ({
+      value: `${nft.contract.address}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+    }))}
+  />
+)
+
+const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
+  <Select
+    label="Equipment"
+    placeholder="Choose Your Equipment"
+    value={getEquipmentSelectValue(equipment)}
+    onChange={(value) => onChange(value)}
+    data={equipmentNftOptions.map((nft) => ({
+      value: `${nft.contract.address}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+    }))}
+  />
+)
+
 const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ isMinted, setIsMinted ] = useState(false)
   const [ didMintToday, setDidMintToday ] = useState(false)
@@ -63,6 +102,46 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
   const [ stats, setStats ] = useState(dbData.stats)
+
+  const handlePfpChange = (value) => {
+    const valueArray = value.split('-')
+    const contract = valueArray[0]
+    const id = valueArray[1]
+    const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
+      ((nft.contract.address === contract) && nft.tokenId === id)
+    ))
+    setPfp({
+      contract,
+      id,
+      image: identityNftOptions[arrayIndex].metaData.image,
+      race: '',
+      role: '',
+    })
+  }
+
+  const handleBonusCharChange = (value) => {
+    const valueArray = value.split('-')
+    const id = valueArray[1]
+    setBonusChar({
+      id,
+      race: '',
+      role: '',
+      element: ''
+    })
+  }
+
+  const handleEquipmentChange = (value) => {
+    const valueArray = value.split('-')
+
+    // Add an if statement to see if contract should be set as null
+    // if the equipment being used is from the PFP project
+    const contract = {
+      address: valueArray[0],
+      id: valueArray[1]
+    }
+
+    setEquipment(contract)
+  }
 
   const equipmentContract = getEquipmentContractInterface(equipment)
   const lootData = useContractReads({
@@ -122,69 +201,21 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
       <MetaId empty={!isMinted} data={{}} example={isMinted} />
       {!isMinted && <Mint />}
       
-      <Select
-        label="Identity"
-        placeholder="Choose Your PFP"
-        value={getPfpSelectValue(pfp)}
-        onChange={(value) => {
-          const valueArray = value.split('-')
-          const contract = valueArray[0]
-          const id = valueArray[1]
-          const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
-            ((nft.contract.address === contract) && nft.tokenId === id)
-          ))
-          setPfp({
-            contract,
-            id,
-            image: identityNftOptions[arrayIndex].metaData.image,
-            race: '',
-            role: '',
-          })
-        }}
-        data={identityNftOptions.map((nft) => ({
-          value: `${nft.contract.address}-${nft.tokenId}`,
-          label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-        }))}
+      
+      <PfpSelect
+        pfp={pfp}
+        identityNftOptions={identityNftOptions}
+        onChange={handlePfpChange}
       />
-      <Select
-        label="Bonus Character"
-        placeholder="Choose Your Bonus Character"
-        value={getExtraCharSelectValue(bonusChar)}
-        onChange={(value) => {
-          const valueArray = value.split('-')
-          const id = valueArray[1]
-          setBonusChar({
-            id,
-            race: '',
-            role: '',
-            element: ''
-          })
-        }}
-        data={identityNftOptions.map((nft) => ({
-          value: `${nft.contract.address}-${nft.tokenId}`,
-          label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-        }))}
+      <BonusCharSelect
+        bonusChar={bonusChar}
+        identityNftOptions={identityNftOptions}
+        onChange={handleBonusCharChange}
       />
-      <Select
-        label="Equipment"
-        placeholder="Choose Your Equipment"
-        value={getEquipmentSelectValue(equipment)}
-        onChange={(value) => {
-          const valueArray = value.split('-')
-
-          // Add an if statement to see if contract should be set as null
-          // if the equipment being used is from the PFP project
-          const contract = {
-            address: valueArray[0],
-            id: valueArray[1]
-          }
-
-          setEquipment(contract)
-        }}
-        data={equipmentNftOptions.map((nft) => ({
-          value: `${nft.contract.address}-${nft.tokenId}`,
-          label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-        }))}
+      <EquipmentSelect
+        equipment={equipment}
+        equipmentNftOptions={equipmentNftOptions}
+        onChange={handleEquipmentChange}
       />
       <ConnectButton />
       <Withdraw />
