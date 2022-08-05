@@ -85,6 +85,16 @@ function parseDb(data) {
   }
 }
 
+function getRank(address) {
+  return {
+    overall: 1,
+    nft: 1,
+    defi: 1,
+    bonus: 1,
+    totalPeople: 10
+  }
+}
+
 async function getTokenByAddress(address) {
   try {
     const token = await prisma.token.findUnique({
@@ -161,6 +171,7 @@ async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, bas
 
 export {
   parseDb,
+  getRank,
   getTokenByAddress,
   getTokenByTokenId,
   putTokenByTokenId,

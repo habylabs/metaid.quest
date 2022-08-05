@@ -10,6 +10,7 @@ import {
   Loading,
   MetaId,
   Mint,
+  Rank,
   Withdraw,
 } from '.'
 
@@ -46,8 +47,8 @@ const getPfpSelectValue = (pfp) => (
   pfp.contract ? `${pfp.contract}-${pfp.id}` : null
 )
 
-const getExtraCharSelectValue = (extraChar) => (
-  extraChar.id ? `${CHARACTER_CONTRACT_ADDRESS.toLowerCase()}-${extraChar.id}` : null
+const getExtraCharSelectValue = (bonusChar) => (
+  bonusChar.id ? `${CHARACTER_CONTRACT_ADDRESS.toLowerCase()}-${bonusChar.id}` : null
 )
 
 const getEquipmentSelectValue = (equipment) => (
@@ -56,12 +57,15 @@ const getEquipmentSelectValue = (equipment) => (
 
 const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ isMinted, setIsMinted ] = useState(false)
+  const [ didMintToday, setDidMintToday ] = useState(false)
+  const [ onboardingStep, setOnboardingStep ] = useState(6)
   const [ pfp, setPfp ] = useState(dbData.identity.pfp)
-  const [ extraChar, setExtraChar ] = useState(dbData.identity.character)
+  const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
+  const [ stats, setStats ] = useState(dbData.stats)
 
   const equipmentContract = getEquipmentContractInterface(equipment)
-  const { data } = useContractReads({
+  const lootData = useContractReads({
     contracts: [
       {
         ...equipmentContract,
@@ -108,15 +112,16 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
     ]
   })
 
+  if (lootData.error) return <div>Failed to load</div>
+  if (!lootData.data) return <Loading />
+
   return (
     <div>
-      <Button onClick={() => setIsMinted(!isMinted)}>
-        Changed Minted Status
-      </Button>
-      <ConnectButton />
-      <Mint />
-      <Withdraw />
-      {isMinted && <MetaId empty />}
+      <div>Text to entice people</div>
+      <Rank rank={dbData.rank}/>
+      <MetaId empty={!isMinted} data={{}} example={isMinted} />
+      {!isMinted && <Mint />}
+      
       <Select
         label="Identity"
         placeholder="Choose Your PFP"
@@ -142,13 +147,13 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
         }))}
       />
       <Select
-        label="Additional Identity"
-        placeholder="Choose Your Character"
-        value={getExtraCharSelectValue(extraChar)}
+        label="Bonus Character"
+        placeholder="Choose Your Bonus Character"
+        value={getExtraCharSelectValue(bonusChar)}
         onChange={(value) => {
           const valueArray = value.split('-')
           const id = valueArray[1]
-          setExtraChar({
+          setBonusChar({
             id,
             race: '',
             role: '',
@@ -180,8 +185,28 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
           value: `${nft.contract.address}-${nft.tokenId}`,
           label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
         }))}
-        disabled={!data}
       />
+      <ConnectButton />
+      <Withdraw />
+      <div className='row'>
+        <Button small outline onClick={() => setIsMinted(!isMinted)}>
+          Minted: {`${isMinted}`}
+        </Button>
+
+        <Button small outline onClick={() => {
+          setDidMintToday(!didMintToday)
+          setOnboardingStep(0)
+        }}>
+          Minted Today: {`${didMintToday}`}
+        </Button>
+
+        <Button
+          small outline 
+          onClick={() => setOnboardingStep(onboardingStep === 6 ? 6 : ++onboardingStep)}
+        >
+          Onboarding Step {onboardingStep}
+        </Button>
+      </div>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import MetaId from './MetaId.js';
 import Mint from './Mint.js';
 import Page from './Page.js';
 import Profile from './Profile.js';
+import Rank from './Rank.js';
 import Withdraw from './Withdraw.js';
 
 export {
@@ -19,5 +20,6 @@ export {
   Mint,
   Page,
   Profile,
+  Rank,
   Withdraw
 };

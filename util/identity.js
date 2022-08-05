@@ -30,7 +30,7 @@ import {
 // provided in the contract attributes response
 
 function getGuild(identity) {
-  return (identity.pfp.contract ? contractNameMap[identity.pfp.contract] : '???')
+  return (identity.pfp.contract ? contractNameMap[identity.pfp.contract.toLowerCase()] : '???')
 }
 
 function getId(identity) {

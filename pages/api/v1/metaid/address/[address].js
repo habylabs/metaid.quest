@@ -1,5 +1,6 @@
 import {
   parseDb,
+  getRank,
   getTokenByAddress,
 } from '../../../../../util/db'
 
@@ -15,6 +16,7 @@ async function get(address) {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
   dbData.stats = await getStats(address)
+  dbData.rank = getRank(address)
   const identityNftOptions = await getNFTs(address, 'identity')
   const equipmentNftOptions = await getNFTs(address, 'equipment')
 
