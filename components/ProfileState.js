@@ -39,28 +39,55 @@ const Profile = ({
   equipmentNftOptions
 }) => {
   const [ isMinted, setIsMinted ] = useState(false)
-  const [ didMintToday, setDidMintToday ] = useState(false)
-  const [ onboardingStep, setOnboardingStep ] = useState(6)
+  const [ isOnboardingDone, setIsOnboardingDone ] = useState(true)
+  const [ onboardingStep, setOnboardingStep ] = useState(4)
   const [ pfp, setPfp ] = useState(dbData.identity.pfp)
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
   const [ stats, setStats ] = useState(dbData.stats)
+
+  const handleIsMinted = () => {
+    if (!isMinted) {
+      setIsOnboardingDone(false)
+      setOnboardingStep(1)
+    }
+
+    setIsMinted(!isMinted)
+  }
+
+  const handleOnboardingDone = () => {
+    setIsOnboardingDone(!isOnboardingDone)
+    setOnboardingStep(1)
+  }
+
+  const handleOnboardingStep = () => {
+    if (onboardingStep === 4) {
+      setIsOnboardingDone(true)
+    } else {
+      setOnboardingStep(++onboardingStep)
+    }
+  }
 
   const handlePfpChange = (value) => {
     if (value) {
       const valueArray = value.split('-')
       const contract = valueArray[0]
       const id = valueArray[1]
-      const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
-        ((nft.contract.address === contract) && nft.tokenId === id)
+      const arrayIndex = _.findIndex(allNfts, (nft) => (
+        ((nft.contract === contract) && nft.tokenId === id)
       ))
+
       setPfp({
         contract,
         id,
-        image: identityNftOptions[arrayIndex].metaData.image,
+        image: allNfts[arrayIndex].metaData.image,
         race: '',
         role: '',
       })
+
+      if (!isOnboardingDone) {
+        handleOnboardingStep()
+      }
     } else {
       setPfp({
         contract: null,
@@ -104,6 +131,10 @@ const Profile = ({
       }
 
       setEquipment(contract)
+
+      if (!isOnboardingDone) {
+        handleOnboardingStep()
+      }
     } else {
       setEquipment(null)
     }
@@ -175,11 +206,11 @@ const Profile = ({
         equipmentNftOptions={equipmentNftOptions}
         rank={dbData.rank}
         isMinted={isMinted}
-        setIsMinted={setIsMinted}
-        didMintToday={didMintToday}
-        setDidMintToday={setDidMintToday}
+        handleIsMinted={handleIsMinted}
+        isOnboardingDone={isOnboardingDone}
+        handleOnboardingDone={handleOnboardingDone}
         onboardingStep={onboardingStep}
-        setOnboardingStep={setOnboardingStep}
+        handleOnboardingStep={handleOnboardingStep}
       />
     </div>
   )

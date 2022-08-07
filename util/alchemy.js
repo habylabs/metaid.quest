@@ -137,6 +137,7 @@ async function getNFTs(address, type = 'all') {
     const nfts = await alchemy.nft.getNftsForOwner(address)
     return nfts.ownedNfts.map((nft) => ({
       contract: nft.contract.address.toLowerCase(),
+      title: nft.title,
       tokenId: nft.tokenId,
       tokenType: nft.tokenType,
       metaData: nft.rawMetadata,

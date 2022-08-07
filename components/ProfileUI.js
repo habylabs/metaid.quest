@@ -20,30 +20,24 @@ import {
 const getMainText = (isMinted, onboardingStep) => {
   if (isMinted) {
     switch (onboardingStep) {
-      case 0:
-        return 'Onboarding Step 0'
       case 1:
-        return 'Onboarding Step 1'
+        return 'Choose your PFP!'
       case 2:
-        return 'Onboarding Step 2'
+        return 'You\'re missing a role and element. Mint a Character to get one and increase your bonus level!'
       case 3:
-        return 'Onboarding Step 3'
+        return 'Choose your equipment!'
       case 4:
-        return 'Onboarding Step 4'
-      case 5:
-        return 'Onboarding Step 5'
-      case 6:
-        return 'Onboarding Step 6'
+        return 'Share your Meta ID!'
       default:
-        break;
+        return 'Choose your PFP!'
     }
   }
 
   return 'Mint your Meta ID'
 }
 
-const MainText = ({ isMinted, didMintToday, onboardingStep }) => {
-  if (isMinted && !didMintToday) {
+const MainText = ({ isMinted, isOnboardingDone, onboardingStep }) => {
+  if (isMinted && isOnboardingDone) {
      return null
   }
 
@@ -75,7 +69,7 @@ const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
       value: `${nft.contract}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract]} #${nft.tokenId}`
+      label: `${contractNameMap[nft.contract] || nft.title} #${nft.tokenId}`
     }))}
   />
 )
@@ -110,11 +104,15 @@ const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   />
 )
 
-const _getCtaTitleText = () => {}
+const SkipButton = ({ onClick }) => (
+  <Button outline onClick={onClick}>
+    Skip
+  </Button>
+)
 
 const Cta = ({
   isMinted,
-  didMintToday,
+  isOnboardingDone,
   onboardingStep,
   pfp,
   handlePfpChange,
@@ -122,19 +120,65 @@ const Cta = ({
   handleBonusCharChange,
   equipment,
   handleEquipmentChange,
+  allNfts,
   identityNftOptions,
   characterNftOptions,
-  equipmentNftOptions
+  equipmentNftOptions,
+  handleOnboardingStep
 }) => {
   if (!isMinted) {
     return <Mint free={identityNftOptions.length > 0 || characterNftOptions.length > 0}/>
+  }
+
+  if (!isOnboardingDone) {
+    switch (onboardingStep) {
+      case 1:
+        return (
+          <div>
+            <PfpSelect
+              pfp={pfp}
+              identityNftOptions={allNfts}
+              onChange={handlePfpChange}
+            />
+          </div>
+        )
+      case 2:
+        return (
+          <div>
+            <Mint isCharacter />
+            <SkipButton onClick={handleOnboardingStep} />
+          </div>
+        )
+      case 3:
+        return (
+          <div>
+            <EquipmentSelect
+              equipment={equipment}
+              equipmentNftOptions={equipmentNftOptions}
+              onChange={handleEquipmentChange}
+            />
+            <SkipButton onClick={handleOnboardingStep} />
+          </div>
+        )
+      case 4:
+        return (
+          <div>
+            <Button onClick={handleOnboardingStep}>
+              Share Meta ID on Twitter
+            </Button>
+            <SkipButton onClick={handleOnboardingStep} />
+          </div>
+        )
+      default:
+        return null
+    }
   }
 
   return (
     <div className='row'>
       <PfpSelect
         pfp={pfp}
-        identityNftOptions={identityNftOptions}
+        identityNftOptions={allNfts}
         onChange={handlePfpChange}
       />
       <BonusCharSelect
@@ -147,6 +191,12 @@ const Cta = ({
         equipmentNftOptions={equipmentNftOptions}
         onChange={handleEquipmentChange}
       />
+      <Button onClick={() => console.log('Update DB')}>
+        Update
+      </Button>
+      <Button onClick={() => console.log('Share Meta ID')}>
+        Share Meta ID
+      </Button>
     </div>
   )
 }
@@ -164,11 +214,11 @@ const ProfileUI = ({
   equipmentNftOptions,
   rank,
   isMinted,
-  setIsMinted,
-  didMintToday,
-  setDidMintToday,
+  handleIsMinted,
+  isOnboardingDone,
+  handleOnboardingDone,
   onboardingStep,
-  setOnboardingStep,
+  handleOnboardingStep,
 }) => {
   // There are effectively 3 sections on the Profile page
   // 1. Main text
@@ -181,14 +231,14 @@ const ProfileUI = ({
     <div>
       <MainText
         isMinted={isMinted}
-        didMintToday={didMintToday}
+        isOnboardingDone={isOnboardingDone}
         onboardingStep={onboardingStep}
       />
       <Rank rank={rank}/>
       <MetaId empty={!isMinted} data={{}} example={isMinted} />
       <Cta
         isMinted={isMinted}
-        didMintToday={didMintToday}
+        isOnboardingDone={isOnboardingDone}
         onboardingStep={onboardingStep}
         pfp={pfp}
         handlePfpChange={handlePfpChange}
@@ -196,29 +246,25 @@ const ProfileUI = ({
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
         handleEquipmentChange={handleEquipmentChange}
+        allNfts={allNfts}
         identityNftOptions={identityNftOptions}
         characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}
+        handleOnboardingStep={handleOnboardingStep}
       />
       
       <ConnectButton />
       <Withdraw />
       <div className='row'>
-        <Button small outline onClick={() => setIsMinted(!isMinted)}>
+        <Button small outline onClick={handleIsMinted}>
           Minted: {`${isMinted}`}
         </Button>
 
-        <Button small outline onClick={() => {
-          setDidMintToday(!didMintToday)
-          setOnboardingStep(0)
-        }}>
-          Minted Today: {`${didMintToday}`}
+        <Button small outline onClick={handleOnboardingDone}>
+          Onboarding Done: {`${isOnboardingDone}`}
         </Button>
 
-        <Button
-          small outline 
-          onClick={() => setOnboardingStep(onboardingStep === 6 ? 6 : ++onboardingStep)}
-        >
+        <Button small outline onClick={handleOnboardingStep}>
           Onboarding Step {onboardingStep}
         </Button>
       </div>
