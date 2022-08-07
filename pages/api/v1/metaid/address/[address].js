@@ -12,17 +12,48 @@ import {
   getNFTs
 } from '../../../../../util/alchemy'
 
+import {
+  IDENTITY_NFT_CONTRACTS,
+  CHARACTER_CONTRACT_ADDRESS,
+  EQUIPMENT_NFT_CONTRACTS
+} from '../../../../../util/constants'
+import _ from 'lodash'
+
 async function get(address) {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
   dbData.stats = await getStats(address)
   dbData.rank = getRank(address)
-  const identityNftOptions = await getNFTs(address, 'identity')
-  const equipmentNftOptions = await getNFTs(address, 'equipment')
+  const nftOptions = await getNFTs(address)
 
-  // Need to add in the option of "Unequip" or something that will be displayed in the list
+  const identityNftOptions =  _.filter(
+    nftOptions,
+    (nft) => (
+      _.indexOf(IDENTITY_NFT_CONTRACTS, nft.contract) > -1
+    )
+  )
+  
+  const characterNftOptions = _.filter(
+    nftOptions,
+    (nft) => (
+      nft.contract === CHARACTER_CONTRACT_ADDRESS
+    )
+  )
 
-  return { dbData, identityNftOptions, equipmentNftOptions }
+  const equipmentNftOptions = _.filter(
+    nftOptions,
+    (nft) => (
+      _.indexOf(EQUIPMENT_NFT_CONTRACTS, nft.contract) > -1
+    )
+  )
+
+  return {
+    dbData,
+    allNfts: nftOptions,
+    identityNftOptions,
+    characterNftOptions,
+    equipmentNftOptions
+  }
 }
 
 export default async function handler(req, res) {

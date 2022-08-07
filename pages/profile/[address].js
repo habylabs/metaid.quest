@@ -32,7 +32,9 @@ function ProfilePage() {
       </Head>
       <ProfileState
         dbData={dbRes.data.dbData}
+        allNfts={dbRes.data.allNfts}
         identityNftOptions={dbRes.data.identityNftOptions}
+        characterNftOptions={dbRes.data.characterNftOptions}
         equipmentNftOptions={dbRes.data.equipmentNftOptions}
       />
     </>

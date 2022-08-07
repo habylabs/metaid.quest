@@ -59,7 +59,7 @@ const _getPfpSelectValue = (pfp) => (
 )
 
 const _getExtraCharSelectValue = (bonusChar) => (
-  bonusChar.id ? `${CHARACTER_CONTRACT_ADDRESS.toLowerCase()}-${bonusChar.id}` : null
+  bonusChar.id ? `${CHARACTER_CONTRACT_ADDRESS}-${bonusChar.id}` : null
 )
 
 const _getEquipmentSelectValue = (equipment) => (
@@ -68,42 +68,49 @@ const _getEquipmentSelectValue = (equipment) => (
 
 const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
   <Select
+    searchable
     label="Identity"
     placeholder="Choose Your PFP"
     value={_getPfpSelectValue(pfp)}
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+      value: `${nft.contract}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract]} #${nft.tokenId}`
     }))}
   />
 )
 
 const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
   <Select
+    clearable
+    searchable
     label="Bonus Character"
     placeholder="Choose Your Bonus Character"
     value={_getExtraCharSelectValue(bonusChar)}
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+      value: `${nft.contract}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract]} #${nft.tokenId}`
     }))}
   />
 )
 
 const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   <Select
+    clearable
+    searchable
     label="Equipment"
     placeholder="Choose Your Equipment"
     value={_getEquipmentSelectValue(equipment)}
     onChange={(value) => onChange(value)}
     data={equipmentNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
+      value: `${nft.contract}-${nft.tokenId}`,
+      label: `${contractNameMap[nft.contract]} #${nft.tokenId}`
     }))}
   />
 )
+
+const _getCtaTitleText = () => {}
 
 const Cta = ({
   isMinted,
@@ -116,14 +123,15 @@ const Cta = ({
   equipment,
   handleEquipmentChange,
   identityNftOptions,
+  characterNftOptions,
   equipmentNftOptions
 }) => {
   if (!isMinted) {
-    return <Mint />
+    return <Mint free={identityNftOptions.length > 0 || characterNftOptions.length > 0}/>
   }
 
   return (
-    <>
+    <div className='row'>
       <PfpSelect
         pfp={pfp}
         identityNftOptions={identityNftOptions}
@@ -139,7 +147,7 @@ const Cta = ({
         equipmentNftOptions={equipmentNftOptions}
         onChange={handleEquipmentChange}
       />
-    </>
+    </div>
   )
 }
 
@@ -150,7 +158,9 @@ const ProfileUI = ({
   handleBonusCharChange,
   equipment,
   handleEquipmentChange,
+  allNfts,
   identityNftOptions,
+  characterNftOptions,
   equipmentNftOptions,
   rank,
   isMinted,
@@ -187,6 +197,7 @@ const ProfileUI = ({
         equipment={equipment}
         handleEquipmentChange={handleEquipmentChange}
         identityNftOptions={identityNftOptions}
+        characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}
       />
       

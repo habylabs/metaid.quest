@@ -16,7 +16,7 @@ import LootJson from '../contracts/Loot.json'
 import MLootJson from '../contracts/TemporalLoot.json'
 
 const getEquipmentContractInterface = (equipment) => {
-  if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS.toLowerCase()) {
+  if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS) {
     return {
       addressOrName: LOOT_CONTRACT_ADDRESS,
       contractInterface: LootJson.abi
@@ -31,7 +31,13 @@ const getEquipmentContractInterface = (equipment) => {
 
 const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
 
-const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
+const Profile = ({
+  dbData,
+  allNfts,
+  identityNftOptions,
+  characterNftOptions,
+  equipmentNftOptions
+}) => {
   const [ isMinted, setIsMinted ] = useState(false)
   const [ didMintToday, setDidMintToday ] = useState(false)
   const [ onboardingStep, setOnboardingStep ] = useState(6)
@@ -41,43 +47,66 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ stats, setStats ] = useState(dbData.stats)
 
   const handlePfpChange = (value) => {
-    const valueArray = value.split('-')
-    const contract = valueArray[0]
-    const id = valueArray[1]
-    const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
-      ((nft.contract.address === contract) && nft.tokenId === id)
-    ))
-    setPfp({
-      contract,
-      id,
-      image: identityNftOptions[arrayIndex].metaData.image,
-      race: '',
-      role: '',
-    })
+    if (value) {
+      const valueArray = value.split('-')
+      const contract = valueArray[0]
+      const id = valueArray[1]
+      const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
+        ((nft.contract.address === contract) && nft.tokenId === id)
+      ))
+      setPfp({
+        contract,
+        id,
+        image: identityNftOptions[arrayIndex].metaData.image,
+        race: '',
+        role: '',
+      })
+    } else {
+      setPfp({
+        contract: null,
+        id: null,
+        image: null,
+        race: '???',
+        role: '???',
+        element: '???'
+      })
+    }
   }
 
   const handleBonusCharChange = (value) => {
-    const valueArray = value.split('-')
-    const id = valueArray[1]
-    setBonusChar({
-      id,
-      race: '',
-      role: '',
-      element: ''
-    })
+    if (value) {
+      const valueArray = value.split('-')
+      const id = valueArray[1]
+      setBonusChar({
+        id,
+        race: '',
+        role: '',
+        element: ''
+      })
+    } else {
+      setBonusChar({
+        id: null,
+        race: null,
+        role: null,
+        element: null
+      })
+    }
   }
 
   const handleEquipmentChange = (value) => {
-    const valueArray = value.split('-')
+    if (value) {
+      console.log(value)
+      const valueArray = value.split('-')
 
-    // Add an if statement to see if contract should be set as null
-    // if the equipment being used is from the PFP project
-    const contract = {
-      address: valueArray[0],
-      id: valueArray[1]
+      const contract = {
+        address: valueArray[0],
+        id: valueArray[1]
+      }
+
+      setEquipment(contract)
+    } else {
+      setEquipment(null)
     }
-
-    setEquipment(contract)
   }
 
   const equipmentContract = getEquipmentContractInterface(equipment)
@@ -140,7 +169,9 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
         handleEquipmentChange={handleEquipmentChange}
+        allNfts={allNfts}
         identityNftOptions={identityNftOptions}
+        characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}
         rank={dbData.rank}
         isMinted={isMinted}

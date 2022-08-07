@@ -6,11 +6,6 @@ import {
 
 import _ from 'lodash'
 
-import {
-  IDENTITY_NFT_CONTRACTS,
-  EQUIPMENT_NFT_CONTRACTS
-} from './constants'
-
 const settings = {
   apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
   network: Network.ETH_MAINNET, // Replace with your network.
@@ -42,7 +37,7 @@ const getLatestBlockNum = async () => {
     // from Alchemy
     return _intToHex(latestBlock - 5)
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return -1
   }
 }
@@ -64,7 +59,7 @@ const getFromTx = async (address, fromBlock, toBlock) => {
       nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return _getNoTx()
   }  
 }
@@ -86,7 +81,7 @@ const getToTx = async (address, fromBlock, toBlock) => {
       nft: _.filter(all, (tx) => (tx.category === 'erc721' || tx.category === 'erc1155')),
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return _getNoTx()
   }  
 }
@@ -115,7 +110,7 @@ const getDeFiTokenCount = async (address, fromTx, toTx) => {
 
     return _getNoCount()
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return _getNoCount()
   }
 }
@@ -132,35 +127,23 @@ const getNFTCount = async (address, fromTx, toTx) => {
       current: nfts.totalCount
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return _getNoCount()
-  }
-}
-
-function _getNftContractAddresses(type) {
-  if (type === 'all') {
-    return _.concat(IDENTITY_NFT_CONTRACTS, EQUIPMENT_NFT_CONTRACTS)
-  } else if (type === 'equipment') {
-    return EQUIPMENT_NFT_CONTRACTS
-  } else {
-    return IDENTITY_NFT_CONTRACTS
   }
 }
 
 async function getNFTs(address, type = 'all') {
   try {
-    const nfts = await alchemy.nft.getNftsForOwner(address, {
-      contractAddresses: _getNftContractAddresses(type)
-    });
+    const nfts = await alchemy.nft.getNftsForOwner(address)
     return nfts.ownedNfts.map((nft) => ({
-      contract: nft.contract,
+      contract: nft.contract.address.toLowerCase(),
       tokenId: nft.tokenId,
       tokenType: nft.tokenType,
       metaData: nft.rawMetadata,
       media: nft.media
     }))
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return []
   }
 }

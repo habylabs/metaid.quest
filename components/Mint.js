@@ -10,23 +10,37 @@ import { Button } from '../components'
 import styles from '../styles/components/Mint.module.css'
 import CharacterJson from '../contracts/Character.json'
 
+const _getPrepareContractConfig = (isCharacter) => {
+  if (isCharacter) {
+    return {
+      addressOrName: CHARACTER_CONTRACT_ADDRESS,
+      contractInterface: CharacterJson.abi,
+      functionName: 'mintPublic',
+      args: [1],
+      overrides: {
+        value: ethers.utils.parseEther('0.04'),
+      },
+    }
+  }
 
-function Mint() {
-  const [ numToMint, setNumToMint ] = useState(1)
+  // values here need to be updated for the Meta ID contract
+  return {
+    addressOrName: CHARACTER_CONTRACT_ADDRESS,
+    contractInterface: CharacterJson.abi,
+    functionName: 'mintPublic',
+    args: [1],
+    overrides: {
+      value: ethers.utils.parseEther('0.04'),
+    },
+  }
+}
 
+function Mint({ free, isCharacter }) {
   const {
     config,
     error: prepareError,
     isError: isPrepareError,
-  } = usePrepareContractWrite({
-    addressOrName: CHARACTER_CONTRACT_ADDRESS,
-    contractInterface: CharacterJson.abi,
-    functionName: 'mintPublic',
-    args: [numToMint],
-    overrides: {
-      value: ethers.utils.parseEther(`${numToMint * 0.04}`),
-    },
-  })
+  } = usePrepareContractWrite(_getPrepareContractConfig(isCharacter))
   const { data, error, isError, write } = useContractWrite(config)
 
   const { isLoading, isSuccess } = useWaitForTransaction({
@@ -36,21 +50,18 @@ function Mint() {
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        0.04 ETH to Mint
+        {`${(!free || isCharacter) ? '0.04 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
-        <input
-          className={styles.mintNumInput} 
-          type="number" 
-          value={numToMint} 
-          onChange={ e => setNumToMint(parseInt(e.target.value)) } 
-          min="1"
-        />
         <Button 
           onClick={() => write()} 
-          disabled={(!write || numToMint < 1 || isLoading)}
+          disabled={(!write || isLoading)}
         >
-          {isLoading ? 'Minting...' : 'Mint'}
+          {
+            isLoading ?
+            'Minting...' :
+            `Mint ${isCharacter ? 'Character' : 'Meta ID'}`
+          }
         </Button>
       </div>
       <div className={`monospace-font white-text ${styles.mintMessagePadding}`}>
