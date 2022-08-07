@@ -17,15 +17,52 @@ import {
   Withdraw
 } from '.'
 
-const getPfpSelectValue = (pfp) => (
+const getMainText = (isMinted, onboardingStep) => {
+  if (isMinted) {
+    switch (onboardingStep) {
+      case 0:
+        return 'Onboarding Step 0'
+      case 1:
+        return 'Onboarding Step 1'
+      case 2:
+        return 'Onboarding Step 2'
+      case 3:
+        return 'Onboarding Step 3'
+      case 4:
+        return 'Onboarding Step 4'
+      case 5:
+        return 'Onboarding Step 5'
+      case 6:
+        return 'Onboarding Step 6'
+      default:
+        break;
+    }
+  }
+
+  return 'Mint your Meta ID'
+}
+
+const MainText = ({ isMinted, didMintToday, onboardingStep }) => {
+  if (isMinted && !didMintToday) {
+     return null
+  }
+
+  return (
+    <div>
+      {getMainText(isMinted, onboardingStep)}
+    </div>
+  )
+}
+
+const _getPfpSelectValue = (pfp) => (
   pfp.contract ? `${pfp.contract}-${pfp.id}` : null
 )
 
-const getExtraCharSelectValue = (bonusChar) => (
+const _getExtraCharSelectValue = (bonusChar) => (
   bonusChar.id ? `${CHARACTER_CONTRACT_ADDRESS.toLowerCase()}-${bonusChar.id}` : null
 )
 
-const getEquipmentSelectValue = (equipment) => (
+const _getEquipmentSelectValue = (equipment) => (
   equipment ? `${equipment.address}-${equipment.id}` : null
 )
 
@@ -33,7 +70,7 @@ const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
   <Select
     label="Identity"
     placeholder="Choose Your PFP"
-    value={getPfpSelectValue(pfp)}
+    value={_getPfpSelectValue(pfp)}
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
       value: `${nft.contract.address}-${nft.tokenId}`,
@@ -46,7 +83,7 @@ const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
   <Select
     label="Bonus Character"
     placeholder="Choose Your Bonus Character"
-    value={getExtraCharSelectValue(bonusChar)}
+    value={_getExtraCharSelectValue(bonusChar)}
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
       value: `${nft.contract.address}-${nft.tokenId}`,
@@ -59,7 +96,7 @@ const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   <Select
     label="Equipment"
     placeholder="Choose Your Equipment"
-    value={getEquipmentSelectValue(equipment)}
+    value={_getEquipmentSelectValue(equipment)}
     onChange={(value) => onChange(value)}
     data={equipmentNftOptions.map((nft) => ({
       value: `${nft.contract.address}-${nft.tokenId}`,
@@ -68,17 +105,41 @@ const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   />
 )
 
-const MainText = ({ isMinted, didMintToday, onboardingStep }) => {
-  if (isMinted && !didMintToday) {
-     return null
+const Cta = ({
+  isMinted,
+  didMintToday,
+  onboardingStep,
+  pfp,
+  handlePfpChange,
+  bonusChar,
+  handleBonusCharChange,
+  equipment,
+  handleEquipmentChange,
+  identityNftOptions,
+  equipmentNftOptions
+}) => {
+  if (!isMinted) {
+    return <Mint />
   }
 
-  let text = 'Mint your Meta ID'
-
   return (
-    <div>
-      {text}
-    </div>
+    <>
+      <PfpSelect
+        pfp={pfp}
+        identityNftOptions={identityNftOptions}
+        onChange={handlePfpChange}
+      />
+      <BonusCharSelect
+        bonusChar={bonusChar}
+        identityNftOptions={identityNftOptions}
+        onChange={handleBonusCharChange}
+      />
+      <EquipmentSelect
+        equipment={equipment}
+        equipmentNftOptions={equipmentNftOptions}
+        onChange={handleEquipmentChange}
+      />
+    </>
   )
 }
 
@@ -115,22 +176,20 @@ const ProfileUI = ({
       />
       <Rank rank={rank}/>
       <MetaId empty={!isMinted} data={{}} example={isMinted} />
-      {!isMinted && <Mint />}
-      <PfpSelect
+      <Cta
+        isMinted={isMinted}
+        didMintToday={didMintToday}
+        onboardingStep={onboardingStep}
         pfp={pfp}
-        identityNftOptions={identityNftOptions}
-        onChange={handlePfpChange}
-      />
-      <BonusCharSelect
+        handlePfpChange={handlePfpChange}
         bonusChar={bonusChar}
-        identityNftOptions={identityNftOptions}
-        onChange={handleBonusCharChange}
-      />
-      <EquipmentSelect
+        handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
+        handleEquipmentChange={handleEquipmentChange}
+        identityNftOptions={identityNftOptions}
         equipmentNftOptions={equipmentNftOptions}
-        onChange={handleEquipmentChange}
       />
+      
       <ConnectButton />
       <Withdraw />
       <div className='row'>
