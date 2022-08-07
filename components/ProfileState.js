@@ -1,25 +1,13 @@
 import { useState } from 'react'
-import { useAccount, useContractReads } from 'wagmi'
-import Head from 'next/head'
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Select } from '@mantine/core';
+import { useContractReads } from 'wagmi'
 import _ from 'lodash'
 
 import {
-  Button,
   Loading,
-  MetaId,
-  Mint,
-  Rank,
-  Withdraw,
+  ProfileUI,
 } from '.'
 
 import {
-  contractNameMap
-} from '../util/mapping'
-
-import {
-  CHARACTER_CONTRACT_ADDRESS,
   LOOT_CONTRACT_ADDRESS,
   MLOOT_CONTRACT_ADDRESS
 } from '../util/constants'
@@ -42,57 +30,6 @@ const getEquipmentContractInterface = (equipment) => {
 }
 
 const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
-
-const getPfpSelectValue = (pfp) => (
-  pfp.contract ? `${pfp.contract}-${pfp.id}` : null
-)
-
-const getExtraCharSelectValue = (bonusChar) => (
-  bonusChar.id ? `${CHARACTER_CONTRACT_ADDRESS.toLowerCase()}-${bonusChar.id}` : null
-)
-
-const getEquipmentSelectValue = (equipment) => (
-  equipment ? `${equipment.address}-${equipment.id}` : null
-)
-
-const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
-  <Select
-    label="Identity"
-    placeholder="Choose Your PFP"
-    value={getPfpSelectValue(pfp)}
-    onChange={(value) => onChange(value)}
-    data={identityNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-    }))}
-  />
-)
-
-const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
-  <Select
-    label="Bonus Character"
-    placeholder="Choose Your Bonus Character"
-    value={getExtraCharSelectValue(bonusChar)}
-    onChange={(value) => onChange(value)}
-    data={identityNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-    }))}
-  />
-)
-
-const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
-  <Select
-    label="Equipment"
-    placeholder="Choose Your Equipment"
-    value={getEquipmentSelectValue(equipment)}
-    onChange={(value) => onChange(value)}
-    data={equipmentNftOptions.map((nft) => ({
-      value: `${nft.contract.address}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract.address]} #${nft.tokenId}`
-    }))}
-  />
-)
 
 const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
   const [ isMinted, setIsMinted ] = useState(false)
@@ -196,48 +133,23 @@ const Profile = ({ dbData, identityNftOptions, equipmentNftOptions }) => {
 
   return (
     <div>
-      <div>Text to entice people</div>
-      <Rank rank={dbData.rank}/>
-      <MetaId empty={!isMinted} data={{}} example={isMinted} />
-      {!isMinted && <Mint />}
-      
-      
-      <PfpSelect
+      <ProfileUI
         pfp={pfp}
-        identityNftOptions={identityNftOptions}
-        onChange={handlePfpChange}
-      />
-      <BonusCharSelect
+        handlePfpChange={handlePfpChange}
         bonusChar={bonusChar}
-        identityNftOptions={identityNftOptions}
-        onChange={handleBonusCharChange}
-      />
-      <EquipmentSelect
+        handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
+        handleEquipmentChange={handleEquipmentChange}
+        identityNftOptions={identityNftOptions}
         equipmentNftOptions={equipmentNftOptions}
-        onChange={handleEquipmentChange}
+        rank={dbData.rank}
+        isMinted={isMinted}
+        setIsMinted={setIsMinted}
+        didMintToday={didMintToday}
+        setDidMintToday={setDidMintToday}
+        onboardingStep={onboardingStep}
+        setOnboardingStep={setOnboardingStep}
       />
-      <ConnectButton />
-      <Withdraw />
-      <div className='row'>
-        <Button small outline onClick={() => setIsMinted(!isMinted)}>
-          Minted: {`${isMinted}`}
-        </Button>
-
-        <Button small outline onClick={() => {
-          setDidMintToday(!didMintToday)
-          setOnboardingStep(0)
-        }}>
-          Minted Today: {`${didMintToday}`}
-        </Button>
-
-        <Button
-          small outline 
-          onClick={() => setOnboardingStep(onboardingStep === 6 ? 6 : ++onboardingStep)}
-        >
-          Onboarding Step {onboardingStep}
-        </Button>
-      </div>
     </div>
   )
 }

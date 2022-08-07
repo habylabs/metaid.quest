@@ -5,7 +5,7 @@ import useSWR from 'swr'
 
 import {
   Loading,
-  Profile,
+  ProfileState,
 } from '../../components'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
@@ -30,7 +30,7 @@ function ProfilePage() {
           Meta ID | Your NFT profile for the metaverse!
         </title>
       </Head>
-      <Profile
+      <ProfileState
         dbData={dbRes.data.dbData}
         identityNftOptions={dbRes.data.identityNftOptions}
         equipmentNftOptions={dbRes.data.equipmentNftOptions}

@@ -6,7 +6,8 @@ import Loading from './Loading.js';
 import MetaId from './MetaId.js';
 import Mint from './Mint.js';
 import Page from './Page.js';
-import Profile from './Profile.js';
+import ProfileState from './ProfileState.js';
+import ProfileUI from './ProfileUI.js';
 import Rank from './Rank.js';
 import Withdraw from './Withdraw.js';
 
@@ -19,7 +20,8 @@ export {
   MetaId,
   Mint,
   Page,
-  Profile,
+  ProfileState,
+  ProfileUI,
   Rank,
   Withdraw
 };
