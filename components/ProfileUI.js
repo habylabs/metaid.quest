@@ -74,7 +74,7 @@ const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
   />
 )
 
-const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
+const BonusCharSelect = ({ bonusChar, characterNftOptions, onChange }) => (
   <Select
     clearable
     searchable
@@ -82,7 +82,7 @@ const BonusCharSelect = ({ bonusChar, identityNftOptions, onChange }) => (
     placeholder="Choose Your Bonus Character"
     value={_getExtraCharSelectValue(bonusChar)}
     onChange={(value) => onChange(value)}
-    data={identityNftOptions.map((nft) => ({
+    data={characterNftOptions.map((nft) => ({
       value: `${nft.contract}-${nft.tokenId}`,
       label: `${contractNameMap[nft.contract]} #${nft.tokenId}`
     }))}
@@ -181,11 +181,14 @@ const Cta = ({
         identityNftOptions={allNfts}
         onChange={handlePfpChange}
       />
-      <BonusCharSelect
-        bonusChar={bonusChar}
-        identityNftOptions={identityNftOptions}
-        onChange={handleBonusCharChange}
-      />
+      { characterNftOptions.length > 0 ?
+        <BonusCharSelect
+          bonusChar={bonusChar}
+          characterNftOptions={characterNftOptions}
+          onChange={handleBonusCharChange}
+        /> :
+        <Mint isCharacter />
+      }
       <EquipmentSelect
         equipment={equipment}
         equipmentNftOptions={equipmentNftOptions}

@@ -61,7 +61,21 @@ const Profile = ({
   }
 
   const handleOnboardingStep = () => {
-    if (onboardingStep === 4) {
+    // The user just set their PFP
+    if (onboardingStep === 1) {
+      // If the user has a Character NFT, skip step 2
+      if (characterNftOptions.length > 0) {
+        // The user has a valid Equipment NFT so let them choose one
+        // Otherwise move to step 4 to share
+        if (equipmentNftOptions.length > 0) {
+          setOnboardingStep(3)
+        } else {
+          setOnboardingStep(4)
+        }
+      } else {
+        setOnboardingStep(2)
+      }
+    } else if (onboardingStep === 4) {
       setIsOnboardingDone(true)
     } else {
       setOnboardingStep(++onboardingStep)
