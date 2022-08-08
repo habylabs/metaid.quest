@@ -218,6 +218,7 @@ const Profile = ({
         identityNftOptions={identityNftOptions}
         characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}
+        stats={stats}
         rank={dbData.rank}
         isMinted={isMinted}
         handleIsMinted={handleIsMinted}

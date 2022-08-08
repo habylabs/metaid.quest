@@ -215,6 +215,7 @@ const ProfileUI = ({
   identityNftOptions,
   characterNftOptions,
   equipmentNftOptions,
+  stats,
   rank,
   isMinted,
   handleIsMinted,
@@ -238,7 +239,29 @@ const ProfileUI = ({
         onboardingStep={onboardingStep}
       />
       <Rank rank={rank}/>
-      <MetaId empty={!isMinted} data={{}} example={isMinted} />
+      <MetaId
+        empty={!isMinted}
+        data={{
+          identity: {
+            pfp,
+            character: bonusChar
+          },
+          equipment: {
+            contract: equipment,
+            items: {
+              weapon: '???',
+              chestArmor: '???',
+              headArmor: '???',
+              waistArmor: '???',
+              footArmor: '???',
+              handAmor: '???',
+              necklace: '???',
+              ring: '???'
+            }
+          },
+          stats
+        }}
+      />
       <Cta
         isMinted={isMinted}
         isOnboardingDone={isOnboardingDone}

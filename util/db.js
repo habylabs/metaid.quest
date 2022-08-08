@@ -8,6 +8,7 @@ function parseDb(data) {
         pfp: {
           contract: data["pfp_contract"],
           id: data["pfp_id"],
+          guild: data["pfp_guild"],
           image: data["pfp_img"],
           race: data["pfp_race"],
           role: data["pfp_role"],
@@ -51,6 +52,7 @@ function parseDb(data) {
       pfp: {
         contract: null,
         id: null,
+        guild: null,
         image: null,
         race: '???',
         role: '???',

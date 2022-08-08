@@ -19,6 +19,7 @@ model token {
   ens_name        String    @unique // This is the ENS name that the ENS registrar defaults to.
   pfp_contract    String
   pfp_id          Int
+  pfp_guild       String
   pfp_img         String
   pfp_race        String
   pfp_role        String
