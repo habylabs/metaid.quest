@@ -81,7 +81,7 @@ const _getIdentityBonus = (identity) => {
   return _getRaceBonus(race) + _getRoleBonus(role) + _getElementBonus(element)
 }
 
-const getBonusStats = (identity, equipment) => {
+const getLuck = (identity, equipment) => {
   const equipmentBonus = _.sum(_.map(equipment, (item) => (_getEquipmentBonus(item))))
   const identityBonus = _getIdentityBonus(identity)
 
@@ -155,11 +155,11 @@ const getStats = async (address, identity, equipment) => {
     level: _getLevel(allFromTx.all, allToTx.all, tokenCount.all),
     nftLevel: _getLevel(allFromTx.nft, allToTx.nft, tokenCount.nft),
     defiLevel: _getLevel(allFromTx.defi, allToTx.defi, tokenCount.defi),
-    bonusLevel: getBonusStats(identity, equipment)
+    luck: getLuck(identity, equipment)
   }
 } 
 
 export {
-  getBonusStats,
+  getLuck,
   getStats,
 }

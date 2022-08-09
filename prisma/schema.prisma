@@ -41,5 +41,5 @@ model token {
   level           Int
   nft_level       Int
   defi_level      Int
-  bonus_level     Int
+  luck_level      Int
 }

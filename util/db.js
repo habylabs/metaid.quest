@@ -41,7 +41,7 @@ function parseDb(data) {
         level: data.level,
         nftLevel: data["nft_level"],
         defiLevel: data["defi_level"],
-        bonusLevel: data["bonus_level"],
+        luck: data["luck_level"],
       },
     }
   }
@@ -82,7 +82,7 @@ function parseDb(data) {
       level: '???',
       nftLevel: '???',
       defiLevel: '???',
-      bonusLevel: '???',
+      luck: '???',
     },
   }
 }
@@ -92,7 +92,7 @@ function getRank(address) {
     overall: 1,
     nft: 1,
     defi: 1,
-    bonus: 1,
+    luck: 1,
     totalPeople: 10
   }
 }
@@ -154,7 +154,7 @@ async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, bas
     level: baseStats.level,
     nft_level: baseStats.nftLevel,  
     defi_level: baseStats.defiLevel,
-    bonus_level: baseStats.bonusLevel,
+    luck_level: baseStats.luck,
   }
 
   try {

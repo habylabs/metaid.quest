@@ -41,7 +41,7 @@ const exampleData = {
     level: 24,
     nftLevel: 24,
     defiLevel: 24,
-    bonusLevel: 24
+    luck: 24
   }
 }
 
@@ -76,7 +76,7 @@ const emptyData = {
     level: '??',
     nftLevel: '???',
     defiLevel: '???',
-    bonusLevel: '???',
+    luck: '???',
   },
 }
 
@@ -141,8 +141,8 @@ function MetaId({ data, example = false, empty = false }) {
       <text x="1318" y="165" className={styles.baseText}>{stats.nftLevel}</text>
       <text x="1318" y="190" className={styles.titleText}>DEFI LEVEL</text>
       <text x="1318" y="205" className={styles.baseText}>{stats.defiLevel}</text>
-      <text x="1318" y="230" className={styles.titleText}>BONUS LEVEL</text>
-      <text x="1318" y="245" className={styles.baseText}>{stats.bonusLevel}</text>
+      <text x="1318" y="230" className={styles.titleText}>LUCK</text>
+      <text x="1318" y="245" className={styles.baseText}>{stats.luck}</text>
     </svg>
   )
 }
