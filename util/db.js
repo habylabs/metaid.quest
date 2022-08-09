@@ -51,8 +51,8 @@ function parseDb(data) {
       name: null,
       pfp: {
         contract: null,
-        id: null,
-        guild: null,
+        id: '???',
+        guild: '???',
         image: null,
         race: '???',
         role: '???',

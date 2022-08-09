@@ -8,6 +8,10 @@ import {
 } from '.'
 
 import {
+  getGuild
+} from '../util/identity'
+
+import {
   LOOT_CONTRACT_ADDRESS,
   MLOOT_CONTRACT_ADDRESS
 } from '../util/constants'
@@ -33,7 +37,7 @@ const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) :
 
 const Profile = ({
   dbData,
-  allNfts,
+  hasFreeMint,
   identityNftOptions,
   characterNftOptions,
   equipmentNftOptions
@@ -87,14 +91,15 @@ const Profile = ({
       const valueArray = value.split('-')
       const contract = valueArray[0]
       const id = valueArray[1]
-      const arrayIndex = _.findIndex(allNfts, (nft) => (
+      const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
         ((nft.contract === contract) && nft.tokenId === id)
       ))
 
       setPfp({
         contract,
+        guild: getGuild(contract, identityNftOptions[arrayIndex].title),
         id,
-        image: allNfts[arrayIndex].metaData.image,
+        image: identityNftOptions[arrayIndex].media[0].gateway,
         race: '',
         role: '',
       })
@@ -105,7 +110,8 @@ const Profile = ({
     } else {
       setPfp({
         contract: null,
-        id: null,
+        guild: '???',
+        id: '???',
         image: null,
         race: '???',
         role: '???',
@@ -214,7 +220,7 @@ const Profile = ({
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
         handleEquipmentChange={handleEquipmentChange}
-        allNfts={allNfts}
+        hasFreeMint={hasFreeMint}
         identityNftOptions={identityNftOptions}
         characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}

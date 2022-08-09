@@ -26,10 +26,17 @@ async function get(address) {
   dbData.rank = getRank(address)
   const nftOptions = await getNFTs(address)
 
-  const identityNftOptions =  _.filter(
+  const freeMintNftOptions =  _.filter(
     nftOptions,
     (nft) => (
       _.indexOf(IDENTITY_NFT_CONTRACTS, nft.contract) > -1
+    )
+  )
+
+  const identityNftOptions = _.filter(
+    nftOptions,
+    (nft) => (
+      !(_.indexOf(EQUIPMENT_NFT_CONTRACTS, nft.contract) > -1)
     )
   )
   
@@ -40,6 +47,8 @@ async function get(address) {
     )
   )
 
+  const hasFreeMint = (freeMintNftOptions.length > 0 || characterNftOptions.length > 0)
+
   const equipmentNftOptions = _.filter(
     nftOptions,
     (nft) => (
@@ -49,7 +58,7 @@ async function get(address) {
 
   return {
     dbData,
-    allNfts: nftOptions,
+    hasFreeMint,
     identityNftOptions,
     characterNftOptions,
     equipmentNftOptions

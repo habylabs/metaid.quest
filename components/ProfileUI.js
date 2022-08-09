@@ -69,7 +69,7 @@ const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
     onChange={(value) => onChange(value)}
     data={identityNftOptions.map((nft) => ({
       value: `${nft.contract}-${nft.tokenId}`,
-      label: `${contractNameMap[nft.contract] || nft.title} #${nft.tokenId}`
+      label: `${contractNameMap[nft.contract] || nft.title || '???'} #${nft.tokenId}`
     }))}
   />
 )
@@ -120,14 +120,14 @@ const Cta = ({
   handleBonusCharChange,
   equipment,
   handleEquipmentChange,
-  allNfts,
+  hasFreeMint,
   identityNftOptions,
   characterNftOptions,
   equipmentNftOptions,
   handleOnboardingStep
 }) => {
   if (!isMinted) {
-    return <Mint free={identityNftOptions.length > 0 || characterNftOptions.length > 0}/>
+    return <Mint free={hasFreeMint}/>
   }
 
   if (!isOnboardingDone) {
@@ -137,7 +137,7 @@ const Cta = ({
           <div>
             <PfpSelect
               pfp={pfp}
-              identityNftOptions={allNfts}
+              identityNftOptions={identityNftOptions}
               onChange={handlePfpChange}
             />
           </div>
@@ -178,7 +178,7 @@ const Cta = ({
     <div className='row'>
       <PfpSelect
         pfp={pfp}
-        identityNftOptions={allNfts}
+        identityNftOptions={identityNftOptions}
         onChange={handlePfpChange}
       />
       { characterNftOptions.length > 0 ?
@@ -211,7 +211,7 @@ const ProfileUI = ({
   handleBonusCharChange,
   equipment,
   handleEquipmentChange,
-  allNfts,
+  hasFreeMint,
   identityNftOptions,
   characterNftOptions,
   equipmentNftOptions,
@@ -272,7 +272,7 @@ const ProfileUI = ({
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
         handleEquipmentChange={handleEquipmentChange}
-        allNfts={allNfts}
+        hasFreeMint={hasFreeMint}
         identityNftOptions={identityNftOptions}
         characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}

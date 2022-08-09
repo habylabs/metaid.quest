@@ -132,12 +132,19 @@ const getNFTCount = async (address, fromTx, toTx) => {
   }
 }
 
-async function getNFTs(address, type = 'all') {
+const _parseNftTitleMetaData = (title) => {
+  const titleArray = title.split('#')
+  return (
+    titleArray[0] === '' ? null : titleArray[0]
+  )
+}
+
+const getNFTs = async (address, type = 'all') => {
   try {
     const nfts = await alchemy.nft.getNftsForOwner(address)
     return nfts.ownedNfts.map((nft) => ({
       contract: nft.contract.address.toLowerCase(),
-      title: nft.title,
+      title: _parseNftTitleMetaData(nft.title),
       tokenId: nft.tokenId,
       tokenType: nft.tokenType,
       metaData: nft.rawMetadata,
@@ -149,7 +156,7 @@ async function getNFTs(address, type = 'all') {
   }
 }
 
-async function getNFTMetadata(contractAddress, contractId) {
+const getNFTMetadata = async (contractAddress, contractId) => {
   try {
     const nftMetadata = await alchemy.nft.getNftMetadata(contractAddress, contractId);
     return nftMetadata.metadata

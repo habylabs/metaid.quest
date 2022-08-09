@@ -1,8 +1,6 @@
 import { useAccount, useEnsName } from 'wagmi'
 
 import {
-  getGuild,
-  getId,
   getRace,
   getRole,
   getElement
@@ -14,6 +12,7 @@ const exampleData = {
   identity: {
     pfp: {
       contract: '0x439cac149B935AE1D726569800972E1669d17094',
+      guild: 'The Idols',
       id: 9392,
       image: 'https://lh3.googleusercontent.com/K3Bpl07pp03XcbkBiAGgpZbJpS1tsp6bd6OadaDJw_ZV2xM-H25W75B-N4LWv5bGsNCyjalLiPLqzjqnVefAiJI9D2zkeJf6wp7rDIA=w600',
       race: 'Human',
@@ -49,7 +48,8 @@ const emptyData = {
   identity: {
     pfp: {
       contract: null,
-      id: null,
+      guild: '???',
+      id: '???',
       image: null,
       race: '???',
       role: '???',
@@ -104,9 +104,9 @@ function MetaId({ data, example = false, empty = false }) {
       <text x="600" y="110" className={styles.titleText}>NAME</text>
       <text x="600" y="125" className={styles.baseText}>{name}</text>
       <text x="600" y="150" className={styles.titleText}>GUILD</text>
-      <text x="600" y="165" className={styles.baseText}>{getGuild(identity)}</text>
+      <text x="600" y="165" className={styles.baseText}>{identity.pfp.guild}</text>
       <text x="600" y="190" className={styles.titleText}>ID</text>
-      <text x="600" y="205" className={styles.baseText}>{getId(identity)}</text>
+      <text x="600" y="205" className={styles.baseText}>{identity.pfp.id}</text>
       <text x="600" y="230" className={styles.titleText}>RACE</text>
       <text x="600" y="245" className={styles.baseText}>{getRace(identity)}</text>
       <text x="600" y="270" className={styles.titleText}>ROLE</text>

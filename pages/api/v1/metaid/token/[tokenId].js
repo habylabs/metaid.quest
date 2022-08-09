@@ -9,8 +9,6 @@ import {
 } from '../../../../../util/image'
 
 import {
-  getGuild,
-  getId,
   getRace,
   getRole,
   getElement,
@@ -37,11 +35,11 @@ function formatRes(tokenId, identity, equipment, stats) {
       },
       {
         "trait_type": "Guild",
-        "value": getGuild(identity)
+        "value": identity.pfp.guild
       },
       {
         "trait_type": "ID",
-        "value": getId(identity)
+        "value": identity.pfp.id
       },
       {
         "trait_type": "Race",

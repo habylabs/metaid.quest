@@ -29,13 +29,16 @@ import {
 // The functions below take information stored in the DB and format them to be
 // provided in the contract attributes response
 
-function getGuild(identity) {
-  return (identity.pfp.contract ? contractNameMap[identity.pfp.contract.toLowerCase()] : '???')
-}
+function getGuild(contract, title) {
+  if (title) {
+    return title
+  }
 
-function getId(identity) {
-  return (identity.pfp.contract ?
-    `${getGuild(identity)} #${identity.pfp.id}` : '???')
+  if (contractNameMap[contract]) {
+    return contractNameMap[contract]
+  }
+
+  return '???'
 }
 
 function getRace(identity) {
@@ -322,7 +325,6 @@ async function getIdentity(pfp, charId) {
 
 export {
   getGuild,
-  getId,
   getRace,
   getRole,
   getElement,
