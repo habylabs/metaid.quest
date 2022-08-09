@@ -19,7 +19,7 @@ import {
 import LootJson from '../contracts/Loot.json'
 import MLootJson from '../contracts/TemporalLoot.json'
 
-const getEquipmentContractInterface = (equipment) => {
+const _getEquipmentContractInterface = (equipment) => {
   if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS) {
     return {
       addressOrName: LOOT_CONTRACT_ADDRESS,
@@ -33,7 +33,7 @@ const getEquipmentContractInterface = (equipment) => {
   }
 }
 
-const getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
+const _getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
 
 const Profile = ({
   dbData,
@@ -76,6 +76,13 @@ const Profile = ({
         } else {
           setOnboardingStep(4)
         }
+
+        setBonusChar({
+          id: characterNftOptions[0].tokenId,
+          race: characterNftOptions[0].race,
+          role: characterNftOptions[0].role,
+          element: characterNftOptions[0].element,
+        })
       } else {
         setOnboardingStep(2)
       }
@@ -127,15 +134,15 @@ const Profile = ({
       const contract = valueArray[0]
       const id = valueArray[1]
 
-      const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
+      const arrayIndex = _.findIndex(characterNftOptions, (nft) => (
         ((nft.contract === contract) && nft.tokenId === id)
       ))
 
       setBonusChar({
         id,
-        race: identityNftOptions[arrayIndex].race,
-        role: identityNftOptions[arrayIndex].role,
-        element: identityNftOptions[arrayIndex].element,
+        race: characterNftOptions[arrayIndex].race,
+        role: characterNftOptions[arrayIndex].role,
+        element: characterNftOptions[arrayIndex].element,
       })
     } else {
       setBonusChar({
@@ -166,50 +173,50 @@ const Profile = ({
     }
   }
 
-  const equipmentContract = getEquipmentContractInterface(equipment)
+  const equipmentContract = _getEquipmentContractInterface(equipment)
   const lootData = useContractReads({
     contracts: [
       {
         ...equipmentContract,
         functionName: 'getWeapon',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       {
         ...equipmentContract,
         functionName: 'getChest',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       {
         ...equipmentContract,
         functionName: 'getHead',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       {
         ...equipmentContract,
         functionName: 'getWaist',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       {
         ...equipmentContract,
         functionName: 'getFoot',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       {
         ...equipmentContract,
         functionName: 'getHand',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       
       {
         ...equipmentContract,
         functionName: 'getNeck',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
       ,
       {
         ...equipmentContract,
         functionName: 'getRing',
-        args: [getEquipmentTokenId(equipment)]
+        args: [_getEquipmentTokenId(equipment)]
       },
     ]
   })
