@@ -100,8 +100,9 @@ const Profile = ({
         guild: getGuild(contract, identityNftOptions[arrayIndex].title),
         id,
         image: identityNftOptions[arrayIndex].media[0].gateway,
-        race: '',
-        role: '',
+        race: identityNftOptions[arrayIndex].race,
+        role: identityNftOptions[arrayIndex].role,
+        element: identityNftOptions[arrayIndex].element,
       })
 
       if (!isOnboardingDone) {
@@ -110,12 +111,12 @@ const Profile = ({
     } else {
       setPfp({
         contract: null,
-        guild: '???',
+        guild: null,
         id: '???',
         image: null,
-        race: '???',
-        role: '???',
-        element: '???'
+        race: null,
+        role: null,
+        element: null
       })
     }
   }
@@ -123,12 +124,18 @@ const Profile = ({
   const handleBonusCharChange = (value) => {
     if (value) {
       const valueArray = value.split('-')
+      const contract = valueArray[0]
       const id = valueArray[1]
+
+      const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
+        ((nft.contract === contract) && nft.tokenId === id)
+      ))
+
       setBonusChar({
         id,
-        race: '',
-        role: '',
-        element: ''
+        race: identityNftOptions[arrayIndex].race,
+        role: identityNftOptions[arrayIndex].role,
+        element: identityNftOptions[arrayIndex].element,
       })
     } else {
       setBonusChar({

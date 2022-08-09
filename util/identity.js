@@ -29,7 +29,7 @@ import {
 // The functions below take information stored in the DB and format them to be
 // provided in the contract attributes response
 
-function getGuild(contract, title) {
+const getGuild = (contract, title) => {
   if (title) {
     return title
   }
@@ -41,37 +41,55 @@ function getGuild(contract, title) {
   return '???'
 }
 
-function getRace(identity) {
-  if (identity && identity.pfp.race) {
+const getRace = (identity) => {
+  if (identity) {
+    if (identity.pfp.race) {
+      if (identity.character.race) {
+        return `${identity.pfp.race} + ${identity.character.race}`
+      }
+  
+      return identity.pfp.race
+    }
+
     if (identity.character.race) {
-      return `${identity.pfp.race} + ${identity.character.race}`
+      return identity.character.race
     }
-
-    return identity.pfp.race
   }
 
-  return 'None'
+  return 'Unknown'
 }
 
-function getRole(identity) {
-  if (identity && identity.pfp.role) {
+const getRole = (identity) => {
+  if (identity) {
+    if (identity.pfp.role) {
+      if (identity.character.role) {
+        return `${identity.pfp.role} + ${identity.character.role}`
+      }
+  
+      return identity.pfp.role
+    }
+
     if (identity.character.role) {
-      return `${identity.pfp.role} + ${identity.character.role}`
+      return identity.character.role
     }
-
-    return identity.pfp.role
   }
 
   return 'None'
 }
 
-function getElement(identity) {
-  if (identity && identity.pfp.element) {
-    if (identity.character.element) {
-      return `${identity.pfp.element} + ${identity.character.element}`
+const getElement = (identity) => {
+  if (identity) {
+    if (identity.pfp.element) {
+      if (identity.character.element) {
+        return `${identity.pfp.element} + ${identity.character.element}`
+      }
+  
+      return identity.pfp.element
     }
 
-    return identity.pfp.element
+    if (identity.character.element) {
+      return identity.character.element
+    }
   }
 
   return 'None'
@@ -80,7 +98,7 @@ function getElement(identity) {
 // The functions below take the users PFP and Character selections to determine
 // values regarding identity to be stored in the DB
 
-function getPfpRace(contractAddress, { attributes }) {
+const getPfpRace = (contractAddress, { attributes }) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
@@ -208,7 +226,7 @@ function getPfpRace(contractAddress, { attributes }) {
   }
 }
 
-function getPfpRole(contractAddress, { attributes }) {
+const getPfpRole = (contractAddress, { attributes }) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
@@ -222,7 +240,7 @@ function getPfpRole(contractAddress, { attributes }) {
   }
 }
 
-function getAzukiTypeElement(value) {
+const _getAzukiTypeElement = (value) => {
   if (value === 'Blue') {
     return 'Water'
   } else if (value === 'Red') {
@@ -232,7 +250,7 @@ function getAzukiTypeElement(value) {
   }
 }
 
-function getAzukiSpecialElement(value) {
+const _getAzukiSpecialElement = (value) => {
   if (value === 'Smoke') {
     return 'Poison'
   } else if (value === 'Fox Fire') {
@@ -252,7 +270,7 @@ function getAzukiSpecialElement(value) {
   return null
 }
 
-function getAzukiEyeElement(value) {
+const _getAzukiEyeElement = (value) => {
   if (value === 'Fire') {
     return 'Fire'
   } else if (value === 'Lightning') {
@@ -266,7 +284,7 @@ function getAzukiEyeElement(value) {
   return null
 }
 
-function getPfpElement(contractAddress, { attributes }) {
+const getPfpElement = (contractAddress, { attributes }) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
@@ -289,9 +307,9 @@ function getPfpElement(contractAddress, { attributes }) {
       const specialIndex = _.findIndex(attributes, ['trait_type', 'Special'])
       const eyeIndex = _.findIndex(attributes, ['trait_type', 'Eyes'])
 
-      const azukiTypeElement = getAzukiTypeElement(attributes[typeIndex].value)
-      const azukiSpecialElement = getAzukiSpecialElement(attributes[specialIndex].value)
-      const azukiEyeElement = getAzukiEyeElement(attributes[eyeIndex].value)
+      const azukiTypeElement = _getAzukiTypeElement(attributes[typeIndex].value)
+      const azukiSpecialElement = _getAzukiSpecialElement(attributes[specialIndex].value)
+      const azukiEyeElement = _getAzukiEyeElement(attributes[eyeIndex].value)
       const elements = _.remove(_.uniq([azukiTypeElement, azukiSpecialElement, azukiEyeElement]), (n) => (n != null))
 
       return _.replace(_.toString(elements), ',', ' + ')
@@ -328,5 +346,8 @@ export {
   getRace,
   getRole,
   getElement,
-  getIdentity
+  getPfpRace,
+  getPfpRole,
+  getPfpElement,
+  getIdentity,
 }

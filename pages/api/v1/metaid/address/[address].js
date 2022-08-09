@@ -5,6 +5,12 @@ import {
 } from '../../../../../util/db'
 
 import {
+  getPfpRace,
+  getPfpRole,
+  getPfpElement,
+} from '../../../../../util/identity'
+
+import {
   getStats,
 } from '../../../../../util/stats'
 
@@ -19,6 +25,25 @@ import {
 } from '../../../../../util/constants'
 import _ from 'lodash'
 
+const _getIdentityNftOptions = (nftOptions) => {
+  const filteredOptions = _.filter(
+    nftOptions,
+    (nft) => (
+      !(_.indexOf(EQUIPMENT_NFT_CONTRACTS, nft.contract) > -1)
+    )
+  )
+
+  return _.map(
+    filteredOptions,
+    (nft) => ({
+      ...nft,
+      race: getPfpRace(nft.contract, nft.metaData),
+      role: getPfpRole(nft.contract, nft.metaData),
+      element: getPfpElement(nft.contract, nft.metaData)
+    })
+  )
+}
+
 async function get(address) {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
@@ -26,22 +51,17 @@ async function get(address) {
   dbData.rank = getRank(address)
   const nftOptions = await getNFTs(address)
 
+  const identityNftOptions = _getIdentityNftOptions(nftOptions)
+
   const freeMintNftOptions =  _.filter(
-    nftOptions,
+    identityNftOptions,
     (nft) => (
       _.indexOf(IDENTITY_NFT_CONTRACTS, nft.contract) > -1
     )
   )
-
-  const identityNftOptions = _.filter(
-    nftOptions,
-    (nft) => (
-      !(_.indexOf(EQUIPMENT_NFT_CONTRACTS, nft.contract) > -1)
-    )
-  )
   
   const characterNftOptions = _.filter(
-    nftOptions,
+    identityNftOptions,
     (nft) => (
       nft.contract === CHARACTER_CONTRACT_ADDRESS
     )
