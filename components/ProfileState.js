@@ -149,7 +149,6 @@ const Profile = ({
 
   const handleEquipmentChange = (value) => {
     if (value) {
-      console.log(value)
       const valueArray = value.split('-')
 
       const contract = {
