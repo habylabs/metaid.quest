@@ -6,6 +6,10 @@ import {
 } from '../util/mapping'
 
 import {
+  getPfpEquipment,
+} from '../util/equipment'
+
+import {
   CHARACTER_CONTRACT_ADDRESS,
 } from '../util/constants'
 
@@ -46,6 +50,36 @@ const MainText = ({ isMinted, isOnboardingDone, onboardingStep }) => {
       {getMainText(isMinted, onboardingStep)}
     </div>
   )
+}
+
+const _getEquipmentItems = (pfp, equipment, lootEquipment) => {
+  if (equipment) {
+    return {
+      weapon: lootEquipment[0],
+      chestArmor: lootEquipment[1],
+      headArmor: lootEquipment[2],
+      waistArmor: lootEquipment[3],
+      footArmor: lootEquipment[4],
+      handArmor: lootEquipment[5],
+      necklace: lootEquipment[6],
+      ring: lootEquipment[7]
+    }
+  }
+
+  if (pfp) {
+    return getPfpEquipment(pfp)
+  }
+
+  return {
+    weapon: '???',
+    chestArmor: '???',
+    headArmor: '???',
+    waistArmor: '???',
+    footArmor: '???',
+    handAmor: '???',
+    necklace: '???',
+    ring: '???'
+  }
 }
 
 const _getPfpSelectValue = (pfp) => (
@@ -210,6 +244,7 @@ const ProfileUI = ({
   bonusChar,
   handleBonusCharChange,
   equipment,
+  lootEquipment,
   handleEquipmentChange,
   hasFreeMint,
   identityNftOptions,
@@ -231,6 +266,8 @@ const ProfileUI = ({
   // All 3 sections always exist, but the exact content of each of them change
   // based on their mint and onboarding state.
 
+  console.log(lootEquipment)
+
   return (
     <div>
       <MainText
@@ -246,19 +283,7 @@ const ProfileUI = ({
             pfp,
             character: bonusChar
           },
-          equipment: {
-            contract: equipment,
-            items: {
-              weapon: '???',
-              chestArmor: '???',
-              headArmor: '???',
-              waistArmor: '???',
-              footArmor: '???',
-              handAmor: '???',
-              necklace: '???',
-              ring: '???'
-            }
-          },
+          equipment: _getEquipmentItems(pfp, equipment, lootEquipment),
           stats
         }}
       />

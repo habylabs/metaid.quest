@@ -19,6 +19,24 @@ import {
 import LootJson from '../contracts/Loot.json'
 import MLootJson from '../contracts/TemporalLoot.json'
 
+const _getPfp = (pfp, identityNftOptions) => {
+  if (pfp.contract) {
+    const arrayIndex = _.findIndex(identityNftOptions, (nft) => (
+      ((nft.contract === pfp.contract) && nft.tokenId === pfp.id)
+    ))
+
+    return {
+      ...pfp,
+      attributes: identityNftOptions[arrayIndex].metaData.attributes
+    }
+  }
+
+  return {
+    ...pfp,
+    attributes: null
+  }
+}
+
 const _getEquipmentContractInterface = (equipment) => {
   if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS) {
     return {
@@ -104,12 +122,13 @@ const Profile = ({
 
       setPfp({
         contract,
-        guild: getGuild(contract, identityNftOptions[arrayIndex].title),
         id,
+        guild: getGuild(contract, identityNftOptions[arrayIndex].title),
         image: identityNftOptions[arrayIndex].media[0].gateway,
         race: identityNftOptions[arrayIndex].race,
         role: identityNftOptions[arrayIndex].role,
         element: identityNftOptions[arrayIndex].element,
+        attributes: identityNftOptions[arrayIndex].metaData.attributes
       })
 
       if (!isOnboardingDone) {
@@ -118,12 +137,13 @@ const Profile = ({
     } else {
       setPfp({
         contract: null,
-        guild: null,
         id: '???',
+        guild: null,
         image: null,
         race: null,
         role: null,
-        element: null
+        element: null,
+        attributes: null
       })
     }
   }
@@ -220,6 +240,7 @@ const Profile = ({
       },
     ]
   })
+  console.log(lootData.data)
 
   if (lootData.error) return <div>Failed to load</div>
   if (!lootData.data) return <Loading />
@@ -232,6 +253,7 @@ const Profile = ({
         bonusChar={bonusChar}
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
+        lootEquipment={equipment ? lootData.data : null}
         handleEquipmentChange={handleEquipmentChange}
         hasFreeMint={hasFreeMint}
         identityNftOptions={identityNftOptions}

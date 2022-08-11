@@ -32,7 +32,7 @@ const exampleData = {
     headArmor: '"Skull Moon" Divine Hood of Skill +1',
     waistArmor: 'Mesh Belt of Protection',
     footArmor: 'Demonhide Boots',
-    handAmor: 'Demon\'s Hands of Vitriol',
+    handArmor: 'Demon\'s Hands of Vitriol',
     necklace: 'Pendant',
     ring: 'Gold Ring'
   },
@@ -68,7 +68,7 @@ const emptyData = {
     headArmor: '???',
     waistArmor: '???',
     footArmor: '???',
-    handAmor: '???',
+    handArmor: '???',
     necklace: '???',
     ring: '???'
   },
@@ -125,7 +125,7 @@ function MetaId({ data, example = false, empty = false }) {
       <text x="884" y="230" className={styles.titleText}>WAIST ARMOR</text>
       <text x="884" y="245" className={styles.baseText}>{equipment.waistArmor}</text>
       <text x="884" y="270" className={styles.titleText}>HAND ARMOR</text>
-      <text x="884" y="285" className={styles.baseText}>{equipment.handAmor}</text>
+      <text x="884" y="285" className={styles.baseText}>{equipment.handArmor}</text>
       <text x="884" y="310" className={styles.titleText}>FOOT ARMOR</text>
       <text x="884" y="325" className={styles.baseText}>{equipment.footArmor}</text>
       <text x="884" y="350" className={styles.titleText}>NECKLACE</text>

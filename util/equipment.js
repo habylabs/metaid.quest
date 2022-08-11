@@ -14,27 +14,9 @@ import {
   WOW_CONTRACT_ADDRESS
 } from './constants'
 
-// Helper functions to populate Equipment fields in Meta ID
-function getEquipMetadata(equip) {
-  if (equip) {
-    return {
-      weapon: null,
-      chestArmor: null,
-      headArmor: null,
-      waistArmor: null,
-      footArmor: null,
-      handArmor: null,
-      necklace: null,
-      ring: null,
-    }
-  }
-  
-  return null
-}
-
-function getPfpWeapon(identity) {
+const _getPfpWeapon = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Weapon'])
       return index > -1 ? attributes[index].value : null
@@ -59,9 +41,9 @@ function getPfpWeapon(identity) {
   }
 }
 
-function getPfpChestArmor(identity) {
+const _getPfpChestArmor = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Clothes'])
       if (attributes[index].value === 'Bone Necklace') {
@@ -116,9 +98,9 @@ function getPfpChestArmor(identity) {
   }
 }
 
-function getPfpHeadArmor(identity) {
+const _getPfpHeadArmor = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
       return attributes[index].value
@@ -172,9 +154,9 @@ function getPfpHeadArmor(identity) {
   }
 }
 
-function getPfpWaistArmor(identity) {
+const _getPfpWaistArmor = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Waist Armor'])
       return index > -1 ? attributes[index].value : null
@@ -186,9 +168,9 @@ function getPfpWaistArmor(identity) {
   }
 }
 
-function getPfpFootArmor(identity) {
+const _getPfpFootArmor = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case MEEBITS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Shoes'])
       return index > -1 ? attributes[index].value : null
@@ -203,9 +185,9 @@ function getPfpFootArmor(identity) {
   }
 }
 
-function getPfpHandArmor(identity) {
+const _getPfpHandArmor = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Hand Armor'])
       return index > -1 ? attributes[index].value : null
@@ -217,9 +199,9 @@ function getPfpHandArmor(identity) {
   }
 }
 
-function getPfpNecklace(identity) {
+const _getPfpNecklace = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Clothes'])
       if (attributes[index].value === 'Bone Necklace') {
@@ -242,7 +224,7 @@ function getPfpNecklace(identity) {
       index = _.findIndex(attributes, ['trait_type', 'Necklace'])
       return index > -1 ? attributes[index].value : null
     case HYPERLOOT_CONTRACT_ADDRESS:
-      index = _.findIndex(attributes, ['trait_type', 'Necklace'])
+      index = _.findIndex(attributes, ['trait_type', 'Neck'])
       return index > -1 ? attributes[index].value : null
     case AZUKI_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Neck'])
@@ -255,9 +237,9 @@ function getPfpNecklace(identity) {
   }
 }
 
-function getPfpRing(identity) {
+const _getPfpRing = ({ contract, attributes }) => {
   let index
-  switch (contractAddress) {
+  switch (contract) {
     case LOOT_EXPLORERS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Ring'])
       return index > -1 ? attributes[index].value : null
@@ -269,22 +251,28 @@ function getPfpRing(identity) {
   }
 }
 
-async function getEquipment(identity, equip) {
-  const equipMetadata = getEquipMetadata(equip)
+const getPfpEquipment = (pfp) => {
+  const weapon = _getPfpWeapon(pfp)
+  const chestArmor = _getPfpChestArmor(pfp)
+  const headArmor = _getPfpHeadArmor(pfp)
+  const waistArmor = _getPfpWaistArmor(pfp)
+  const footArmor = _getPfpFootArmor(pfp)
+  const handArmor = _getPfpHandArmor(pfp)
+  const necklace = _getPfpNecklace(pfp)
+  const ring = _getPfpRing(pfp)
+
   return {
-    equipContract: equipMetadata ? equipMetadata.contract.address : null,
-    equipId: equipMetadata ? equipMetadata.id.tokenId : null,
-    weapon: equipMetadata ? equipMetadata.weapon : getPfpWeapon(identity),
-    chestArmor: equipMetadata ? equipMetadata.chestArmor : getPfpChestArmor(identity),
-    headArmor: equipMetadata ? equipMetadata.headArmor : getPfpHeadArmor(identity),
-    waistArmor: equipMetadata ? equipMetadata.waistArmor : getPfpWaistArmor(identity),
-    footArmor: equipMetadata ? equipMetadata.footArmor : getPfpFootArmor(identity),
-    handArmor: equipMetadata ? equipMetadata.handArmor : getPfpHandArmor(identity),
-    necklace: equipMetadata ? equipMetadata.necklace : getPfpNecklace(identity),
-    ring: equipMetadata ? equipMetadata.ring : getPfpRing(identity)
+    weapon: weapon ? weapon : 'None',
+    chestArmor: chestArmor ? chestArmor : 'None',
+    headArmor: headArmor ? headArmor : 'None',
+    waistArmor: waistArmor ? waistArmor : 'None',
+    footArmor: footArmor ? footArmor : 'None',
+    handArmor: handArmor ? handArmor : 'None',
+    necklace: necklace ? necklace : 'None',
+    ring: ring ? ring : 'None',
   }
 }
 
 export {
-  getEquipment
+  getPfpEquipment
 }
