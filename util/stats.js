@@ -82,14 +82,8 @@ const _getIdentityBonus = (identity) => {
 }
 
 const getLuck = (identity, equipmentItems) => {
-  console.log('----')
-  console.log('Get Luck')
-
   const equipmentBonus = _.sum(_.map(equipmentItems, (item) => (_getEquipmentBonus(item))))
   const identityBonus = _getIdentityBonus(identity)
-
-  console.log(`Equipment Bonus ${equipmentBonus}`)
-  console.log(`Identity Bonus ${identityBonus}`)
 
   return equipmentBonus + identityBonus
 }
