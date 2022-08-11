@@ -63,10 +63,9 @@ const Profile = ({
   const [ isMinted, setIsMinted ] = useState(false)
   const [ isOnboardingDone, setIsOnboardingDone ] = useState(true)
   const [ onboardingStep, setOnboardingStep ] = useState(4)
-  const [ pfp, setPfp ] = useState(dbData.identity.pfp)
+  const [ pfp, setPfp ] = useState(_getPfp(dbData.identity.pfp))
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
-  const [ stats, setStats ] = useState(dbData.stats)
 
   const handleIsMinted = () => {
     if (!isMinted) {
@@ -240,7 +239,6 @@ const Profile = ({
       },
     ]
   })
-  console.log(lootData.data)
 
   if (lootData.error) return <div>Failed to load</div>
   if (!lootData.data) return <Loading />
@@ -259,7 +257,7 @@ const Profile = ({
         identityNftOptions={identityNftOptions}
         characterNftOptions={characterNftOptions}
         equipmentNftOptions={equipmentNftOptions}
-        stats={stats}
+        stats={dbData.stats}
         rank={dbData.rank}
         isMinted={isMinted}
         handleIsMinted={handleIsMinted}

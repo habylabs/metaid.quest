@@ -47,7 +47,7 @@ const _getIdentityNftOptions = (nftOptions) => {
 async function get(address) {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
-  dbData.stats = await getStats(address)
+  dbData.stats = await getStats(address, dbData.identity, dbData.equipment)
   dbData.rank = getRank(address)
   const nftOptions = await getNFTs(address)
 

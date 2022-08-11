@@ -6,6 +6,10 @@ import {
 } from '../util/mapping'
 
 import {
+  getLuck,
+} from '../util/stats'
+
+import {
   getPfpEquipment,
 } from '../util/equipment'
 
@@ -265,8 +269,7 @@ const ProfileUI = ({
   // 3. CTA
   // All 3 sections always exist, but the exact content of each of them change
   // based on their mint and onboarding state.
-
-  console.log(lootEquipment)
+  const equipmentItems =  _getEquipmentItems(pfp, equipment, lootEquipment)
 
   return (
     <div>
@@ -283,8 +286,17 @@ const ProfileUI = ({
             pfp,
             character: bonusChar
           },
-          equipment: _getEquipmentItems(pfp, equipment, lootEquipment),
-          stats
+          equipment: equipmentItems,
+          stats: {
+            ...stats,
+            luck: getLuck(
+              {
+                pfp,
+                character: bonusChar
+              },
+              equipmentItems
+            )
+          }
         }}
       />
       <Cta

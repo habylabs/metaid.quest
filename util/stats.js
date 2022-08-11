@@ -25,7 +25,7 @@ function _logCalc(t, multiple = 1) {
 }
 
 const _getEquipmentBonus = (item) => {
-  if (item) {
+  if (item && item != '???' && item != 'None') {
     if (item.includes("of")) {
       if (item.startsWith("\"")) {
         if (item.includes("+1")) {
@@ -41,7 +41,7 @@ const _getEquipmentBonus = (item) => {
 }
 
 const _getRaceBonus = (race) => {
-  if (race === 'None') {
+  if (!race || race === 'Unknown' || race === '???') {
     return 0
   }
 
@@ -52,18 +52,18 @@ const _getRaceBonus = (race) => {
 }
 
 const _getRoleBonus = (role) => {
-  if (role === 'None') {
+  if (!role || role === 'None' || role === '???') {
     return 0
   } 
   
   // Split the role text up by ' + ' because there might be more than 1 role
   // If there is only 1 role, it creates an array of 1
   const roles = role.split(' + ')
-  return 2 * roles.length
+  return 5 * roles.length
 }
 
 const _getElementBonus = (element) => {
-  if (element === 'None') {
+  if (!element || element === 'None' || element === '???') {
     return 0
   } 
   
@@ -81,9 +81,15 @@ const _getIdentityBonus = (identity) => {
   return _getRaceBonus(race) + _getRoleBonus(role) + _getElementBonus(element)
 }
 
-const getLuck = (identity, equipment) => {
-  const equipmentBonus = _.sum(_.map(equipment, (item) => (_getEquipmentBonus(item))))
+const getLuck = (identity, equipmentItems) => {
+  console.log('----')
+  console.log('Get Luck')
+
+  const equipmentBonus = _.sum(_.map(equipmentItems, (item) => (_getEquipmentBonus(item))))
   const identityBonus = _getIdentityBonus(identity)
+
+  console.log(`Equipment Bonus ${equipmentBonus}`)
+  console.log(`Identity Bonus ${identityBonus}`)
 
   return equipmentBonus + identityBonus
 }
@@ -155,7 +161,7 @@ const getStats = async (address, identity, equipment) => {
     level: _getLevel(allFromTx.all, allToTx.all, tokenCount.all),
     nftLevel: _getLevel(allFromTx.nft, allToTx.nft, tokenCount.nft),
     defiLevel: _getLevel(allFromTx.defi, allToTx.defi, tokenCount.defi),
-    luck: getLuck(identity, equipment)
+    luck: getLuck(identity, equipment.items)
   }
 } 
 
