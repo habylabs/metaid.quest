@@ -165,7 +165,23 @@ const Cta = ({
   handleOnboardingStep
 }) => {
   if (!isMinted) {
-    return <Mint free={hasFreeMint}/>
+    return (
+      <div>
+        <Mint free={hasFreeMint}/>
+        {
+          hasFreeMint && (
+            <div>
+              <p className='monospace-font'>
+                Meta ID is free to print for owners of <a href=''>Eligible Projects</a>,
+                including <strong>Character</strong>. You can mint a{' '}
+                <strong>Character</strong> for 0.02 ETH.
+              </p>
+              <Mint isCharacter />
+            </div>
+          )
+        }
+      </div>
+    )
   }
 
   if (!isOnboardingDone) {
