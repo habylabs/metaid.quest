@@ -106,6 +106,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       return attributes[index].value
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      if (index === -1) {
+        return 'Ape Folk'
+      }
       const baycFurTrait = attributes[index].value
       if (baycFurTrait === 'Cheetah') {
         return 'Ape Folk + Cat Folk'
@@ -118,6 +121,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case MAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Fur'])
+      if (index === -1) {
+        return 'Ape Folk'
+      }
       const maycFurTrait = attributes[index].value
       if (maycFurTrait === 'Cheetah') {
         return 'Ape Folk + Cat Folk'
@@ -130,6 +136,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case MEEBITS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Type'])
+      if (index === -1) {
+        return 'Human'
+      }
       const meebitType = attributes[index].value
       if (meebitType === 'Skeleton') {
         return 'Undead'
@@ -142,6 +151,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case COOLCATS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'face'])
+      if (index === -1) {
+        return 'Cat Folk'
+      }
       const coolCatFace = attributes[index].value
       if (coolCatFace === 'Alien' || coolCatFace === 'Angel' || coolCatFace === 'Demon' || coolCatFace === 'Robot') {
         return `Cat Folk + ${coolCatFace}`
@@ -154,10 +166,16 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case JUNGLE_FREAKS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Species'])
+      if (index === -1) {
+        return 'Ape Folk'
+      }
       const jfSpecies = attributes[index].value
       return jfSpecies === 'ZOMBIE' ? 'Undead' : 'Ape Folk'
     case IDOLS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Skin'])
+      if (index === -1) {
+        return 'Human'
+      }
       const idolsSkin = attributes[index].value
       if (idolsSkin === 'Ape') {
         return 'Ape Folk'
@@ -189,6 +207,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       return 'Human'
     case DOODLES_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Face'])
+      if (index === -1) {
+        return 'Human'
+      }
       const doodlesFace = attributes[index].value
       if (doodlesFace === 'Ape' || doodlesFace.includes('ape')) {
         return 'Ape Folk'
@@ -203,6 +224,9 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case AZUKI_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Type'])
+      if (index === -1) {
+        return 'Human'
+      }
       if (attributes[index].value === 'Spirit') {
         return 'Fairy'
       } else {
@@ -210,8 +234,10 @@ const getPfpRace = (contractAddress, { attributes }) => {
       }
     case MOONBIRDS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Type'])
+      if (index === -1) {
+        return 'Bird Folk'
+      }
       const moonbirdType = attributes[index].value
-
       if (moonbirdType === 'Robot') {
         return 'Bird Folk + Robot'
       } else if (moonbirdType.includes('Skeleton')) {

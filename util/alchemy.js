@@ -30,6 +30,21 @@ const _getNoTx = () => ({
 
 const _intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
 
+const _recursiveTxPagination = async (params, results, alchemyRes, n = 1) => {
+  console.log(`Start recuring ${n}`)
+  if (alchemyRes && alchemyRes.pageKey) {
+    const res = await alchemy.core.getAssetTransfers({
+      ...params,
+      pageKey: alchemyRes.pageKey
+    })
+
+    const recursiveRes = await _recursiveTxPagination(params, res.transfers, res, n+1)
+    return _.concat(results, recursiveRes)
+  }
+
+  return results
+}
+
 const getLatestBlockNum = async () => {
   try {
     const latestBlock = await alchemy.core.getBlockNumber()
@@ -44,14 +59,17 @@ const getLatestBlockNum = async () => {
 
 const getFromTx = async (address, fromBlock, toBlock) => {
   try {
-    const res = await alchemy.core.getAssetTransfers({
+    const params = {
       fromBlock,
       toBlock,
-      'fromAddress': address,
-      'category': _getCategoryAll()
-    })
+      fromAddress: address,
+      excludeZeroValue: true,
+      category: _getCategoryAll()
+    }
+    const res = await alchemy.core.getAssetTransfers(params)
 
-    const all = res.transfers
+    const all = await _recursiveTxPagination(params, res.transfers, res)
+    console.log(`All FromTx length: ${all.length}`)
 
     return {
       all,
@@ -66,14 +84,17 @@ const getFromTx = async (address, fromBlock, toBlock) => {
 
 const getToTx = async (address, fromBlock, toBlock) => {
   try {
-    const res = await alchemy.core.getAssetTransfers({
+    const params = {
       fromBlock,
       toBlock,
-      'toAddress': address,
-      'category': _getCategoryAll()
-    })
+      toAddress: address,
+      excludeZeroValue: true,
+      category: _getCategoryAll()
+    }
+    const res = await alchemy.core.getAssetTransfers(params)
 
-    const all = res.transfers
+    const all = await _recursiveTxPagination(params, res.transfers, res)
+    console.log(`All ToTx length: ${all.length}`)
 
     return {
       all,
