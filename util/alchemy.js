@@ -30,15 +30,28 @@ const _getNoTx = () => ({
 
 const _intToHex = (int) => (`0x${parseInt(int).toString(16)}`)
 
-const _recursiveTxPagination = async (params, results, alchemyRes, n = 1) => {
-  console.log(`Start recuring ${n}`)
+const _recursiveTxPagination = async (results, alchemyRes, params = {}) => {
   if (alchemyRes && alchemyRes.pageKey) {
     const res = await alchemy.core.getAssetTransfers({
       ...params,
       pageKey: alchemyRes.pageKey
     })
 
-    const recursiveRes = await _recursiveTxPagination(params, res.transfers, res, n+1)
+    const recursiveRes = await _recursiveTxPagination(res.transfers, res, params)
+    return _.concat(results, recursiveRes)
+  }
+
+  return results
+}
+
+const _recursiveNftPagination = async (address, results, alchemyRes, params = {}) => {
+  if (alchemyRes && alchemyRes.pageKey) {
+    const res = await alchemy.nft.getNftsForOwner(address, {
+      ...params,
+      pageKey: alchemyRes.pageKey
+    })
+
+    const recursiveRes = await _recursiveNftPagination(address, res.ownedNfts, res, params)
     return _.concat(results, recursiveRes)
   }
 
@@ -68,8 +81,8 @@ const getFromTx = async (address, fromBlock, toBlock) => {
     }
     const res = await alchemy.core.getAssetTransfers(params)
 
-    const all = await _recursiveTxPagination(params, res.transfers, res)
-    console.log(`All FromTx length: ${all.length}`)
+    const all = await _recursiveTxPagination(res.transfers, res, params)
+    console.log(`All FromTx length for ${address}: ${all.length}`)
 
     return {
       all,
@@ -93,8 +106,8 @@ const getToTx = async (address, fromBlock, toBlock) => {
     }
     const res = await alchemy.core.getAssetTransfers(params)
 
-    const all = await _recursiveTxPagination(params, res.transfers, res)
-    console.log(`All ToTx length: ${all.length}`)
+    const all = await _recursiveTxPagination(res.transfers, res, params)
+    console.log(`All ToTx length for ${address}: ${all.length}`)
 
     return {
       all,
@@ -142,6 +155,7 @@ const getNFTCount = async (address, fromTx, toTx) => {
       omitMetadata: true,
       excludeFilters: [ NftExcludeFilters.SPAM ] 
     });
+    console.log(`NFT Total count for ${address}: ${nfts.totalCount}`)
 
     return {
       allTime: _getContractAddresses(fromTx, toTx).length,
@@ -160,10 +174,14 @@ const _parseNftTitleMetaData = (title) => {
   )
 }
 
-const getNFTs = async (address, type = 'all') => {
+const getNFTs = async (address) => {
   try {
-    const nfts = await alchemy.nft.getNftsForOwner(address)
-    return nfts.ownedNfts.map((nft) => ({
+    const params = { excludeFilters: [ NftExcludeFilters.SPAM ] }
+    const alchemyRes = await alchemy.nft.getNftsForOwner(address, params)
+    const allNfts = await _recursiveNftPagination(address, alchemyRes.ownedNfts, alchemyRes, params)
+    console.log(`NFT total count for ${address}: ${allNfts.length}`)
+
+    return allNfts.map((nft) => ({
       contract: nft.contract.address.toLowerCase(),
       title: _parseNftTitleMetaData(nft.title),
       tokenId: nft.tokenId,
