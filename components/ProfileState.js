@@ -242,7 +242,6 @@ const Profile = ({
 
   if (lootData.error) return <div>Failed to load</div>
   if (!lootData.data) return <Loading />
-  console.log(lootData.data)
 
   return (
     <div>
