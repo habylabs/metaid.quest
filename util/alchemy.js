@@ -225,7 +225,7 @@ const getNFTs = async (address) => {
       initialAllNfts, 
       params
     )
-    console.log(`NFT total count for ${address}: ${finalNftList.length}`)
+    console.log(`NFT list count for ${address}: ${finalNftList.length}`)
 
     return finalNftList.map((nft) => ({
       contract: nft.contract.address.toLowerCase(),
