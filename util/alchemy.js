@@ -196,6 +196,12 @@ const _getImageUrl = (rawUrl) => {
     return rawUrl.replace('ipfs://', 'https://ipfs.io/ipfs/')
   }
 
+  if (rawUrl && rawUrl.includes('data:image/svg+xml;utf8,')) {
+    const svgString = rawUrl.replace('data:image/svg+xml;utf8,','')
+    const base64SvgString = Buffer.from(svgString).toString('base64')
+    return ('data:image/svg+xml;base64,' + base64SvgString)
+  }
+
   return rawUrl
 }
 

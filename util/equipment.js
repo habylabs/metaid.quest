@@ -52,7 +52,7 @@ const _getPfpChestArmor = ({ contract, attributes }) => {
       return attributes[index].value
     case MAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Clothes'])
-      if (attributes[index].value === 'Bone Necklace') {
+      if (index === -1 || attributes[index].value === 'Bone Necklace') {
         return null
       }
       return attributes[index].value
@@ -103,10 +103,10 @@ const _getPfpHeadArmor = ({ contract, attributes }) => {
   switch (contract) {
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
-      return attributes[index].value
+      return index > -1 ? attributes[index].value : null
     case MAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
-      return attributes[index].value
+      return index > -1 ? attributes[index].value : null
     case MEEBITS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Hat'])
       return index > -1 ? attributes[index].value : null
@@ -204,13 +204,13 @@ const _getPfpNecklace = ({ contract, attributes }) => {
   switch (contract) {
     case BAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Clothes'])
-      if (attributes[index].value === 'Bone Necklace') {
+      if (index > - 1 && attributes[index].value === 'Bone Necklace') {
         return attributes[index].value
       }
       return null
     case MAYC_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Clothes'])
-      if (attributes[index].value === 'Bone Necklace') {
+      if (index > - 1 && attributes[index].value === 'Bone Necklace') {
         return attributes[index].value
       }
       return null

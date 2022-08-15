@@ -260,53 +260,71 @@ const getPfpRole = (contractAddress, attributes) => {
       return attributes[index].value
     case CRYPTO_COVEN_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Archetype of Power'])
+      if (index === -1) {
+        return null
+      }
       return attributes[index].value
     default:
       return null
   }
 }
 
-const _getAzukiTypeElement = (value) => {
-  if (value === 'Blue') {
-    return 'Water'
-  } else if (value === 'Red') {
-    return 'Fire'
-  } else {
-    return null
+const _getAzukiTypeElement = (attributes, index) => {
+  if (index > -1) {
+    const { value } = attributes[index]
+    if (value === 'Blue') {
+      return 'Water'
+    } else if (value === 'Red') {
+      return 'Fire'
+    } else {
+      return null
+    }
   }
-}
-
-const _getAzukiSpecialElement = (value) => {
-  if (value === 'Smoke') {
-    return 'Poison'
-  } else if (value === 'Fox Fire') {
-    return 'Fire'
-  } else if (value === 'Sakura') {
-    return 'Wind'
-  } else if (value === 'Fire') {
-    return 'Fire'
-  } else if (value === 'Earth') {
-    return 'Earth'
-  } else if (value === 'Water') {
-    return 'Water'
-  } else if (value === 'Lightning') {
-    return 'Lightning'
-  }
-
+  
   return null
 }
 
-const _getAzukiEyeElement = (value) => {
-  if (value === 'Fire') {
-    return 'Fire'
-  } else if (value === 'Lightning') {
-    return 'Lightning'
-  } else if (value === 'Glowing') {
-    return 'Light'
-  } else if (value === 'Red') {
-    return 'Dark'
-  }
+const _getAzukiSpecialElement = (attributes, index) => {
+  if (index > -1) {
+    const { value } = attributes[index]
+    if (value === 'Smoke') {
+      return 'Poison'
+    } else if (value === 'Fox Fire') {
+      return 'Fire'
+    } else if (value === 'Sakura') {
+      return 'Wind'
+    } else if (value === 'Fire') {
+      return 'Fire'
+    } else if (value === 'Earth') {
+      return 'Earth'
+    } else if (value === 'Water') {
+      return 'Water'
+    } else if (value === 'Lightning') {
+      return 'Lightning'
+    }
 
+    return null
+  }
+  
+  return null
+}
+
+const _getAzukiEyeElement = (attributes, index) => {
+  if (index > -1) {
+    const { value } = attributes[index]
+    if (value === 'Fire') {
+      return 'Fire'
+    } else if (value === 'Lightning') {
+      return 'Lightning'
+    } else if (value === 'Glowing') {
+      return 'Light'
+    } else if (value === 'Red') {
+      return 'Dark'
+    }
+  
+    return null
+  }
+  
   return null
 }
 
@@ -318,6 +336,9 @@ const getPfpElement = (contractAddress, attributes) => {
       return attributes[index].value
     case IDOLS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Eyes'])
+      if (index === -1) {
+        return null
+      }
       const idolsEyes = attributes[index].value
       if (idolsEyes === 'Fire Eyes') {
         return 'Fire'
@@ -341,6 +362,9 @@ const getPfpElement = (contractAddress, attributes) => {
       return _.replace(_.toString(elements), ',', ' + ')
     case MOONBIRDS_CONTRACT_ADDRESS:
       index = _.findIndex(attributes, ['trait_type', 'Eyes'])
+      if (index === -1) {
+        return null
+      }
       return attributes[index].value === 'Fire' ? 'Fire' : null
     default:
       return null
