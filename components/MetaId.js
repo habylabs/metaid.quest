@@ -6,6 +6,8 @@ import {
   getElement
 } from "../util/identity"
 
+import _ from 'lodash'
+
 import styles from '../styles/components/MetaId.module.css';
 
 const exampleData = {
@@ -80,6 +82,10 @@ const emptyData = {
   },
 }
 
+const _formatId = (id) => (
+  _.truncate(id, { length: 24 })
+)
+
 function MetaId({ data, example = false, empty = false }) {
   const idData = example ? exampleData : empty ? emptyData : data
   const { identity, equipment, stats } = idData
@@ -106,7 +112,7 @@ function MetaId({ data, example = false, empty = false }) {
       <text x="600" y="150" className={styles.titleText}>GUILD</text>
       <text x="600" y="165" className={styles.baseText}>{identity.pfp.guild}</text>
       <text x="600" y="190" className={styles.titleText}>ID</text>
-      <text x="600" y="205" className={styles.baseText}>{identity.pfp.id}</text>
+      <text x="600" y="205" className={styles.baseText}>{_formatId(identity.pfp.id)}</text>
       <text x="600" y="230" className={styles.titleText}>RACE</text>
       <text x="600" y="245" className={styles.baseText}>{getRace(identity)}</text>
       <text x="600" y="270" className={styles.titleText}>ROLE</text>

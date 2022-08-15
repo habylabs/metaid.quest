@@ -98,7 +98,7 @@ const getElement = (identity) => {
 // The functions below take the users PFP and Character selections to determine
 // values regarding identity to be stored in the DB
 
-const getPfpRace = (contractAddress, { attributes }) => {
+const getPfpRace = (contractAddress, attributes) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
@@ -252,7 +252,7 @@ const getPfpRace = (contractAddress, { attributes }) => {
   }
 }
 
-const getPfpRole = (contractAddress, { attributes }) => {
+const getPfpRole = (contractAddress, attributes) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:
@@ -310,7 +310,7 @@ const _getAzukiEyeElement = (value) => {
   return null
 }
 
-const getPfpElement = (contractAddress, { attributes }) => {
+const getPfpElement = (contractAddress, attributes) => {
   let index
   switch (contractAddress) {
     case CHARACTER_CONTRACT_ADDRESS:

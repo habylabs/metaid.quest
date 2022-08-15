@@ -123,11 +123,11 @@ const Profile = ({
         contract,
         id,
         guild: getGuild(contract, identityNftOptions[arrayIndex].title),
-        image: identityNftOptions[arrayIndex].media[0].gateway,
+        image: identityNftOptions[arrayIndex].image,
         race: identityNftOptions[arrayIndex].race,
         role: identityNftOptions[arrayIndex].role,
         element: identityNftOptions[arrayIndex].element,
-        attributes: identityNftOptions[arrayIndex].metaData.attributes
+        attributes: identityNftOptions[arrayIndex].attributes
       })
 
       if (!isOnboardingDone) {

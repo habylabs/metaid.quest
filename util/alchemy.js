@@ -11,6 +11,10 @@ import {
   DEFAULT_IDENTITY_NFT_CONTRACTS,
 } from './constants'
 
+import { 
+  contractNameMap
+} from './mapping'
+
 const settings = {
   apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
   network: Network.ETH_MAINNET, // Replace with your network.
@@ -172,11 +176,27 @@ const getNFTCount = async (address, fromTx, toTx) => {
   }
 }
 
-const _parseNftTitleMetaData = (title) => {
+const _parseNftTitleMetaData = (contract, title) => {
   const titleArray = title.split('#')
-  return (
-    titleArray[0] === '' ? null : titleArray[0]
-  )
+  if (titleArray[0] === '') {
+    const contractName = contractNameMap[contract]
+
+    if (contractName) {
+      return contractName
+    }
+
+    return null
+  }
+
+  return titleArray[0]
+}
+
+const _getImageUrl = (rawUrl) => {
+  if (rawUrl && rawUrl.includes('ipfs://')) {
+    return rawUrl.replace('ipfs://', 'https://ipfs.io/ipfs/')
+  }
+
+  return rawUrl
 }
 
 const _pullAllNfts = async (address, initialAlchemyRes, params) => {
@@ -219,22 +239,27 @@ const getNFTs = async (address) => {
     const params = { excludeFilters: [ NftExcludeFilters.SPAM ] }
     const initialAllNfts = await alchemy.nft.getNftsForOwner(address, params)
 
-    const finalNftList = await _getFinalNftList(
+    const allNfts = await _getFinalNftList(
       address,
       defaultNfts,
       initialAllNfts, 
       params
     )
-    console.log(`NFT list count for ${address}: ${finalNftList.length}`)
+    console.log(`NFT list count for ${address}: ${allNfts.length}`)
+    
+    const parsedAllNfts = allNfts.map((nft) => {
+      const contract = nft.contract.address.toLowerCase()
+      return {
+        contract,
+        title: _parseNftTitleMetaData(contract, nft.title),
+        tokenId: nft.tokenId,
+        tokenType: nft.tokenType,
+        attributes: nft.rawMetadata.attributes,
+        image: _getImageUrl(nft.rawMetadata.image),
+      }
+    })
 
-    return finalNftList.map((nft) => ({
-      contract: nft.contract.address.toLowerCase(),
-      title: _parseNftTitleMetaData(nft.title),
-      tokenId: nft.tokenId,
-      tokenType: nft.tokenType,
-      metaData: nft.rawMetadata,
-      media: nft.media
-    }))
+    return _.filter(parsedAllNfts, (nft) => (nft.title))
   } catch (error) {
     console.error(error)
     return []

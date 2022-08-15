@@ -37,9 +37,9 @@ const _getIdentityNftOptions = (nftOptions) => {
     filteredOptions,
     (nft) => ({
       ...nft,
-      race: getPfpRace(nft.contract, nft.metaData),
-      role: getPfpRole(nft.contract, nft.metaData),
-      element: getPfpElement(nft.contract, nft.metaData)
+      race: getPfpRace(nft.contract, nft.attributes),
+      role: getPfpRole(nft.contract, nft.attributes),
+      element: getPfpElement(nft.contract, nft.attributes)
     })
   )
 }
