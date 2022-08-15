@@ -6,6 +6,11 @@ import {
 
 import _ from 'lodash'
 
+import {
+  EQUIPMENT_NFT_CONTRACTS,
+  DEFAULT_IDENTITY_NFT_CONTRACTS,
+} from './constants'
+
 const settings = {
   apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
   network: Network.ETH_MAINNET, // Replace with your network.
@@ -174,14 +179,55 @@ const _parseNftTitleMetaData = (title) => {
   )
 }
 
+const _pullAllNfts = async (address, initialAlchemyRes, params) => {
+  if (initialAlchemyRes.pageKey) {
+    if (initialAlchemyRes.totalCount > 500) {
+      return initialAlchemyRes.ownedNfts
+    }
+
+    return await _recursiveNftPagination(
+      address,
+      initialAlchemyRes.ownedNfts,
+      initialAlchemyRes,
+      params
+    )
+  }
+
+  return initialAlchemyRes.ownedNfts
+}
+
+const _getFinalNftList = async (address, defaultNfts, initialAlchemyRes, params) => {
+  const allNfts = await _pullAllNfts(address, initialAlchemyRes, params)
+  return _.unionWith(defaultNfts, allNfts, _.isEqual)
+}
+
 const getNFTs = async (address) => {
   try {
-    const params = { excludeFilters: [ NftExcludeFilters.SPAM ] }
-    const alchemyRes = await alchemy.nft.getNftsForOwner(address, params)
-    const allNfts = await _recursiveNftPagination(address, alchemyRes.ownedNfts, alchemyRes, params)
-    console.log(`NFT total count for ${address}: ${allNfts.length}`)
+    const defaultListParams = {
+      excludeFilters: [ NftExcludeFilters.SPAM ],
+      contractAddresses: _.concat(DEFAULT_IDENTITY_NFT_CONTRACTS, EQUIPMENT_NFT_CONTRACTS),
+    }
+    const defaultAlchemyRes = await alchemy.nft.getNftsForOwner(address, defaultListParams)
+    const defaultNfts = await _recursiveNftPagination(
+      address,
+      defaultAlchemyRes.ownedNfts,
+      defaultAlchemyRes,
+      defaultListParams
+    )
+    console.log(`Default NFT total count for ${address}: ${defaultNfts.length}`)
 
-    return allNfts.map((nft) => ({
+    const params = { excludeFilters: [ NftExcludeFilters.SPAM ] }
+    const initialAllNfts = await alchemy.nft.getNftsForOwner(address, params)
+
+    const finalNftList = await _getFinalNftList(
+      address,
+      defaultNfts,
+      initialAllNfts, 
+      params
+    )
+    console.log(`NFT total count for ${address}: ${finalNftList.length}`)
+
+    return finalNftList.map((nft) => ({
       contract: nft.contract.address.toLowerCase(),
       title: _parseNftTitleMetaData(nft.title),
       tokenId: nft.tokenId,

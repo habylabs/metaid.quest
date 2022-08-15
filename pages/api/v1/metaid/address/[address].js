@@ -19,7 +19,7 @@ import {
 } from '../../../../../util/alchemy'
 
 import {
-  IDENTITY_NFT_CONTRACTS,
+  FREE_MINT_CONTRACTS,
   CHARACTER_CONTRACT_ADDRESS,
   EQUIPMENT_NFT_CONTRACTS
 } from '../../../../../util/constants'
@@ -56,7 +56,7 @@ async function get(address) {
   const freeMintNftOptions =  _.filter(
     identityNftOptions,
     (nft) => (
-      _.indexOf(IDENTITY_NFT_CONTRACTS, nft.contract) > -1
+      _.indexOf(FREE_MINT_CONTRACTS, nft.contract) > -1
     )
   )
   
