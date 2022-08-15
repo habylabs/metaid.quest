@@ -55,10 +55,10 @@ function Home() {
         <div className={`${styles.primaryContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
           <div className={`column ${isMobile ? 'align-center' : 'align-start'}`}>
             <h1 className={`no-margin serif-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentHeaderText}`}>
-              Play in the Metaverse!
+              What{'\''}s your crypto level?
             </h1>
             <h2 className={`no-margin monospace-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentSubText}`}>
-              Build your profile with Meta ID
+              Build your profile with Meta ID and see how you rank!
             </h2>
             <div className={styles.primaryContainerContentButton}>
               {getCta()}
@@ -186,7 +186,7 @@ function Home() {
             Join the Adventure
           </h2>
           <p className='monospace-font'>
-            Meta ID will be launching this summer. The initial prototype won the{' '}
+            Meta ID will be launch on August 22! The initial prototype won the{' '}
             <a
               href='https://www.ethdenver.com/virtual-winners/#top30'
               target='_blank'

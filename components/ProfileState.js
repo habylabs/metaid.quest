@@ -242,6 +242,7 @@ const Profile = ({
 
   if (lootData.error) return <div>Failed to load</div>
   if (!lootData.data) return <Loading />
+  console.log(lootData.data)
 
   return (
     <div>
@@ -251,7 +252,7 @@ const Profile = ({
         bonusChar={bonusChar}
         handleBonusCharChange={handleBonusCharChange}
         equipment={equipment}
-        lootEquipment={equipment ? lootData.data : null}
+        lootEquipment={equipment ? _.remove(lootData.data, null) : null}
         handleEquipmentChange={handleEquipmentChange}
         hasFreeMint={hasFreeMint}
         identityNftOptions={identityNftOptions}
