@@ -30,12 +30,12 @@ import {
 // provided in the contract attributes response
 
 const getGuild = (contract, title) => {
-  if (title) {
-    return title
-  }
-
   if (contractNameMap[contract]) {
     return contractNameMap[contract]
+  }
+
+  if (title) {
+    return title
   }
 
   return '???'
@@ -354,9 +354,9 @@ const getPfpElement = (contractAddress, attributes) => {
       const specialIndex = _.findIndex(attributes, ['trait_type', 'Special'])
       const eyeIndex = _.findIndex(attributes, ['trait_type', 'Eyes'])
 
-      const azukiTypeElement = _getAzukiTypeElement(attributes[typeIndex].value)
-      const azukiSpecialElement = _getAzukiSpecialElement(attributes[specialIndex].value)
-      const azukiEyeElement = _getAzukiEyeElement(attributes[eyeIndex].value)
+      const azukiTypeElement = _getAzukiTypeElement(attributes, typeIndex)
+      const azukiSpecialElement = _getAzukiSpecialElement(attributes, specialIndex)
+      const azukiEyeElement = _getAzukiEyeElement(attributes, eyeIndex)
       const elements = _.remove(_.uniq([azukiTypeElement, azukiSpecialElement, azukiEyeElement]), (n) => (n != null))
 
       return _.replace(_.toString(elements), ',', ' + ')
