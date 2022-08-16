@@ -86,6 +86,19 @@ const _formatId = (id) => (
   _.truncate(id, { length: 24 })
 )
 
+const _getlevelNumXPos = (level) => {
+  switch (level.toString().length) {
+    case 1:
+      return 455;
+    case 2:
+      return 442;
+    case 3:
+      return 430;
+    default:
+      break;
+  }
+}
+
 function MetaId({ data, example = false, empty = false }) {
   const idData = example ? exampleData : empty ? emptyData : data
   const { identity, equipment, stats } = idData
@@ -102,8 +115,8 @@ function MetaId({ data, example = false, empty = false }) {
       <rect x="41" y="36" width="428" height="428" className={styles.rectBorder}/>
       <rect x="46" y="41" width="418" height="418" className={styles.rectBorder}/>
       <path d="M433.077 305.292L401.155 250L433.077 194.708H496.923L528.845 250L496.923 305.292H433.077Z" fill="#002B36" className={styles.rectBorder}/>
-      <text x="450" y="225" className={styles.levelTitle}>LVL</text>
-      <text x="430" y="280" className={styles.levelNum}>{stats.level}</text>
+      <text x="450" y="230" className={styles.levelTitle}>LVL</text>
+      <text x={_getlevelNumXPos(stats.level)} y="275" className={styles.levelNum}>{stats.level}</text>
       <rect x="581" y="36" width="258" height="428" className={styles.rectBorder}/>
       <rect x="586" y="41" width="248" height="418" className={styles.rectBorder}/>
       <text x="652" y="80" className={styles.headText}>IDENTITY</text>

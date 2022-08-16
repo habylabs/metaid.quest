@@ -2,7 +2,7 @@
 .titleText { fill: #BBB; font-family: monospace; font-size: 10px; }
 .headText { fill: #FFF; font-family: monospace; font-size: 24px; }
 .levelTitle { fill: #BBB; font-family: monospace; font-size: 18px; }
-.levelNum { fill: #FFF; font-family: monospace; font-size: 60px; }
+.levelNum { fill: #FFF; font-family: monospace; font-size: 40px; }
 .rectBorder {
   stroke: #FDF6E3;
   stroke-width: 2px;
