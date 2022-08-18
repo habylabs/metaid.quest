@@ -39,10 +39,10 @@ const exampleData = {
     ring: 'Gold Ring'
   },
   stats: {
-    level: 24,
-    nftLevel: 24,
-    defiLevel: 24,
-    luck: 24
+    level: 52,
+    nftLevel: 45,
+    defiLevel: 22,
+    luck: 50
   }
 }
 
