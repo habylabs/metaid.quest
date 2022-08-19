@@ -1,6 +1,18 @@
 import Head from 'next/head'
+import { getLeaderboard } from '../util/db'
 
-function Leaderboard() {
+export async function getServerSideProps(context) {
+  const leaderboard = await getLeaderboard()
+
+  return {
+    props: {
+      leaderboard
+    },
+  }
+}
+
+function Leaderboard({ leaderboard }) {
+  console.log(leaderboard)
   return (
     <>
       <Head>

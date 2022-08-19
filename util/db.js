@@ -97,6 +97,25 @@ function getRank(address) {
   }
 }
 
+const getLeaderboard = async () => {
+  // This needs to return top 100 individuals and communities by total, nft, and defi level.
+  // The data structure should reflect that as well.
+  return {
+    individual: {
+      total: [],
+      nft: [],
+      defi: [],
+      luck: [],
+    },
+    community: {
+      total: [],
+      nft: [],
+      defi: [],
+      luck: [],
+    },
+  }
+}
+
 async function getTokenByAddress(address) {
   try {
     const token = await prisma.token.findUnique({
@@ -174,6 +193,7 @@ async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, bas
 export {
   parseDb,
   getRank,
+  getLeaderboard,
   getTokenByAddress,
   getTokenByTokenId,
   putTokenByTokenId,
