@@ -67,6 +67,9 @@ function Home() {
           {getAnimation()}
         </div>
         <Card>
+          Mini leaderboard
+        </Card>
+        <Card>
           <div>
             <MetaId example/>
           </div>

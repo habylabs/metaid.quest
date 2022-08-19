@@ -39,7 +39,11 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} coolMode>
+      <RainbowKitProvider
+        chains={chains}
+        modalSize='compact' 
+        coolMode
+      >
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
