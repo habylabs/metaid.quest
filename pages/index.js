@@ -92,13 +92,13 @@ const Home = ({ leaderboard }) => {
           <Leaderboard list={leaderboard} />
         </Card>
         <Card>
-          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
-            What is Meta ID?
-          </h2>
           <div>
             <MetaId example/>
           </div>
-          <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
+          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
+            What is Meta ID?
+          </h2>
+          <ul className={`no-margin ${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
             <li className={styles.homepageListItem}>
               <div>
                 <h3 className='monospace-font'>
@@ -108,20 +108,9 @@ const Home = ({ leaderboard }) => {
                   Bring your favorite PFP NFT with you across the metaverse.
                 </p>
                 <p className={`monospace-font ${styles.homepageListText}`}>
-                  Mint and edit your Meta ID with your BAYC, Crypto Coven, 
-                  Doodles, Nouns, and{' '}
-                  <a
-                    href='https://docs.metaid.quest/overview/identity/eligible-projects'
-                    target='_blank'
-                    rel='noreferrer'
-                    className='link-bright'
-                  >
-                    more
-                  </a>.
-                </p>
-                <p className={`monospace-font ${styles.homepageListText}`}>
-                  Right now, all these vibrant communities exist in their own silos, 
-                  but Meta ID brings them together to have one large, diverse metaverse.
+                There are many vibrant NFT communities. But they{'\''}re all 
+                in their own bubble. Meta ID brings them together in{' '}
+                <strong>one large, diverse metaverse.</strong>
                 </p>
               </div>
             </li>
@@ -131,8 +120,8 @@ const Home = ({ leaderboard }) => {
                   Equipment
                 </h3>
                 <p className={`monospace-font ${styles.homepageListText}`}>
-                  Use your favorite Loot or mLoot bag to customize 
-                  and strengthen your character.
+                Use the traits of your PFP. Or customize with your favorite 
+                Loot bag and increase your luck.
                 </p>
               </div>
             </li>
@@ -141,9 +130,6 @@ const Home = ({ leaderboard }) => {
                 <h3 className='monospace-font'>
                   Stats
                 </h3>
-                <p className={`monospace-font ${styles.homepageListText}`}>
-                  Participate on-chain to improve your stats and prove yourself.
-                </p>
                 <p className={`monospace-font ${styles.homepageListText}`}>
                   Your stats are a{' '}
                   <a
@@ -154,9 +140,7 @@ const Home = ({ leaderboard }) => {
                   >
                     reflection
                   </a>
-                  {' '}of everything you do on-chain. How many
-                  different NFTs do you own? How many ERC-20 tokens? How old is your
-                  address? How many transactions has it done?
+                  {' '}of everything you do on-chain.
                 </p>
                 <p className={`monospace-font ${styles.homepageListText}`}>
                   As you engage in the metaverse, your stats naturally change and grow
