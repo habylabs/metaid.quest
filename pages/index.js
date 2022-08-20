@@ -5,11 +5,28 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Router from 'next/router'
-import { Button, Card, MetaId } from '../components'
+
+import {
+  Button,
+  Card,
+  MetaId
+} from '../components'
+import { getLeaderboardList } from '../util/db'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
 
-function Home() {
+export async function getServerSideProps(context) {
+  const leaderboard = await getLeaderboardList()
+
+  return {
+    props: {
+      leaderboard
+    },
+  }
+}
+
+const Home = ({ leaderboard }) => {
+  console.log(leaderboard)
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const { address, isConnected } = useAccount()
   if (isConnected) {
@@ -44,7 +61,7 @@ function Home() {
           </Link>
         </Button>
       ) : 
-      <ConnectButton />
+      <ConnectButton label='Connect Wallet to Mint' />
     )
   }
 
@@ -62,7 +79,7 @@ function Home() {
               What{'\''}s your crypto level?
             </h1>
             <h2 className={`no-margin monospace-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentSubText}`}>
-              Build your profile with Meta ID and see how you rank!
+              Mint your Meta ID and find out!
             </h2>
             <div className={styles.primaryContainerContentButton}>
               {getCta()}

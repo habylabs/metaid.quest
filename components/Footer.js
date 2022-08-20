@@ -40,15 +40,15 @@ function Footer() {
           Twitter
         </a>
         <a
-          href="https://habylabs.notion.site/Meta-Id-4f87d1d22f4a4429bed314240ae5f02e"
+          href="https://docs.metaid.quest/"
           target="_blank"
           rel="noopener noreferrer"
           className={`link monospace-font ${styles.footerLink}`}
         >
-          Roadmap
+          Docs
         </a>
         <a
-          href="https://habylabs.notion.site/c9d5d38160b94ab4ad9a79c03f20ff07?v=a7d6642c6a384041b80b51a0f8bb3bc9"
+          href="https://docs.metaid.quest/for-developers/smart-contracts"
           target="_blank"
           rel="noopener noreferrer"
           className={`link monospace-font ${styles.footerLink}`}

@@ -7,6 +7,7 @@
   padding-bottom: 1.5vmax;
   z-index: 100;
   background-color: #FDF6E3;
+  border-bottom: 1px solid #D9CEAF;
 }
 
 .headerLink {

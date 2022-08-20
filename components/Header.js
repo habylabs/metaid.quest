@@ -4,11 +4,11 @@ import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
 import styles from '../styles/components/Header.module.css'
 
-function formatAddress(address) {
-  return `${address.slice(0,4)}...${address.slice(address.length - 4)}`
-}
+const _formatAddress = (address) => (
+  `${address.slice(0,4)}...${address.slice(address.length - 4)}`
+)
 
-function Header() {
+const Header = () => {
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
   const isMobile = useMediaQuery({ maxWidth: 480 })
@@ -27,22 +27,17 @@ function Header() {
         <Link href='/leaderboard'>
           <a className={`${styles.headerLink} ${styles.navLink}`}>Leaderboard</a>
         </Link>
-        <Link href='/castles'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Castles</a>
+        <Link href='/character'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
         </Link>
-        <a 
-          href='https://docs.metaid.quest/'
-          target='_blank'
-          rel='noreferrer'
-          className={`${styles.headerLink} ${styles.navLink}`}
-        >
-          Docs
-        </a>
+        <Link href='/apps'>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Apps</a>
+        </Link>
       </div>
       <div>
         {isConnected && (
           <Link href={`/profile/${address}`}>
-            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
+            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? _formatAddress(address)}</a>
           </Link>
         )}
       </div>

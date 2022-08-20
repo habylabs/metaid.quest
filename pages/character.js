@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-function Castles() {
+const Character = () => {
   return (
     <>
       <Head>
@@ -9,10 +9,10 @@ function Castles() {
         </title>
       </Head>
       <div>
-        Castles
+        Character
       </div>
     </>
   )
 }
 
-export default Castles
+export default Character
