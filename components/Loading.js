@@ -1,11 +1,9 @@
 import styles from '../styles/components/Loading.module.css';
 
-function Loading() {
-  return (
-    <div>
-      Loading...
-    </div>
-  )
-}
+const Loading = () => (
+  <div className={styles.loadingContainer}>
+    <div className={styles.spinner} />
+  </div>
+)
 
 export default Loading
