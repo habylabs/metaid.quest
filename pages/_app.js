@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   getDefaultWallets,
+  lightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import {
@@ -41,7 +42,11 @@ function MyApp({ Component, pageProps }) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         chains={chains}
-        modalSize='compact' 
+        theme={lightTheme({
+          accentColor: '#f46692',
+          borderRadius: 'small',
+          overlayBlur: 'small',
+        })}
         coolMode
       >
         <MantineProvider

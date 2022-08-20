@@ -97,7 +97,7 @@ function getRank(address) {
   }
 }
 
-const getLeaderboard = async () => {
+const getLeaderboard = async (length = 100) => {
   // This needs to return top 100 individuals and communities by total, nft, and defi level.
   // The data structure should reflect that as well.
   return {

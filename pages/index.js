@@ -35,13 +35,17 @@ function Home() {
   }
 
   function getCta() {
-    return (isConnected ? (
-      <Button>
-        <Link href='/profile'>
-          <a>Mint</a>
-        </Link>
-      </Button>
-    ) : <ConnectButton />)
+    return (
+      isConnected ? 
+      (
+        <Button>
+          <Link href='/profile'>
+            <a>Mint</a>
+          </Link>
+        </Button>
+      ) : 
+      <ConnectButton />
+    )
   }
 
   return (
