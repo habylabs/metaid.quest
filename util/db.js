@@ -97,21 +97,216 @@ function getRank(address) {
   }
 }
 
-const getLeaderboardList = async (length = 100) => {
-  // This needs to return top 100 individuals and communities by total, nft, and defi level.
-  // The data structure should reflect that as well.
+const getMiniLeaderboard = async () => {
+  // This returns the top 5 individual and community for just all level
   return {
-    individual: {
-      total: [],
-      nft: [],
-      defi: [],
-      luck: [],
+    individual: [
+      {
+        name: 'michaelcjoseph.eth',
+        address: '0x66782E5a061B5A63536f912380A6dcf9481900C7',
+        level: 78,
+      },
+      {
+        name: null,
+        address: '0xA282AB51650B3cBc84acA92E5f328a1B12658700',
+        level: 28,
+      },
+      {
+        name: 'cantino.eth',
+        address: '0x79dd8Fab0661Da2Cd4131BB454bAb060576ce2ee',
+        level: 113,
+      },
+      {
+        name: 'xuannu.eth',
+        address: '0xa3e90da6c1d5ea0b1b4e881d1eaaaaaaf3c25cc2',
+        level: 54,
+      },
+      {
+        name: 'tomwhite.eth',
+        address: '0xc32ba9452cb2bcfa2462686f7a2b62811e3a4058',
+        level: 101,
+      },
+    ],
+    guild: [
+      {
+        name: 'BAYC',
+        level: 480,
+      },
+      {
+        name: 'Crypto Punks',
+        level: 376,
+      },
+      {
+        name: 'CoolCats',
+        level: 345,
+      },
+      {
+        name: 'The Idols',
+        level: 297,
+      },
+      {
+        name: 'Crypto Coven',
+        level: 265,
+      },
+    ],
+  }
+}
+
+const getFullLeaderboard = async () => {
+  // This needs to return top 100 individuals and communities by all, nft, and defi level.
+  return {
+    all: {
+      individual: [
+        {
+          name: 'michaelcjoseph.eth',
+          address: '0x66782E5a061B5A63536f912380A6dcf9481900C7',
+          level: 78,
+        },
+        {
+          name: '',
+          address: '0xA282AB51650B3cBc84acA92E5f328a1B12658700',
+          level: 28,
+        },
+        {
+          name: 'cantino.eth',
+          address: '0x79dd8Fab0661Da2Cd4131BB454bAb060576ce2ee',
+          level: 113,
+        },
+        {
+          name: 'xuannu.eth',
+          address: '0xa3e90da6c1d5ea0b1b4e881d1eaaaaaaf3c25cc2',
+          level: 54,
+        },
+        {
+          name: 'tomwhite.eth',
+          address: '0xc32ba9452cb2bcfa2462686f7a2b62811e3a4058',
+          level: 101,
+        },
+      ],
+      guild: [
+        {
+          name: 'BAYC',
+          level: 480,
+        },
+        {
+          name: 'Crypto Punks',
+          level: 376,
+        },
+        {
+          name: 'CoolCats',
+          level: 345,
+        },
+        {
+          name: 'The Idols',
+          level: 297,
+        },
+        {
+          name: 'Crypto Coven',
+          level: 265,
+        },
+      ],
     },
-    community: {
-      total: [],
-      nft: [],
-      defi: [],
-      luck: [],
+    nft: {
+      individual: [
+        {
+          name: 'michaelcjoseph.eth',
+          address: '0x66782E5a061B5A63536f912380A6dcf9481900C7',
+          level: 70,
+        },
+        {
+          name: '',
+          address: '0xA282AB51650B3cBc84acA92E5f328a1B12658700',
+          level: 27,
+        },
+        {
+          name: 'cantino.eth',
+          address: '0x79dd8Fab0661Da2Cd4131BB454bAb060576ce2ee',
+          level: 108,
+        },
+        {
+          name: 'xuannu.eth',
+          address: '0xa3e90da6c1d5ea0b1b4e881d1eaaaaaaf3c25cc2',
+          level: 43,
+        },
+        {
+          name: 'tomwhite.eth',
+          address: '0xc32ba9452cb2bcfa2462686f7a2b62811e3a4058',
+          level: 78,
+        },
+      ],
+      guild: [
+        {
+          name: 'BAYC',
+          level: 480,
+        },
+        {
+          name: 'Crypto Punks',
+          level: 376,
+        },
+        {
+          name: 'CoolCats',
+          level: 345,
+        },
+        {
+          name: 'The Idols',
+          level: 297,
+        },
+        {
+          name: 'Crypto Coven',
+          level: 265,
+        },
+      ],
+    },
+    defi: {
+      individual: [
+        {
+          name: 'michaelcjoseph.eth',
+          address: '0x66782E5a061B5A63536f912380A6dcf9481900C7',
+          level: 47,
+        },
+        {
+          name: '',
+          address: '0xA282AB51650B3cBc84acA92E5f328a1B12658700',
+          level: 22,
+        },
+        {
+          name: 'cantino.eth',
+          address: '0x79dd8Fab0661Da2Cd4131BB454bAb060576ce2ee',
+          level: 81,
+        },
+        {
+          name: 'xuannu.eth',
+          address: '0xa3e90da6c1d5ea0b1b4e881d1eaaaaaaf3c25cc2',
+          level: 28,
+        },
+        {
+          name: 'tomwhite.eth',
+          address: '0xc32ba9452cb2bcfa2462686f7a2b62811e3a4058',
+          level: 95,
+        },
+      ],
+      guild: [
+        {
+          name: 'BAYC',
+          level: 480,
+        },
+        {
+          name: 'Crypto Punks',
+          level: 376,
+        },
+        {
+          name: 'CoolCats',
+          level: 345,
+        },
+        {
+          name: 'The Idols',
+          level: 297,
+        },
+        {
+          name: 'Crypto Coven',
+          level: 265,
+        },
+      ],
     },
   }
 }
@@ -193,7 +388,8 @@ async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, bas
 export {
   parseDb,
   getRank,
-  getLeaderboardList,
+  getMiniLeaderboard,
+  getFullLeaderboard,
   getTokenByAddress,
   getTokenByTokenId,
   putTokenByTokenId,

@@ -2,6 +2,7 @@ import Button from './Button.js';
 import Card from './Card.js';
 import Footer from './Footer.js';
 import Header from './Header.js';
+import Leaderboard from './Leaderboard.js';
 import Loading from './Loading.js';
 import MetaId from './MetaId.js';
 import Mint from './Mint.js';
@@ -16,6 +17,7 @@ export {
   Card,
   Footer,
   Header,
+  Leaderboard,
   Loading,
   MetaId,
   Mint,

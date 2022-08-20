@@ -2,11 +2,9 @@ import React from 'react'
 import { useAccount, useEnsName } from 'wagmi'
 import { useMediaQuery } from 'react-responsive'
 import Link from 'next/link'
-import styles from '../styles/components/Header.module.css'
 
-const _formatAddress = (address) => (
-  `${address.slice(0,4)}...${address.slice(address.length - 4)}`
-)
+import { formatAddress } from '../util/identity'
+import styles from '../styles/components/Header.module.css'
 
 const Header = () => {
   const { address, isConnected } = useAccount()
@@ -37,7 +35,7 @@ const Header = () => {
       <div>
         {isConnected && (
           <Link href={`/profile/${address}`}>
-            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? _formatAddress(address)}</a>
+            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
           </Link>
         )}
       </div>

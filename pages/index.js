@@ -9,14 +9,15 @@ import Router from 'next/router'
 import {
   Button,
   Card,
+  Leaderboard,
   MetaId
 } from '../components'
-import { getLeaderboardList } from '../util/db'
+import { getMiniLeaderboard } from '../util/db'
 import exampleGif from '../public/metaid-examples-light.gif'
 import styles from '../styles/pages/index.module.css'
 
 export async function getServerSideProps(context) {
-  const leaderboard = await getLeaderboardList()
+  const leaderboard = await getMiniLeaderboard()
 
   return {
     props: {
@@ -85,12 +86,15 @@ const Home = ({ leaderboard }) => {
               {getCta()}
             </div>
           </div>
-          {getAnimation()}
+          {getAnimation()}          
         </div>
-        <Card>
-          Mini leaderboard
+        <Card noTopPadding>
+          <Leaderboard list={leaderboard} />
         </Card>
         <Card>
+          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
+            What is Meta ID?
+          </h2>
           <div>
             <MetaId example/>
           </div>

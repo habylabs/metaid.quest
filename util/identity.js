@@ -25,6 +25,10 @@ import {
   CHAR_PFP_IMG_URL
 } from './constants'
 
+const formatAddress = (address) => (
+  `${address.slice(0,4)}...${address.slice(address.length - 4)}`
+)
+
 // Helper functions to populate Identity fields in Meta ID
 // The functions below take information stored in the DB and format them to be
 // provided in the contract attributes response
@@ -392,6 +396,7 @@ async function getIdentity(pfp, charId) {
 }
 
 export {
+  formatAddress,
   getGuild,
   getRace,
   getRole,

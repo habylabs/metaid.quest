@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import { getLeaderboardList } from '../util/db'
+import { getFullLeaderboard } from '../util/db'
 
 export async function getServerSideProps(context) {
-  const leaderboard = await getLeaderboardList()
+  const leaderboard = await getFullLeaderboard()
 
   return {
     props: {

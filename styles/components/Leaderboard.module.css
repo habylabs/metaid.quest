@@ -1,0 +1,21 @@
+.leaderboardContainer {
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.leaderboardSection {
+  padding: 0;
+}
+
+.leaderboardSectionTitle {
+  padding: 0;
+}
+
+.leaderboardItemContainer {
+  padding: 0;
+}
+
+.leaderboardItemText {
+  font-size: 1.1em;
+  line-height: 1.5;
+}
