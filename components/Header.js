@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAccount, useEnsName } from 'wagmi'
 import { useMediaQuery } from 'react-responsive'
 import { useRouter } from 'next/router'
@@ -29,10 +28,10 @@ const AppsLink = () => (
 const Header = () => {
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
+
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const paddingClass = isMobile ? 'side-padding-mobile' : 'side-padding'
   const router = useRouter()
-  console.log(router)
 
   return (
     <header
@@ -46,23 +45,16 @@ const Header = () => {
       <div>
         {isMobile ? null : <LeaderboardLink />}
         {isMobile ? null : <CharacterLink />}
-        <AppsLink />
+        {isMobile ? null : <AppsLink />}
       </div>
-      {
-        isMobile ?
-        null :
-        (
-          <div>
-            {isConnected && (
-              <Link href={`/profile/${address}`}>
-                <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
-              </Link>
-            )}
-            {!isConnected && router.pathname != '/' && <ConnectButton />}
-          </div>
-        )
-      }
-      
+      <div>
+        {isConnected && (
+          <Link href={`/profile/${address}`}>
+            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
+          </Link>
+        )}
+        {!isConnected && router.pathname != '/' && <ConnectButton />}
+      </div>      
     </header>
   )
 }

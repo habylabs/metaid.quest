@@ -1,9 +1,11 @@
-import Image from 'next/image';
-import { useMediaQuery } from 'react-responsive';
-import styles from '../styles/components/Footer.module.css';
-import HabyLabsLogo from '../public/logo.svg';
+import Image from 'next/image'
+import { useMediaQuery } from 'react-responsive'
+import Link from 'next/link'
 
-function Footer() {
+import styles from '../styles/components/Footer.module.css'
+import HabyLabsLogo from '../public/logo.svg'
+
+const Footer = () => {
   const isMobile = useMediaQuery({ maxWidth: 480 });
 
   return (
@@ -20,6 +22,18 @@ function Footer() {
         <p className={`monospace-font no-margin ${styles.habyDescription}`}>
           Come explore the metaverse with us.
         </p>
+      </div>
+
+      <div className={styles.footerLinksContainer}>
+        <Link href='/leaderboard'>
+          <a className={`link monospace-font ${styles.footerLink}`}>Leaderboard</a>
+        </Link>
+        <Link href='/character'>
+          <a className={`link monospace-font ${styles.footerLink}`}>Character</a>
+        </Link>
+        <Link href='/apps'>
+          <a className={`link monospace-font ${styles.footerLink}`}>Apps</a>
+        </Link>
       </div>
 
       <div className={styles.footerLinksContainer}>
@@ -69,7 +83,7 @@ function Footer() {
         © 2021 - 2022 Haby, LLC
       </p>
     </footer>
-  );
+  )
 }
   
-export default Footer;
+export default Footer

@@ -12,6 +12,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding-bottom: 4vmax;
 }
 
 .habyLabsLogo {
@@ -44,7 +45,7 @@
   justify-content: center;
   flex-wrap: wrap;
   font-size: 1rem;
-  padding-top: 4vmax;
+  padding-bottom: 1vmax;
 }
 
 .footerLink {
