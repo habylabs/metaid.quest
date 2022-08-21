@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { useMediaQuery } from 'react-responsive'
 
 import { formatAddress } from '../util/identity';
 import styles from '../styles/components/Leaderboard.module.css';
@@ -16,11 +17,12 @@ const LeaderboardItem = ({ listItem, index }) => {
 }
 
 const Leaderboard = ({ list }) => {
+  const isMobile = useMediaQuery({ maxWidth: 480 })
   const sortedIndividuals = _.orderBy(list.individual, ['level'], ['desc'])
   const sortedGuilds = _.orderBy(list.guild, ['level'], ['desc'])
 
   return (
-    <div className={`row ${styles.leaderboardContainer}`}>
+    <div className={`${isMobile ? 'column': 'row align-center'} ${styles.leaderboardContainer}`}>
       <div className={`column ${styles.leaderboardSection}`}>
         <h2 className={`monospace-font ${styles.leaderboardSectionTitle}`}>
           LEADING INDIVIDUALS

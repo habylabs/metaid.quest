@@ -6,6 +6,24 @@ import Link from 'next/link'
 import { formatAddress } from '../util/identity'
 import styles from '../styles/components/Header.module.css'
 
+const LeaderboardLink = () => (
+  <Link href='/leaderboard'>
+    <a className={`${styles.headerLink} ${styles.navLinkPadding}`}>Leaderboard</a>
+  </Link>
+)
+
+const CharacterLink = () => (
+  <Link href='/character'>
+    <a className={`${styles.headerLink} ${styles.navLinkPadding}`}>Character</a>
+  </Link>
+)
+
+const AppsLink = () => (
+  <Link href='/apps'>
+    <a className={styles.headerLink}>Apps</a>
+  </Link>
+)
+
 const Header = () => {
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
@@ -22,23 +40,24 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        <Link href='/leaderboard'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Leaderboard</a>
-        </Link>
-        <Link href='/character'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Character</a>
-        </Link>
-        <Link href='/apps'>
-          <a className={`${styles.headerLink} ${styles.navLink}`}>Apps</a>
-        </Link>
+        {isMobile ? null : <LeaderboardLink />}
+        {isMobile ? null : <CharacterLink />}
+        <AppsLink />
       </div>
-      <div>
-        {isConnected && (
-          <Link href={`/profile/${address}`}>
-            <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
-          </Link>
-        )}
-      </div>
+      {
+        isMobile ?
+        null :
+        (
+          <div>
+            {isConnected && (
+              <Link href={`/profile/${address}`}>
+                <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
+              </Link>
+            )}
+          </div>
+        )
+      }
+      
     </header>
   )
 }

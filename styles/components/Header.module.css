@@ -17,10 +17,10 @@
   font-size: 1.2em;
 }
 
-.navLink {
-  padding-right: 2vmax;
+.headerLink:hover {
+  color: #FA5853;
 }
 
-.navLink:hover {
-  color: #FA5853;
+.navLinkPadding {
+  padding-right: 2vmax;
 }

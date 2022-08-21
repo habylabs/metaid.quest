@@ -153,6 +153,9 @@ const Home = ({ leaderboard }) => {
               </div>
             </li>
           </ul>
+          <div className='row align-center justify-center'>
+            {getCta()}
+          </div>
         </Card>
         <Card darkBackground noHeightPadding noWidthPadding>
           <Collapsed titleText='Built for Users' darkBackground>
