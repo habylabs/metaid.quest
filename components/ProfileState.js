@@ -240,8 +240,23 @@ const Profile = ({
     ]
   })
 
-  if (lootData.error) return <div>Failed to load</div>
-  if (!lootData.data) return <Loading />
+  if (lootData.error) {
+    return (
+      <div className='top-padding'>
+        <p className='monospace-font text-center'>
+          There was an error. Please refresh the page and try again.
+        </p>
+      </div>
+    )
+  }
+
+  if (!lootData.data) {
+    return (
+      <div className='row top-padding align-center justify-center'>
+        <Loading />
+      </div>
+    )
+  }
 
   return (
     <div>
