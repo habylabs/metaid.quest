@@ -28,7 +28,6 @@ export async function getServerSideProps(context) {
 }
 
 const Home = ({ leaderboard }) => {
-  console.log(leaderboard)
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const { address, isConnected } = useAccount()
   if (isConnected) {

@@ -1,0 +1,13 @@
+.leaderboardPageContainer {
+  padding-top: 8vmin;
+  padding-bottom: 8vmin;
+}
+
+.leaderboardPageSidePadding {
+  padding-left: 20vmax;
+  padding-right: 20vmax;
+}
+
+.leaderboardPageTabsContainer {
+  padding-top: 2vmax;
+}

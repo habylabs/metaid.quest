@@ -1,6 +1,8 @@
 import React from 'react'
 import { useAccount, useEnsName } from 'wagmi'
 import { useMediaQuery } from 'react-responsive'
+import { useRouter } from 'next/router'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from 'next/link'
 
 import { formatAddress } from '../util/identity'
@@ -29,6 +31,8 @@ const Header = () => {
   const { data: ensName } = useEnsName({ address })
   const isMobile = useMediaQuery({ maxWidth: 480 })
   const paddingClass = isMobile ? 'side-padding-mobile' : 'side-padding'
+  const router = useRouter()
+  console.log(router)
 
   return (
     <header
@@ -54,6 +58,7 @@ const Header = () => {
                 <a className={`${styles.headerLink} ${styles.navLink}`}>{ensName ?? formatAddress(address)}</a>
               </Link>
             )}
+            {!isConnected && router.pathname != '/' && <ConnectButton />}
           </div>
         )
       }
