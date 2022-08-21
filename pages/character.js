@@ -2,7 +2,6 @@ import { useMediaQuery } from 'react-responsive';
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Head from 'next/head';
-import Link from 'next/link'
 import {
   Card,
   Mint,
@@ -27,7 +26,7 @@ export default function Character() {
   return (
     <>
       <Head>
-        <title>Adventure: Enter the Lootverse</title>
+        <title>Character | Your unique avatar NFT for your Meta ID</title>
       </Head>
       <div>
         <div className={styles.aboveTheFold}>
@@ -80,7 +79,7 @@ export default function Character() {
                     className='link-bright'
                   >
                     here
-                  </a>
+                  </a>.
                 </p>
               </div>
             </li>
