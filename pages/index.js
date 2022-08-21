@@ -9,6 +9,7 @@ import Router from 'next/router'
 import {
   Button,
   Card,
+  Collapsed,
   Leaderboard,
   MetaId
 } from '../components'
@@ -153,71 +154,90 @@ const Home = ({ leaderboard }) => {
             </li>
           </ul>
         </Card>
-        <Card darkBackground>
-          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
-            Developer Friendly
-          </h2>
-          <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
-            <li className={styles.homepageListItem}>
-              <div>
-                <h3 className='monospace-font'>
-                  &#127760; CC0
-                </h3>
-                <p className={`monospace-font ${styles.homepageListText}`}>
-                  With the CC0 license, Meta ID allows you to build anything on top of Meta ID. 
-                  No limitation. Maximum creativity.
-                </p>
-              </div>
-            </li>
-            <li className={styles.homepageListItem}>
-              <div>
-                <h3 className='monospace-font'>
-                  &#128214; Open Source
-                </h3>
-                <p className={`monospace-font ${styles.homepageListText}`}>
-                  Everything we do is open source from our codebase to the roadmap. We want
-                  to make it as easy as possible for developers and artists to build on top
-                  of Meta ID and will.
-                </p>
-              </div>
-            </li>
-            <li className={styles.homepageListItem}>
-              <div>
-                <h3 className='monospace-font'>
-                  &#128101; Large User Base
-                </h3>
-                <p className={`monospace-font ${styles.homepageListText}`}>
-                  Meta ID brings together numerous active NFT communities together, each with
-                  tens of thousands of members. When you build on Meta ID, you&#x27;re building for
-                  all of them.
-                </p>
-              </div>
-            </li>
-          </ul>
+        <Card darkBackground noHeightPadding noWidthPadding>
+          <Collapsed titleText='Built for Users' darkBackground>
+            <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#128153; Inclusive
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    Anyone can mint a Meta ID NFT and there{'\''}s an infinite supply.
+                  </p>
+                </div>
+              </li>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#128274; Secure
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    Meta ID does not interact with anything in your wallet. We
+                    only need to verify you own your address. Your assets are
+                    safe and it will always be that way!
+                  </p>
+                </div>
+              </li>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#128241; Your New App Store
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    With your Meta ID, you{'\''}ll be able to safely access tons of
+                    new apps and games.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </Collapsed>
+          <Collapsed titleText='Convenient for Developers' darkBackground>
+            <ul className={`${isMobile ? 'column' : 'row'} ${styles.homepageList}`}>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#127760; CC0
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    With the CC0 license, Meta ID allows you to build anything on top of Meta ID. 
+                    No limitation. Maximum creativity.
+                  </p>
+                </div>
+              </li>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#128101; Large User Base
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    Meta ID brings together numerous active NFT communities together, each with
+                    tens of thousands of members. When you build on Meta ID, you{'\''}re building for
+                    all of them.
+                  </p>
+                </div>
+              </li>
+              <li className={styles.homepageListItem}>
+                <div>
+                  <h3 className='monospace-font'>
+                    &#128227; Free Promotion
+                  </h3>
+                  <p className={`monospace-font ${styles.homepageListText}`}>
+                    We promote all projects built for Meta ID users on our
+                    app store front. Let users discover what you{'\''}re building
+                    for free.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </Collapsed>
         </Card>
         <Card>
           <h2 className={`serif-font ${styles.homepageCardHeader}`}>
-            The Future
-          </h2>
-        </Card>
-        <Card darkBackground>
-          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
             Join the Adventure
           </h2>
-          <p className='monospace-font'>
-            Meta ID will be launch on August 22! The initial prototype won the{' '}
-            <a
-              href='https://www.ethdenver.com/virtual-winners/#top30'
-              target='_blank'
-              rel='noreferrer'
-              className='link-bright'
-            >
-              2022 ETH Denver Virtual Hackathon
-            </a>{' '}
-            for the Gaming and Metaverse track.
-          </p>
-          <p className='monospace-font'>
-            Join the community to learn more!
+          <p className={`monospace-font ${styles.homepageListText}`}>
+            Mint your Meta ID and experience a brand new world!
           </p>
           <div className='row align-center justify-center'>
             {getCta()}

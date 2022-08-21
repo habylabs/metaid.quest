@@ -1,0 +1,13 @@
+.collapsedContainer {
+  padding-top: 8vmin;
+  padding-bottom: 8vmin;
+  border-bottom: 1px solid #FDF6E3;
+}
+
+.collapsedHeaderPadding {
+  padding-bottom: 2vmin;
+}
+
+.collapsedHeaderText {
+  padding-right: 1vmin;
+}

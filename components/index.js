@@ -1,5 +1,6 @@
 import Button from './Button.js';
 import Card from './Card.js';
+import Collapsed from './Collapsed.js';
 import Footer from './Footer.js';
 import Header from './Header.js';
 import Leaderboard from './Leaderboard.js';
@@ -15,6 +16,7 @@ import Withdraw from './Withdraw.js';
 export {
   Button,
   Card,
+  Collapsed,
   Footer,
   Header,
   Leaderboard,
