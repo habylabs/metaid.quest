@@ -1,7 +1,7 @@
 .aboveTheFold {
-  min-height: 100vh;
-  background-color: rgba(253, 246, 227, 0.5);
-  overflow: hidden;
+  min-height: 70vh;
+  background-color: #FDF6E3;
+  padding-bottom: 8vmin;
 }
 
 .title {
@@ -39,4 +39,27 @@
   text-align: center;
   font-size: 1.5rem;
   color: #555;
+}
+
+.cardHeaderText {
+  margin-bottom: 0;
+}
+
+.cardList {
+  list-style-type: none;
+  padding-left: 0;
+  padding-top: 1vmax;
+  padding-bottom: 1vmax;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cardListItem {
+  flex: 1;
+  padding-right: 2vmax;
+}
+
+.cardListText {
+  font-size: 1.1em;
+  line-height: 1.5;
 }
