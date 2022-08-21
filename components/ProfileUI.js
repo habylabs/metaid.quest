@@ -22,7 +22,6 @@ import {
   MetaId,
   Mint,
   Rank,
-  Withdraw
 } from '.'
 
 const getMainText = (isMinted, onboardingStep) => {
@@ -333,7 +332,6 @@ const ProfileUI = ({
       />
       
       <ConnectButton />
-      <Withdraw />
       <div className='row'>
         <Button small outline onClick={handleIsMinted}>
           Minted: {`${isMinted}`}
