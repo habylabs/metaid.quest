@@ -82,10 +82,6 @@ const emptyData = {
   },
 }
 
-const _formatId = (id) => (
-  _.truncate(id, { length: 24 })
-)
-
 const _getlevelNumXPos = (level) => {
   switch (level.toString().length) {
     case 1:
@@ -124,14 +120,12 @@ function MetaId({ data, example = false, empty = false }) {
       <text x="600" y="125" className={styles.baseText}>{name}</text>
       <text x="600" y="150" className={styles.titleText}>GUILD</text>
       <text x="600" y="165" className={styles.baseText}>{identity.pfp.guild}</text>
-      <text x="600" y="190" className={styles.titleText}>ID</text>
-      <text x="600" y="205" className={styles.baseText}>{_formatId(identity.pfp.id)}</text>
-      <text x="600" y="230" className={styles.titleText}>RACE</text>
-      <text x="600" y="245" className={styles.baseText}>{getRace(identity)}</text>
-      <text x="600" y="270" className={styles.titleText}>ROLE</text>
-      <text x="600" y="285" className={styles.baseText}>{getRole(identity)}</text>
-      <text x="600" y="310" className={styles.titleText}>ELEMENT</text>
-      <text x="600" y="325" className={styles.baseText}>{getElement(identity)}</text>
+      <text x="600" y="190" className={styles.titleText}>RACE</text>
+      <text x="600" y="205" className={styles.baseText}>{getRace(identity)}</text>
+      <text x="600" y="230" className={styles.titleText}>ROLE</text>
+      <text x="600" y="245" className={styles.baseText}>{getRole(identity)}</text>
+      <text x="600" y="270" className={styles.titleText}>ELEMENT</text>
+      <text x="600" y="285" className={styles.baseText}>{getElement(identity)}</text>
       <rect x="865" y="36" width="408" height="428" className={styles.rectBorder}/>
       <rect x="870" y="41" width="398" height="418" className={styles.rectBorder}/>
       <text x="1004" y="80" className={styles.headText}>EQUIPMENT</text>
