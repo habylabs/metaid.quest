@@ -1,7 +1,6 @@
 .cardContainer {
   min-height: 20vh;
   width: 100%;
-  color: #002B36;
   padding-bottom: 8vmin;
 }
 
@@ -9,10 +8,12 @@
   padding-top: 8vmin;
 }
 
-.cardWhiteBackground {
-  background-color: rgba(253, 246, 227, 0.5);
-}
-
 .cardTanBackground {
   background-color: #FDF6E3;
+  color: #002B36;
+}
+
+.cardDarkBackground {
+  background-color: #191100;
+  color: #FDF6E3;
 }

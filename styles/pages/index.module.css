@@ -7,14 +7,18 @@
 }
 
 .primaryContainer {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   background-color: #FDF6E3;
   padding-top: 8vmin;
   padding-bottom: 8vmin;
+}
+
+.primaryContainerContent {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .primaryContainerContentHeaderText {
@@ -30,17 +34,12 @@
   padding-top: 1vmax;
 }
 
-.primaryContainerContentButton {
-  padding-top: 2vmax;
-}
-
-.primaryContainerContentButtonLink {
-  text-decoration: none;
-  color: #FFF;
-}
-
 .primaryContainerAnimation {
   width: 30%;
+}
+
+.primaryContainerButton {
+  padding-top: 2vmax;
 }
 
 .homepageList {

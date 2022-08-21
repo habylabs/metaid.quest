@@ -74,21 +74,23 @@ const Home = ({ leaderboard }) => {
         </title>
       </Head>
       <div className={styles.homepageContainer}>
-        <div className={`${styles.primaryContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
-          <div className={`column ${isMobile ? 'align-center' : 'align-start'}`}>
-            <h1 className={`no-margin serif-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentHeaderText}`}>
-              What{'\''}s your crypto level?
-            </h1>
-            <h2 className={`no-margin monospace-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentSubText}`}>
-              Mint your Meta ID and find out!
-            </h2>
-            <div className={styles.primaryContainerContentButton}>
-              {getCta()}
+        <div className={`column ${styles.primaryContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
+          <div className={`row ${styles.primaryContainerContent}`}>
+            <div className={`column ${isMobile ? 'align-center' : 'align-start'}`}>
+              <h1 className={`no-margin serif-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentHeaderText}`}>
+                What{'\''}s your crypto level?
+              </h1>
+              <h2 className={`no-margin monospace-font ${isMobile ? 'text-center' : ''} ${styles.primaryContainerContentSubText}`}>
+                Mint your Meta ID and find out!
+              </h2>
             </div>
+            {getAnimation()}
           </div>
-          {getAnimation()}          
+          <div className={styles.primaryContainerButton}>
+            {getCta()}
+          </div>        
         </div>
-        <Card noTopPadding>
+        <Card darkBackground>
           <Leaderboard list={leaderboard} />
         </Card>
         <Card>
@@ -151,7 +153,7 @@ const Home = ({ leaderboard }) => {
             </li>
           </ul>
         </Card>
-        <Card tanBackground>
+        <Card darkBackground>
           <h2 className={`serif-font ${styles.homepageCardHeader}`}>
             Developer Friendly
           </h2>
@@ -194,6 +196,11 @@ const Home = ({ leaderboard }) => {
           </ul>
         </Card>
         <Card>
+          <h2 className={`serif-font ${styles.homepageCardHeader}`}>
+            The Future
+          </h2>
+        </Card>
+        <Card darkBackground>
           <h2 className={`serif-font ${styles.homepageCardHeader}`}>
             Join the Adventure
           </h2>
