@@ -18,7 +18,7 @@ const Header = () => {
     >
       <div>
         <Link href='/'>
-          <a className={styles.headerLink}>Meta ID</a>
+          <a className={`${styles.headerLink} ${styles.navLink}`}>Meta ID</a>
         </Link>
       </div>
       <div>
