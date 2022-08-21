@@ -10,7 +10,15 @@ import {
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-function ProfilePage() {
+const DataError = () => (
+  <div className='top-padding'>
+    <p className='monospace-font text-center'>
+      The page failed to load. Please refresh and try again.
+    </p>
+  </div>
+)
+
+const ProfilePage = () => {
   const router = useRouter()
   const { address, isConnected } = useAccount()
   if (!isConnected || address != router.query.address) {
@@ -18,10 +26,6 @@ function ProfilePage() {
   }
 
   const dbRes = useSWR(`/api/v1/metaid/address/${address}`, fetcher)
-  console.log(dbRes.data)
-
-  if (dbRes.error) return <div>Failed to load</div>
-  if (!dbRes.data) return <Loading />
 
   return (
     <>
@@ -30,13 +34,22 @@ function ProfilePage() {
           Meta ID | Your NFT profile for the metaverse!
         </title>
       </Head>
-      <ProfileState
-        dbData={dbRes.data.dbData}
-        hasFreeMint={dbRes.data.hasFreeMint}
-        identityNftOptions={dbRes.data.identityNftOptions}
-        characterNftOptions={dbRes.data.characterNftOptions}
-        equipmentNftOptions={dbRes.data.equipmentNftOptions}
-      />
+      {
+        dbRes.error ?
+        <DataError /> :
+        dbRes.data ?
+        <ProfileState
+          dbData={dbRes.data.dbData}
+          hasFreeMint={dbRes.data.hasFreeMint}
+          identityNftOptions={dbRes.data.identityNftOptions}
+          characterNftOptions={dbRes.data.characterNftOptions}
+          equipmentNftOptions={dbRes.data.equipmentNftOptions}
+        /> :
+        <div className='row top-padding align-center justify-center'>
+          <Loading />
+        </div>
+      }
+      
     </>
   )
 }

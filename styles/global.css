@@ -50,6 +50,9 @@ code {
   color: #FFC444;
 }
 
+.top-padding {
+  padding-top: 8vmin;
+}
 
 .side-padding {
   padding-left: 8vmax;
