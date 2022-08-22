@@ -192,7 +192,7 @@ const Cta = ({
         // it associated in the DB correctly from the getgo
         return (
           <div>
-            <Mint free={hasFreeMint}/>
+            <Mint isDisabled free={hasFreeMint}/>
           </div>
         )
       case 2:
@@ -406,19 +406,6 @@ const ProfileUI = ({
       </Card>
       <Card>
         <ConnectButton />
-        <div className='row'>
-          <Button small outline onClick={handleIsMinted}>
-            Minted: {`${isMinted}`}
-          </Button>
-
-          <Button small outline onClick={handleOnboardingDone}>
-            Onboarding Done: {`${isOnboardingDone}`}
-          </Button>
-
-          <Button small outline onClick={handleOnboardingStep}>
-            Onboarding Step {onboardingStep}
-          </Button>
-        </div>
       </Card>
     </div>
   )

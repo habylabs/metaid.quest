@@ -62,7 +62,7 @@ const _getSuccessCharacterMessage = (isSuccess, isCharacter) => (
   </p>
 )
 
-const Mint = ({ free, isCharacter }) => {
+const Mint = ({ free, isCharacter, isDisabled = false }) => {
   const {
     config,
     error: prepareError,
@@ -77,12 +77,12 @@ const Mint = ({ free, isCharacter }) => {
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        {`${(!free || isCharacter) ? '0.02 ETH' : 'Free'} to Mint`}
+        {`${(!free || isCharacter) ? '0.04 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
         <Button 
           onClick={() => write()} 
-          disabled={(!write || isLoading)}
+          disabled={(!write || isLoading || isDisabled)}
         >
           {
             isLoading ?
@@ -97,7 +97,7 @@ const Mint = ({ free, isCharacter }) => {
           {
             !free && !isCharacter && (
               <p className={styles.mintContext}>
-                Meta ID is <strong>free to mint</strong> for owners of{' '}
+                Meta ID is coming soon and will be <strong>free to mint</strong> for owners of{' '}
                 <a
                   href='https://docs.metaid.quest/overview/identity/eligible-projects'
                   target='_blank'
@@ -110,7 +110,7 @@ const Mint = ({ free, isCharacter }) => {
                   <a className='link-bright'>
                     Character
                   </a>
-                </Link>. which you can mint for for 0.02 ETH.
+                </Link>. which you can mint for for 0.04 ETH.
               </p>
             )
           }
