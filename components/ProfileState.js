@@ -27,9 +27,11 @@ const _getPfp = (pfp, identityNftOptions) => {
       ((nft.contract === pfp.contract) && nft.tokenId === pfp.id)
     ))
 
-    return {
-      ...pfp,
-      attributes: identityNftOptions[arrayIndex].metaData.attributes
+    if (arrayIndex > -1) {
+      return {
+        ...pfp,
+        attributes: identityNftOptions[arrayIndex].metaData.attributes
+      }
     }
   }
 
@@ -60,10 +62,11 @@ const Profile = ({
   hasFreeMint,
   identityNftOptions,
   characterNftOptions,
-  equipmentNftOptions
+  equipmentNftOptions,
+  saveData
 }) => {
-  const [ isMinted, setIsMinted ] = useState(false)
-  const [ isOnboardingDone, setIsOnboardingDone ] = useState(false)
+  const [ isMinted, setIsMinted ] = useState(dbData.tokenId ? true : false)
+  const [ isOnboardingDone, setIsOnboardingDone ] = useState(dbData.tokenId ? true : false)
   const [ onboardingStep, setOnboardingStep ] = useState(1)
   const [ pfp, setPfp ] = useState(_getPfp(dbData.identity.pfp))
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
@@ -282,6 +285,7 @@ const Profile = ({
         handleOnboardingDone={handleOnboardingDone}
         onboardingStep={onboardingStep}
         handleOnboardingStep={handleOnboardingStep}
+        saveData={saveData}
       />
     </div>
   )

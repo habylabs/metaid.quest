@@ -2,6 +2,7 @@ import {
   parseDb,
   getRank,
   getTokenByAddress,
+  putTokenByAddress
 } from '../../../../../util/db'
 
 import {
@@ -44,11 +45,11 @@ const _getIdentityNftOptions = (nftOptions) => {
   )
 }
 
-async function get(address) {
+const get = async (address) => {
   const db = await getTokenByAddress(address)
   const dbData = parseDb(db)
   dbData.stats = await getStats(address, dbData.identity, dbData.equipment)
-  dbData.rank = getRank(address)
+  dbData.rank = await getRank(address)
   const nftOptions = await getNFTs(address)
 
   const identityNftOptions = _getIdentityNftOptions(nftOptions)
@@ -85,8 +86,19 @@ async function get(address) {
   }
 }
 
+const put = async (address, reqBody) => {
+  console.log(reqBody)
+  const token = await putTokenByAddress(address, reqBody)
+  return token
+}
+
 export default async function handler(req, res) {
   const { address } = req.query
-  const getJson = await get(address)
-  return res.status(200).json(getJson)
+  if (req.method === "PUT") {
+    const putJson = await put(address, req.body)
+    return res.status(200).json(putJson)
+  } else {
+    const getJson = await get(address)
+    return res.status(200).json(getJson)
+  }
 }

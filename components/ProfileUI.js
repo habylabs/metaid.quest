@@ -134,14 +134,19 @@ const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   />
 )
 
-const NextButton = ({ onClick, isSkip = false, isDisabled = false }) => (
+const NextButton = ({
+  onClick,
+  isSkip = false,
+  isDisabled = false,
+  isSave = false,
+}) => (
   <Button
     disabled={isDisabled}
     onClick={onClick}
     outline={isSkip}
     small={isSkip}
   >
-    {isSkip ? 'Skip' : 'Next'}
+    {isSkip ? 'Skip' : isSave ? 'Save' : 'Next'}
   </Button>
 )
 
@@ -158,11 +163,33 @@ const Cta = ({
   identityNftOptions,
   characterNftOptions,
   equipmentNftOptions,
-  handleOnboardingStep
+  handleOnboardingStep,
+  equipmentItems,
+  stats,
+  saveData
 }) => {
+  const data = {
+    pfp,
+    bonusChar,
+    equipment,
+    equipmentItems,
+    stats: {
+      ...stats,
+      luck: getLuck(
+        {
+          pfp,
+          character: bonusChar
+        },
+        equipmentItems
+      )
+    }
+  }
+
   if (!isOnboardingDone) {
     switch (onboardingStep) {
       case 1: 
+        // Need to save data after the user mints the Meta ID so we have
+        // it associated in the DB correctly from the getgo
         return (
           <div>
             <Mint free={hasFreeMint}/>
@@ -215,7 +242,13 @@ const Cta = ({
               </p>
             </div>
             <div className='row justify-center'>
-              <NextButton onClick={handleOnboardingStep} />
+              <NextButton
+                isSave
+                onClick={() => {
+                  handleOnboardingStep()
+                  saveData(data)
+                }} 
+              />
             </div>
           </div>
           
@@ -276,7 +309,7 @@ const Cta = ({
           </p>
         </div>
       }
-      <Button onClick={() => console.log('Update DB')}>
+      <Button onClick={() => { saveData(data) }}>
         Update
       </Button>
     </div>
@@ -303,6 +336,7 @@ const ProfileUI = ({
   handleOnboardingDone,
   onboardingStep,
   handleOnboardingStep,
+  saveData
 }) => {
   // There are effectively 3 sections on the Profile page
   // 1. Main text
@@ -361,6 +395,9 @@ const ProfileUI = ({
           characterNftOptions={characterNftOptions}
           equipmentNftOptions={equipmentNftOptions}
           handleOnboardingStep={handleOnboardingStep}
+          equipmentItems={equipmentItems}
+          stats={stats}
+          saveData={saveData}
         />
       </div>
       

@@ -375,8 +375,6 @@ const getPfpElement = (contractAddress, attributes) => {
   }
 }
 
-// This function
-
 async function getIdentity(pfp, charId) {
   const pfpMetadata = await getNftMetadata(pfp.contract, pfp.id)
   const pfpImg = pfp.contract === CHARACTER_CONTRACT_ADDRESS ? CHAR_PFP_IMG_URL : pfpMetadata.image

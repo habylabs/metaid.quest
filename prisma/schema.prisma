@@ -16,28 +16,28 @@ model token {
   updatedAt       DateTime  @updatedAt
   token_id        Int       @unique // This is the ID provided by the contract when minted
   owner_address   String    @unique // This is the ETH address of the owner
-  ens_name        String    @unique // This is the ENS name that the ENS registrar defaults to.
-  pfp_contract    String
-  pfp_id          Int
-  pfp_guild       String
-  pfp_img         String
-  pfp_race        String
-  pfp_role        String
-  pfp_element     String
-  char_id         Int
-  char_race       String
-  char_role       String
-  char_element    String
-  equip_contract  String
-  equip_id        Int
-  weapon          String
-  chest_armor     String
-  head_armor      String
-  waist_armor     String
-  foot_armor      String
-  hand_armor      String
-  necklace        String
-  ring            String
+  ens_name        String?   @unique // This is the ENS name that the ENS registrar defaults to.
+  pfp_contract    String?
+  pfp_id          Int?
+  pfp_guild       String?
+  pfp_img         String?
+  pfp_race        String?
+  pfp_role        String?
+  pfp_element     String?
+  char_id         Int?
+  char_race       String?
+  char_role       String?
+  char_element    String?
+  equip_contract  String?
+  equip_id        Int?
+  weapon          String?
+  chest_armor     String?
+  head_armor      String?
+  waist_armor     String?
+  foot_armor      String?
+  hand_armor      String?
+  necklace        String?
+  ring            String?
   level           Int
   nft_level       Int
   defi_level      Int

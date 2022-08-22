@@ -1,7 +1,6 @@
 import {
   parseDb,
   getTokenByTokenId,
-  putTokenByTokenId
 } from '../../../../../util/db'
 
 import {
@@ -12,16 +11,7 @@ import {
   getRace,
   getRole,
   getElement,
-  getIdentity
 } from '../../../../../util/identity'
-
-import {
-  getEquipment
-} from '../../../../../util/equipment'
-
-import {
-  getStats,
-} from '../../../../../util/stats'
 
 function formatRes(tokenId, identity, equipment, stats) {
   return {
@@ -111,23 +101,8 @@ async function get(tokenId) {
   return formatRes(tokenId, identity, equipment.items, stats)
 }
 
-async function put(tokenId, reqBody) {
-  const { ownerAddress, ensName, pfp, charId, equip } = reqBody
-  const identity = await getIdentity(ensName, pfp, charId)
-  const equipment = getEquipment(identity, equip)
-  const stats = getStats(ownerAddress)
-  
-  await putTokenByTokenId(tokenId, ownerAddress, identity, equipment, stats)
-  return formatRes(tokenId, identity, equipment, stats)
-}
-
 export default async function handler(req, res) {
   const { tokenId } = req.query
-  if (req.method === "PUT") {
-    const putJson = await put(tokenId, reqBody)
-    return res.status(200).json(putJson)
-  } else {
-    const getJson = await get(tokenId)
-    return res.status(200).json(getJson)
-  }
+  const getJson = await get(tokenId)
+  return res.status(200).json(getJson)
 }

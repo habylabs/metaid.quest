@@ -3,6 +3,7 @@ import prisma from '../lib/prisma'
 function parseDb(data) {
   if (data) {
     return {
+      tokenId: data["token_id"],
       identity: {
         name: data["ens_name"],
         pfp: {
@@ -47,6 +48,7 @@ function parseDb(data) {
   }
   
   return {
+    tokenId: null,
     identity: {
       name: null,
       pfp: {
@@ -352,39 +354,44 @@ async function getTokenByTokenId(tokenId) {
   }
 }
 
-async function putTokenByTokenId(tokenId, ownerAddress, identity, equipment, baseStats, bonusStats) {
+async function putTokenByAddress(address, data) {
+  const { tokenId, identity, equipment, stats } = data
+  const { pfp, character } = identity
+  const { contract, items } = equipment
   const newData = {
-    owner_address: ownerAddress,
-    ens_name: identity.ensName,
-    pfp_contract: identity.pfpContract,
-    pfp_id: identity.pfpId,
-    pfp_img: identity.pfpImg,
-    pfp_race: identity.pfpRace,
-    pfp_role: identity.pfpRole,
-    pfp_element: identity.pfpElement,
-    char_id: identity.charId,
-    char_race: identity.charRace,
-    char_role: identity.charRole,
-    char_element: identity.charElement,
-    equip_contract: equipment.equipContract,
-    equip_id: equipment.equipId,
-    weapon: equipment.weapon,
-    chest_armor: equipment.chestArmor,
-    head_armor: equipment.headArmor,
-    waist_armor: equipment.waistArmor,
-    foot_armor: equipment.footArmor,
-    hand_armor: equipment.handArmor,
-    necklace: equipment.necklace,
-    ring: equipment.ring,
-    level: baseStats.level,
-    nft_level: baseStats.nftLevel,  
-    defi_level: baseStats.defiLevel,
-    luck_level: baseStats.luck,
+    token_id: tokenId,
+    owner_address: address,
+    ens_name: identity.name ? identity.name : undefined,
+    pfp_contract: pfp.contract,
+    pfp_guild: pfp.guild,
+    pfp_id: parseInt(pfp.id),
+    pfp_img: pfp.image,
+    pfp_race: pfp.race ? pfp.race : undefined,
+    pfp_role: pfp.role ? pfp.role : undefined,
+    pfp_element: pfp.element ? pfp.element : undefined,
+    char_id: character.id ? parseInt(character.id) : undefined,
+    char_race: character.race ? character.race : undefined,
+    char_role: character.role ? character.race : undefined,
+    char_element: character.element ? character.race : undefined,
+    equip_contract: contract ? contract.address : undefined,
+    equip_id: contract ? parseInt(contract.id) : undefined,
+    weapon: items ? items.weapon : undefined,
+    chest_armor: items ? items.chestArmor : undefined,
+    head_armor: items ? items.headArmor : undefined,
+    waist_armor: items ? items.waistArmor : undefined,
+    foot_armor: items ? items.footArmor : undefined,
+    hand_armor: items ? items.handArmor : undefined,
+    necklace: items ? items.necklace : undefined,
+    ring: items ? items.ring : undefined,
+    level: stats.level,
+    nft_level: stats.nftLevel,  
+    defi_level: stats.defiLevel,
+    luck_level: stats.luck,
   }
 
   try {
     const token = await prisma.token.upsert({
-      where: { token_id: tokenId },
+      where: { owner_address: address },
       update: newData,
       create: newData,
     })
@@ -403,5 +410,5 @@ export {
   getFullLeaderboard,
   getTokenByAddress,
   getTokenByTokenId,
-  putTokenByTokenId,
+  putTokenByAddress,
 }

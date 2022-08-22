@@ -1,4 +1,4 @@
-import { useAccount } from 'wagmi'
+import { useAccount, useEnsName } from 'wagmi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -9,6 +9,18 @@ import {
 } from '../../components'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
+
+const putRequest = async (url, data) => {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  return await response.json()
+}
 
 const DataError = () => (
   <div className='top-padding'>
@@ -25,7 +37,33 @@ const ProfilePage = () => {
     router.push('/')
   }
 
+  const { data: ensName } = useEnsName({ address })
+
   const dbRes = useSWR(`/api/v1/metaid/address/${address}`, fetcher)
+
+  const saveData = async (data) => {
+    const { pfp, bonusChar, equipment, equipmentItems, stats } = data
+
+    const finalData = {
+      tokenId: 1,
+      identity: {
+        name: ensName,
+        pfp,
+        character: bonusChar,
+      },
+      equipment: {
+        contract: equipment,
+        items: equipmentItems
+      },
+      stats
+    }
+
+    const json = await putRequest(
+      `/api/v1/metaid/address/${address}`,
+      finalData
+    );
+    console.log(json)
+  }
 
   return (
     <>
@@ -44,6 +82,7 @@ const ProfilePage = () => {
           identityNftOptions={dbRes.data.identityNftOptions}
           characterNftOptions={dbRes.data.characterNftOptions}
           equipmentNftOptions={dbRes.data.equipmentNftOptions}
+          saveData={saveData}
         /> :
         <div className='row top-padding align-center justify-center'>
           <Loading />
