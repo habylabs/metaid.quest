@@ -12,6 +12,8 @@ import {
 } from '../util/identity'
 
 import {
+  HYPERLOOT_CONTRACT_ADDRESS,
+  LOOT_EXPLORERS_CONTRACT_ADDRESS,
   LOOT_CONTRACT_ADDRESS,
   MLOOT_CONTRACT_ADDRESS
 } from '../util/constants'
@@ -61,8 +63,8 @@ const Profile = ({
   equipmentNftOptions
 }) => {
   const [ isMinted, setIsMinted ] = useState(false)
-  const [ isOnboardingDone, setIsOnboardingDone ] = useState(true)
-  const [ onboardingStep, setOnboardingStep ] = useState(4)
+  const [ isOnboardingDone, setIsOnboardingDone ] = useState(false)
+  const [ onboardingStep, setOnboardingStep ] = useState(1)
   const [ pfp, setPfp ] = useState(_getPfp(dbData.identity.pfp))
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
@@ -70,7 +72,7 @@ const Profile = ({
   const handleIsMinted = () => {
     if (!isMinted) {
       setIsOnboardingDone(false)
-      setOnboardingStep(1)
+      setOnboardingStep(2)
     }
 
     setIsMinted(!isMinted)
@@ -83,15 +85,23 @@ const Profile = ({
 
   const handleOnboardingStep = () => {
     // The user just set their PFP
-    if (onboardingStep === 1) {
-      // If the user has a Character NFT, skip step 2
+    if (onboardingStep === 2) {
+      // If the user has a Character NFT, skip asking them to mint one
       if (characterNftOptions.length > 0) {
-        // The user has a valid Equipment NFT so let them choose one
-        // Otherwise move to step 4 to share
+        setOnboardingStep(4)
+
+        // If they have equipment options and their PFP is not HyperLoot or
+        // Loot Explorers, then set their equipment for them.
         if (equipmentNftOptions.length > 0) {
-          setOnboardingStep(3)
-        } else {
-          setOnboardingStep(4)
+          if (
+            pfp.contract.toLowerCase() != HYPERLOOT_CONTRACT_ADDRESS &&
+            pfp.contract.toLowerCase() != LOOT_EXPLORERS_CONTRACT_ADDRESS
+          ) {
+            setEquipment({
+              address: equipmentNftOptions[0].contract,
+              id: equipmentNftOptions[1].tokenId,
+            })
+          }
         }
 
         setBonusChar({
@@ -101,7 +111,7 @@ const Profile = ({
           element: characterNftOptions[0].element,
         })
       } else {
-        setOnboardingStep(2)
+        setOnboardingStep(3)
       }
     } else if (onboardingStep === 4) {
       setIsOnboardingDone(true)
@@ -129,10 +139,6 @@ const Profile = ({
         element: identityNftOptions[arrayIndex].element,
         attributes: identityNftOptions[arrayIndex].attributes
       })
-
-      if (!isOnboardingDone) {
-        handleOnboardingStep()
-      }
     } else {
       setPfp({
         contract: null,
@@ -183,10 +189,6 @@ const Profile = ({
       }
 
       setEquipment(contract)
-
-      if (!isOnboardingDone) {
-        handleOnboardingStep()
-      }
     } else {
       setEquipment(null)
     }

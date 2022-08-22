@@ -1,5 +1,6 @@
+import { useMediaQuery } from 'react-responsive'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Select } from '@mantine/core';
+import { Select, Stepper } from '@mantine/core';
 
 import {
   contractNameMap
@@ -19,38 +20,30 @@ import {
 
 import {
   Button,
+  Card,
   MetaId,
   Mint,
   Rank,
 } from '.'
 
-const getMainText = (isMinted, onboardingStep) => {
-  if (isMinted) {
-    switch (onboardingStep) {
-      case 1:
-        return 'Choose your PFP!'
-      case 2:
-        return 'You\'re missing a role and element. Mint a Character to get one and increase your bonus level!'
-      case 3:
-        return 'Choose your equipment!'
-      case 4:
-        return 'Share your Meta ID!'
-      default:
-        return 'Choose your PFP!'
-    }
-  }
+import styles from '../styles/components/ProfileUI.module.css';
+import Link from 'next/link';
 
-  return 'Mint your Meta ID'
-}
-
-const MainText = ({ isMinted, isOnboardingDone, onboardingStep }) => {
+const OnboardingSteps = ({ isMinted, isOnboardingDone, onboardingStep }) => {
   if (isMinted && isOnboardingDone) {
      return null
   }
 
   return (
     <div>
-      {getMainText(isMinted, onboardingStep)}
+      <Stepper color="dark" active={onboardingStep} breakpoint="sm">
+        <Stepper.Step label="Step 1" description="Connect Wallet" allowStepSelect={false} />
+        <Stepper.Step label="Step 2" description="Mint Meta ID" allowStepSelect={false} />
+        <Stepper.Step label="Step 3" description="Choose PFP" allowStepSelect={false} />
+        <Stepper.Step label="Step 4" description="Increase Luck" allowStepSelect={false} />
+        <Stepper.Step label="Step 5" description="Done" allowStepSelect={false} />
+        <Stepper.Completed />
+      </Stepper>
     </div>
   )
 }
@@ -97,10 +90,10 @@ const _getEquipmentSelectValue = (equipment) => (
   equipment ? `${equipment.address}-${equipment.id}` : null
 )
 
-const PfpSelect = ({ pfp, identityNftOptions, onChange }) => (
+const PfpSelect = ({ pfp, identityNftOptions, onChange, isOnboardingDone = false }) => (
   <Select
     searchable
-    label="Identity"
+    label={isOnboardingDone ? 'PFP' : null }
     placeholder="Choose Your PFP"
     value={_getPfpSelectValue(pfp)}
     onChange={(value) => onChange(value)}
@@ -141,14 +134,18 @@ const EquipmentSelect = ({ equipment, equipmentNftOptions, onChange }) => (
   />
 )
 
-const SkipButton = ({ onClick }) => (
-  <Button outline onClick={onClick}>
-    Skip
+const NextButton = ({ onClick, isSkip = false, isDisabled = false }) => (
+  <Button
+    disabled={isDisabled}
+    onClick={onClick}
+    outline={isSkip}
+    small={isSkip}
+  >
+    {isSkip ? 'Skip' : 'Next'}
   </Button>
 )
 
 const Cta = ({
-  isMinted,
   isOnboardingDone,
   onboardingStep,
   pfp,
@@ -163,64 +160,65 @@ const Cta = ({
   equipmentNftOptions,
   handleOnboardingStep
 }) => {
-  if (!isMinted) {
-    return (
-      <div>
-        <Mint free={hasFreeMint}/>
-        {
-          hasFreeMint && (
-            <div>
-              <p className='monospace-font'>
-                Meta ID is free to print for owners of <a href=''>Eligible Projects</a>,
-                including <strong>Character</strong>. You can mint a{' '}
-                <strong>Character</strong> for 0.02 ETH.
-              </p>
-              <Mint isCharacter />
-            </div>
-          )
-        }
-      </div>
-    )
-  }
-
   if (!isOnboardingDone) {
     switch (onboardingStep) {
-      case 1:
+      case 1: 
         return (
           <div>
-            <PfpSelect
-              pfp={pfp}
-              identityNftOptions={identityNftOptions}
-              onChange={handlePfpChange}
-            />
+            <Mint free={hasFreeMint}/>
           </div>
         )
       case 2:
         return (
-          <div>
-            <Mint isCharacter />
-            <SkipButton onClick={handleOnboardingStep} />
+          <div className='column'>
+            <p className='monospace-font'>
+              Choose your PFP and click <strong>Next</strong> once
+              you{'\''}re done. You can always change it later.
+            </p>
+            <div className={`row ${styles.onboardingStep2}`}>
+              <PfpSelect
+                pfp={pfp}
+                identityNftOptions={identityNftOptions}
+                onChange={handlePfpChange}
+              />
+              <NextButton
+                onClick={handleOnboardingStep}
+                isDisabled={pfp.contract ? false : true}
+              />
+            </div>
           </div>
         )
       case 3:
         return (
           <div>
-            <EquipmentSelect
-              equipment={equipment}
-              equipmentNftOptions={equipmentNftOptions}
-              onChange={handleEquipmentChange}
-            />
-            <SkipButton onClick={handleOnboardingStep} />
+            <div className={`row ${styles.onboardingStep3}`}>
+              <p className='monospace-font'>
+                Luck is based on your race, role, element, and equipment,
+                and you can have more than one. Increase your luck by minting 
+                an extra Character. You can aso do this later.
+              </p>
+              <div className={styles.skipButtonContainerPadding}>
+                <NextButton onClick={handleOnboardingStep} isSkip />
+              </div>
+            </div>
+            <div className='row justify-center'>
+              <Mint isCharacter />
+            </div>
           </div>
         )
       case 4:
         return (
           <div>
-            <Button onClick={handleOnboardingStep}>
-              Share Meta ID on Twitter
-            </Button>
-            <SkipButton onClick={handleOnboardingStep} />
+            <div className={`row ${styles.onboardingStep4}`}>
+              <p className='monospace-font no-margin'>
+                Congrats! You{'\''}ve set up your Meta ID.
+              </p>
+            </div>
+            <div className='row justify-center'>
+              <NextButton onClick={handleOnboardingStep} />
+            </div>
           </div>
+          
         )
       default:
         return null
@@ -228,30 +226,58 @@ const Cta = ({
   }
 
   return (
-    <div className='row'>
+    <div className={`row ${styles.actionButtonsContainer}`}>
       <PfpSelect
         pfp={pfp}
         identityNftOptions={identityNftOptions}
         onChange={handlePfpChange}
+        isOnboardingDone
       />
-      { characterNftOptions.length > 0 ?
+      { 
+        characterNftOptions.length > 0 ?
         <BonusCharSelect
           bonusChar={bonusChar}
           characterNftOptions={characterNftOptions}
           onChange={handleBonusCharChange}
         /> :
-        <Mint isCharacter />
+        <div>
+          <p className='no-margin monospace-font'>
+            You don{'\''}t have any Bonus Characters.
+          </p>
+          <p className='no-margin monospace-font'>
+            <Link href='/character'>
+              <a className='link-bright'>
+                Mint one!
+              </a>
+            </Link>
+          </p>
+        </div>
       }
-      <EquipmentSelect
-        equipment={equipment}
-        equipmentNftOptions={equipmentNftOptions}
-        onChange={handleEquipmentChange}
-      />
+      {
+        equipmentNftOptions.length > 0 ?
+        <EquipmentSelect
+          equipment={equipment}
+          equipmentNftOptions={equipmentNftOptions}
+          onChange={handleEquipmentChange}
+        /> :
+        <div>
+          <p className='no-margin monospace-font'>
+            You don{'\''}t have any Loot or mLoot to use for Equipment.{' '}
+          </p>
+          <p className='no-margin monospace-font'>
+            <a
+              href="https://opensea.io/collection/lootproject"
+              target="_blank"
+              rel="noopener noreferrer"
+              className='link-bright monospace-font'
+            >
+              Buy one!
+            </a>
+          </p>
+        </div>
+      }
       <Button onClick={() => console.log('Update DB')}>
         Update
-      </Button>
-      <Button onClick={() => console.log('Share Meta ID')}>
-        Share Meta ID
       </Button>
     </div>
   )
@@ -284,67 +310,79 @@ const ProfileUI = ({
   // 3. CTA
   // All 3 sections always exist, but the exact content of each of them change
   // based on their mint and onboarding state.
+  const isMobile = useMediaQuery({ maxWidth: 480 })
   const equipmentItems =  _getEquipmentItems(pfp, equipment, lootEquipment)
 
   return (
-    <div>
-      <MainText
-        isMinted={isMinted}
-        isOnboardingDone={isOnboardingDone}
-        onboardingStep={onboardingStep}
-      />
-      <Rank rank={rank}/>
-      <MetaId
-        empty={!isMinted}
-        data={{
-          identity: {
-            pfp,
-            character: bonusChar
-          },
-          equipment: equipmentItems,
-          stats: {
-            ...stats,
-            luck: getLuck(
-              {
-                pfp,
-                character: bonusChar
-              },
-              equipmentItems
-            )
-          }
-        }}
-      />
-      <Cta
-        isMinted={isMinted}
-        isOnboardingDone={isOnboardingDone}
-        onboardingStep={onboardingStep}
-        pfp={pfp}
-        handlePfpChange={handlePfpChange}
-        bonusChar={bonusChar}
-        handleBonusCharChange={handleBonusCharChange}
-        equipment={equipment}
-        handleEquipmentChange={handleEquipmentChange}
-        hasFreeMint={hasFreeMint}
-        identityNftOptions={identityNftOptions}
-        characterNftOptions={characterNftOptions}
-        equipmentNftOptions={equipmentNftOptions}
-        handleOnboardingStep={handleOnboardingStep}
-      />
-      
-      <ConnectButton />
-      <div className='row'>
-        <Button small outline onClick={handleIsMinted}>
-          Minted: {`${isMinted}`}
-        </Button>
-
-        <Button small outline onClick={handleOnboardingDone}>
-          Onboarding Done: {`${isOnboardingDone}`}
-        </Button>
-
-        <Button small outline onClick={handleOnboardingStep}>
-          Onboarding Step {onboardingStep}
-        </Button>
+    <div className={styles.profileUIContainer}>
+      <div className={`${styles.onboardingStepsContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
+        <OnboardingSteps
+          isMinted={isMinted}
+          isOnboardingDone={isOnboardingDone}
+          onboardingStep={onboardingStep}
+        />
       </div>
+      
+      <div className={isMobile ? 'side-padding-mobile' : 'side-padding'}>
+        <MetaId
+          empty={!isMinted}
+          data={{
+            identity: {
+              pfp,
+              character: bonusChar
+            },
+            equipment: equipmentItems,
+            stats: {
+              ...stats,
+              luck: getLuck(
+                {
+                  pfp,
+                  character: bonusChar
+                },
+                equipmentItems
+              )
+            }
+          }}
+        />
+      </div>
+      <div className={`${styles.ctaContainer} ${isMobile ? 'side-padding-mobile' : 'side-padding'}`}>
+        <Cta
+          isMinted={isMinted}
+          isOnboardingDone={isOnboardingDone}
+          onboardingStep={onboardingStep}
+          pfp={pfp}
+          handlePfpChange={handlePfpChange}
+          bonusChar={bonusChar}
+          handleBonusCharChange={handleBonusCharChange}
+          equipment={equipment}
+          handleEquipmentChange={handleEquipmentChange}
+          hasFreeMint={hasFreeMint}
+          identityNftOptions={identityNftOptions}
+          characterNftOptions={characterNftOptions}
+          equipmentNftOptions={equipmentNftOptions}
+          handleOnboardingStep={handleOnboardingStep}
+        />
+      </div>
+      
+      <Card darkBackground>
+        <Rank rank={rank}/>
+      </Card>
+      <Card>
+        <ConnectButton />
+        <div className='row'>
+          <Button small outline onClick={handleIsMinted}>
+            Minted: {`${isMinted}`}
+          </Button>
+
+          <Button small outline onClick={handleOnboardingDone}>
+            Onboarding Done: {`${isOnboardingDone}`}
+          </Button>
+
+          <Button small outline onClick={handleOnboardingStep}>
+            Onboarding Step {onboardingStep}
+          </Button>
+        </div>
+      </Card>
     </div>
   )
 }

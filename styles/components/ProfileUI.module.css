@@ -1,0 +1,35 @@
+.profileUIContainer {
+  padding-top: 4vmin;
+}
+
+.onboardingStepsContainer {
+  padding-bottom: 4vmin;
+}
+
+.ctaContainer {
+  padding-bottom: 2vmax;
+}
+
+.onboardingStep2 {
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.skipButtonContainerPadding {
+  padding-left: 4vmax;
+}
+
+.onboardingStep3 {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.onboardingStep4 {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.actionButtonsContainer {
+  align-items: center;
+  justify-content: space-between;
+}

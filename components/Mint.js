@@ -8,6 +8,7 @@ import { CHARACTER_CONTRACT_ADDRESS } from '../util/constants';
 import { Button } from '../components'
 import styles from '../styles/components/Mint.module.css'
 import CharacterJson from '../contracts/Character.json'
+import Link from 'next/link';
 
 const _getPrepareContractConfig = (isCharacter) => {
   if (isCharacter) {
@@ -34,7 +35,34 @@ const _getPrepareContractConfig = (isCharacter) => {
   }
 }
 
-function Mint({ free, isCharacter }) {
+const _getErrorMessage = (isPrepareError, prepareError, isError, error) => {
+  if (isPrepareError || isError) {
+    return (
+      <p className={`no-margin ${styles.mintError}`}>
+        {(prepareError || error)?.message}
+      </p>
+    )
+  }
+
+  return null
+}
+
+const _getSuccessCharacterMessage = (isSuccess, isCharacter) => (
+  isSuccess && isCharacter &&
+  <p className={`no-margin ${styles.mintSuccess}`}>
+    Successfully minted a Character! Check it out on 
+    <a
+      href="https://opensea.io/collection/adventure-character"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="link monospace-font"
+    >
+      OpenSea.
+    </a>
+  </p>
+)
+
+const Mint = ({ free, isCharacter }) => {
   const {
     config,
     error: prepareError,
@@ -49,7 +77,7 @@ function Mint({ free, isCharacter }) {
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        {`${(!free || isCharacter) ? '0.04 ETH' : 'Free'} to Mint`}
+        {`${(!free || isCharacter) ? '0.02 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
         <Button 
@@ -63,28 +91,34 @@ function Mint({ free, isCharacter }) {
           }
         </Button>
       </div>
-      <div className={`monospace-font white-text ${styles.mintMessagePadding}`}>
-        <p className={`no-margin ${styles.mintSuccess}`}>
-          { 
-            isSuccess && (
-              <>
-                Successfully minted a Character! Check it out on 
+      {
+        ((!free && !isCharacter) || isSuccess || isPrepareError || isError) &&
+        <div className={`monospace-font white-text ${styles.mintMessagePadding}`}>
+          {
+            !free && !isCharacter && (
+              <p className={styles.mintContext}>
+                Meta ID is <strong>free to mint</strong> for owners of{' '}
                 <a
-                  href="https://opensea.io/collection/adventure-character"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link monospace-font"
+                  href='https://docs.metaid.quest/overview/identity/eligible-projects'
+                  target='_blank'
+                  rel='noreferrer'
+                  className='link'
                 >
-                  OpenSea.
-                </a>
-              </>
+                  Eligible Projects
+                </a>, including{' '}
+                <Link href='/character'>
+                  <a className='link-bright'>
+                    Character
+                  </a>
+                </Link>. which you can mint for for 0.02 ETH.
+              </p>
             )
           }
-        </p>
-        <p className={`no-margin ${styles.mintError}`}>
-          { (isPrepareError || isError) && (prepareError || error)?.message }
-        </p>
-      </div>
+          {_getSuccessCharacterMessage(isSuccess, isCharacter)}
+          {_getErrorMessage(isPrepareError, prepareError, isError, error)}
+        </div>
+      }
+      
     </div>
   );
 };

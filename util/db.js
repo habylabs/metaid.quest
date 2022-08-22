@@ -89,11 +89,22 @@ function parseDb(data) {
 
 function getRank(address) {
   return {
-    overall: 1,
-    nft: 1,
-    defi: 1,
-    luck: 1,
-    totalPeople: 10
+    overall: {
+      rank: 1,
+      percentile: '99%'
+    },
+    nft: {
+      rank: 1,
+      percentile: '99%'
+    },
+    defi: {
+      rank: 1,
+      percentile: '99%'
+    },
+    luck: {
+      rank: 1,
+      percentile: '99%'
+    },
   }
 }
 
