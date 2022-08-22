@@ -1,4 +1,4 @@
-import { HABY_LABS_ADDRESS, WEBSITE_URL, COPY } from '../../../../util/constants';
+import { HABY_LABS_ADDRESS, WEBSITE_URL, COPY } from '../../../../../util/constants';
 
 export default async function handler(req, res) {
   console.log(process.env);
