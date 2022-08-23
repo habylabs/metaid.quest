@@ -87,7 +87,7 @@ const _getErrorMessage = (isPrepareError, prepareError, isError, error) => {
 const _getSuccessCharacterMessage = (isSuccess, isCharacter, transaction, transactionSuccess) => {
   if (isSuccess) {
     if (transaction.data) {
-      const tokenId = parseInt(transaction.data.logs[0].topics[3], 16)
+      const tokenId = parseInt(transaction.data.logs[0].topics[3], 16).toString()
       transactionSuccess(tokenId)
     }
 

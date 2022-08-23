@@ -96,7 +96,7 @@ function formatRes(tokenId, identity, equipment, stats) {
 }
 
 async function get(tokenId) {
-  const db = await getTokenByTokenId(parseInt(tokenId))
+  const db = await getTokenByTokenId(tokenId)
   const { identity, equipment, stats } = parseDb(db)
   return formatRes(tokenId, identity, equipment.items, stats)
 }
