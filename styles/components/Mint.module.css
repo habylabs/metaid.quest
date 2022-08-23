@@ -26,6 +26,7 @@
 .mintError {
   font-size: 1em;
   color: #FA5853;
+  overflow-wrap: anywhere;
 }
 
 .mintPriceText {

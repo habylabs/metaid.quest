@@ -19,7 +19,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/global.css';
 
 const { chains, provider } = configureChains(
-  [chain.goerli],
+  [chain.goerli], // Update back to mainnet
   [
     alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
     publicProvider()

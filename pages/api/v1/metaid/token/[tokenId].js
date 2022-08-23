@@ -89,7 +89,7 @@ function formatRes(tokenId, identity, equipment, stats) {
       },
       {
         "trait_type": "Bonus Level",
-        "value": stats.bonusLevel
+        "value": stats.luck
       },
     ]
   }

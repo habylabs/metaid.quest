@@ -42,13 +42,23 @@ const ProfilePage = () => {
   const dbRes = useSWR(`/api/v1/metaid/address/${address}`, fetcher)
 
   const saveData = async (data) => {
-    const { pfp, bonusChar, equipment, equipmentItems, stats } = data
+    const { tokenId, pfp, bonusChar, equipment, equipmentItems, stats } = data
+
+    const noPfp = {
+      contract: null,
+      guild: null,
+      id: null,
+      image: null,
+      race: null,
+      role: null,
+      element: null,
+    }
 
     const finalData = {
-      tokenId: 1,
+      tokenId: tokenId.toString(),
       identity: {
         name: ensName,
-        pfp,
+        pfp: (pfp.contract ? pfp : noPfp),
         character: bonusChar,
       },
       equipment: {
@@ -64,6 +74,8 @@ const ProfilePage = () => {
     );
     console.log(json)
   }
+
+  console.log(dbRes.data)
 
   return (
     <>

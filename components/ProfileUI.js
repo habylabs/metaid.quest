@@ -49,7 +49,7 @@ const OnboardingSteps = ({ isMinted, isOnboardingDone, onboardingStep }) => {
 }
 
 const _getEquipmentItems = (pfp, equipment, lootEquipment) => {
-  if (equipment) {
+  if (equipment && equipment.address) {
     return {
       weapon: lootEquipment[0],
       chestArmor: lootEquipment[1],
@@ -166,7 +166,9 @@ const Cta = ({
   handleOnboardingStep,
   equipmentItems,
   stats,
-  saveData
+  saveData,
+  handleMetaIdMint,
+  handleCharacterMint,
 }) => {
   const data = {
     pfp,
@@ -193,11 +195,11 @@ const Cta = ({
         return (
           <div>
             <Mint
-              // isDisabled
               free={hasFreeMint}
               identityNftOptions={identityNftOptions}
               characterNftOptions={characterNftOptions}
               equipmentNftOptions={equipmentNftOptions}
+              transactionSuccess={(tokenId) => handleMetaIdMint(tokenId, data)}
             />
           </div>
         )
@@ -235,7 +237,10 @@ const Cta = ({
               </div>
             </div>
             <div className='row justify-center'>
-              <Mint isCharacter />
+              <Mint
+                isCharacter
+                transactionSuccess={(tokenId) => handleCharacterMint(tokenId, data)}
+              />
             </div>
           </div>
         )
@@ -337,12 +342,12 @@ const ProfileUI = ({
   stats,
   rank,
   isMinted,
-  handleIsMinted,
   isOnboardingDone,
-  handleOnboardingDone,
   onboardingStep,
   handleOnboardingStep,
-  saveData
+  saveData,
+  handleMetaIdMint,
+  handleCharacterMint
 }) => {
   // There are effectively 3 sections on the Profile page
   // 1. Main text
@@ -404,6 +409,8 @@ const ProfileUI = ({
           equipmentItems={equipmentItems}
           stats={stats}
           saveData={saveData}
+          handleMetaIdMint={handleMetaIdMint}
+          handleCharacterMint={handleCharacterMint}
         />
       </div>
       

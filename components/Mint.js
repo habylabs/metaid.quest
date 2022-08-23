@@ -75,7 +75,7 @@ const _getPrepareContractConfig = (
 const _getErrorMessage = (isPrepareError, prepareError, isError, error) => {
   if (isPrepareError || isError) {
     return (
-      <p className={`no-margin ${styles.mintError}`}>
+      <p className={`no-margin side-padding ${styles.mintError}`}>
         {(prepareError || error)?.message}
       </p>
     )
@@ -84,28 +84,29 @@ const _getErrorMessage = (isPrepareError, prepareError, isError, error) => {
   return null
 }
 
-const _getSuccessCharacterMessage = (isSuccess, isCharacter) => (
-  isSuccess && isCharacter &&
-  <p className={`no-margin ${styles.mintSuccess}`}>
-    Successfully minted a Character! Check it out on 
-    <a
-      href="https://opensea.io/collection/adventure-character"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="link monospace-font"
-    >
-      OpenSea.
-    </a>
-  </p>
-)
+const _getSuccessCharacterMessage = (isSuccess, isCharacter, transaction, transactionSuccess) => {
+  if (isSuccess) {
+    if (transaction.data) {
+      const tokenId = parseInt(transaction.data.logs[0].topics[3], 16)
+      transactionSuccess(tokenId)
+    }
+
+    return (
+      <p className={`no-margin ${styles.mintSuccess}`}>
+        You successfully minted a {isCharacter ? 'Character' : 'Meta ID'}! 
+      </p>
+    )
+  }  
+}
 
 const Mint = ({
   isFree = false,
   isCharacter = false,
   isDisabled = false,
-  identityNftOptions,
-  characterNftOptions,
-  equipmentNftOptions
+  identityNftOptions = [],
+  characterNftOptions = [],
+  equipmentNftOptions = [],
+  transactionSuccess = (n = 'Success') => {console.log(n)}
 }) => {
   const { address } = useAccount()
   const {
@@ -122,11 +123,16 @@ const Mint = ({
       equipmentNftOptions
     )
   )
-  const { data, error, isError, write } = useContractWrite(config)
+  const contractWrite = useContractWrite(config)
+  const { data, error, isError, write } = contractWrite
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const transaction = useWaitForTransaction({
     hash: data?.hash,
   })
+  const { isLoading, isSuccess } = transaction
+
+  // if error message is cannot estimate gas; then it's not a valid error
+  // need to build that logic in
 
   return (
     <div className="column align-center justify-center">
@@ -147,7 +153,7 @@ const Mint = ({
       </div>
       {
         ((!isFree && !isCharacter) || isSuccess || isPrepareError || isError) &&
-        <div className={`monospace-font white-text ${styles.mintMessagePadding}`}>
+        <div className={`column monospace-font white-text ${styles.mintMessagePadding}`}>
           {
             !isFree && !isCharacter && (
               <p className={styles.mintContext}>
@@ -164,12 +170,12 @@ const Mint = ({
                   <a className='link-bright'>
                     Character
                   </a>
-                </Link>. which you can mint for for 0.04 ETH.
+                </Link>, which you can mint for for 0.02 ETH.
               </p>
             )
           }
-          {_getSuccessCharacterMessage(isSuccess, isCharacter)}
           {_getErrorMessage(isPrepareError, prepareError, isError, error)}
+          {_getSuccessCharacterMessage(isSuccess, isCharacter, transaction, transactionSuccess)}
         </div>
       }
       

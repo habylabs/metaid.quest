@@ -15,7 +15,7 @@ import {
   HYPERLOOT_CONTRACT_ADDRESS,
   LOOT_EXPLORERS_CONTRACT_ADDRESS,
   LOOT_CONTRACT_ADDRESS,
-  MLOOT_CONTRACT_ADDRESS
+  MLOOT_CONTRACT_ADDRESS,
 } from '../util/constants'
 
 import LootJson from '../contracts/Loot.json'
@@ -42,7 +42,11 @@ const _getPfp = (pfp, identityNftOptions) => {
 }
 
 const _getEquipmentContractInterface = (equipment) => {
-  if (equipment && equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS) {
+  if (
+    equipment &&
+    equipment.address &&
+    equipment.address.toLowerCase() === LOOT_CONTRACT_ADDRESS
+  ) {
     return {
       addressOrName: LOOT_CONTRACT_ADDRESS,
       contractInterface: LootJson.abi
@@ -55,7 +59,9 @@ const _getEquipmentContractInterface = (equipment) => {
   }
 }
 
-const _getEquipmentTokenId = (equipment) => (equipment ? parseInt(equipment.id) : 0)
+const _getEquipmentTokenId = (equipment) => (
+  (equipment && equipment.id) ? parseInt(equipment.id) : 0
+)
 
 const Profile = ({
   dbData,
@@ -65,6 +71,7 @@ const Profile = ({
   equipmentNftOptions,
   saveData
 }) => {
+  const [ tokenId, setTokenId ] = useState(dbData.tokenId)
   const [ isMinted, setIsMinted ] = useState(dbData.tokenId ? true : false)
   const [ isOnboardingDone, setIsOnboardingDone ] = useState(dbData.tokenId ? true : false)
   const [ onboardingStep, setOnboardingStep ] = useState(1)
@@ -72,23 +79,39 @@ const Profile = ({
   const [ bonusChar, setBonusChar ] = useState(dbData.identity.character)
   const [ equipment, setEquipment ] = useState(dbData.equipment.contract)
 
-  const handleIsMinted = () => {
-    if (!isMinted) {
-      setIsOnboardingDone(false)
-      setOnboardingStep(2)
+  const handleMetaIdMint = (metaIdTokenId, data) => {
+    const dbData = {
+      tokenId: metaIdTokenId,
+      ...data
+    }
+    setTokenId(metaIdTokenId)
+    setIsMinted(true)
+    setOnboardingStep(2)
+    saveData(dbData)
+  }
+  
+  const handleCharacterMint = (characterTokenId, data) => {
+    const newBonusChar = {
+      id: characterTokenId,
+      race: null,
+      role: null,
+      element: null
     }
 
-    setIsMinted(!isMinted)
-  }
+    const dbData = {
+      tokenId,
+      ...data,
+      bonusChar: newBonusChar
+    }
 
-  const handleOnboardingDone = () => {
-    setIsOnboardingDone(!isOnboardingDone)
-    setOnboardingStep(1)
+    setBonusChar(newBonusChar)
+    setOnboardingStep(4)
+    saveData(dbData)
   }
 
   const handleOnboardingStep = () => {
-    // The user just set their PFP
-    if (onboardingStep === 2) {
+    // The user just minted their Meta ID
+    if (onboardingStep === 2) { // The user just set their PFP
       // If the user has a Character NFT, skip asking them to mint one
       if (characterNftOptions.length > 0) {
         setOnboardingStep(4)
@@ -145,7 +168,7 @@ const Profile = ({
     } else {
       setPfp({
         contract: null,
-        id: '???',
+        id: null,
         guild: null,
         image: null,
         race: null,
@@ -280,12 +303,12 @@ const Profile = ({
         stats={dbData.stats}
         rank={dbData.rank}
         isMinted={isMinted}
-        handleIsMinted={handleIsMinted}
         isOnboardingDone={isOnboardingDone}
-        handleOnboardingDone={handleOnboardingDone}
         onboardingStep={onboardingStep}
         handleOnboardingStep={handleOnboardingStep}
-        saveData={saveData}
+        saveData={(data) => saveData({ tokenId, ...data })}
+        handleMetaIdMint={handleMetaIdMint}
+        handleCharacterMint={handleCharacterMint}
       />
     </div>
   )
