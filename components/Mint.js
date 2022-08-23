@@ -1,16 +1,30 @@
 import { 
+  useAccount,
   usePrepareContractWrite,
   useContractWrite, 
   useWaitForTransaction,
 } from 'wagmi'
 import { ethers } from 'ethers';
-import { CHARACTER_CONTRACT_ADDRESS } from '../util/constants';
-import { Button } from '../components'
-import styles from '../styles/components/Mint.module.css'
-import CharacterJson from '../contracts/Character.json'
 import Link from 'next/link';
 
-const _getPrepareContractConfig = (isCharacter) => {
+import { Button } from '../components'
+import {
+  CHARACTER_CONTRACT_ADDRESS,
+  META_ID_CONTRACT_ADDRESS
+} from '../util/constants';
+import CharacterJson from '../contracts/Character.json'
+import MetaIdJson from '../contracts/MetaId.json'
+
+import styles from '../styles/components/Mint.module.css'
+
+const _getPrepareContractConfig = (
+  isCharacter,
+  isFree,
+  address,
+  identityNftOptions,
+  characterNftOptions,
+  equipmentNftOptions,
+) => {
   if (isCharacter) {
     return {
       addressOrName: CHARACTER_CONTRACT_ADDRESS,
@@ -23,14 +37,37 @@ const _getPrepareContractConfig = (isCharacter) => {
     }
   }
 
+  if (isFree) {
+    let contract
+    let tokenId
+
+    if (characterNftOptions.length > 0) {
+      contract = CHARACTER_CONTRACT_ADDRESS
+      tokenId = characterNftOptions[0].tokenId
+    } else if (equipmentNftOptions.length > 0) {
+      contract = equipmentNftOptions[0].contract
+      tokenId = equipmentNftOptions[0].tokenId
+    } else {
+      contract = identityNftOptions[0].contract
+      tokenId = identityNftOptions[0].tokenId
+    }
+
+    return {
+      addressOrName: META_ID_CONTRACT_ADDRESS,
+      contractInterface: MetaIdJson.abi,
+      functionName: 'mintFree',
+      args: [address, contract, tokenId],
+    }
+  }
+
   // values here need to be updated for the Meta ID contract
   return {
-    addressOrName: CHARACTER_CONTRACT_ADDRESS,
-    contractInterface: CharacterJson.abi,
-    functionName: 'mintPublic',
-    args: [1],
+    addressOrName: META_ID_CONTRACT_ADDRESS,
+    contractInterface: MetaIdJson.abi,
+    functionName: 'mint',
+    args: [address],
     overrides: {
-      value: ethers.utils.parseEther('0.04'),
+      value: ethers.utils.parseEther('0.02'),
     },
   }
 }
@@ -62,12 +99,29 @@ const _getSuccessCharacterMessage = (isSuccess, isCharacter) => (
   </p>
 )
 
-const Mint = ({ free, isCharacter, isDisabled = false }) => {
+const Mint = ({
+  isFree = false,
+  isCharacter = false,
+  isDisabled = false,
+  identityNftOptions,
+  characterNftOptions,
+  equipmentNftOptions
+}) => {
+  const { address } = useAccount()
   const {
     config,
     error: prepareError,
     isError: isPrepareError,
-  } = usePrepareContractWrite(_getPrepareContractConfig(isCharacter))
+  } = usePrepareContractWrite(
+    _getPrepareContractConfig(
+      isCharacter,
+      isFree,
+      address,
+      identityNftOptions,
+      characterNftOptions,
+      equipmentNftOptions
+    )
+  )
   const { data, error, isError, write } = useContractWrite(config)
 
   const { isLoading, isSuccess } = useWaitForTransaction({
@@ -77,7 +131,7 @@ const Mint = ({ free, isCharacter, isDisabled = false }) => {
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        {`${(!free || isCharacter) ? '0.04 ETH' : 'Free'} to Mint`}
+        {`${(!isFree || isCharacter) ? '0.02 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
         <Button 
@@ -92,10 +146,10 @@ const Mint = ({ free, isCharacter, isDisabled = false }) => {
         </Button>
       </div>
       {
-        ((!free && !isCharacter) || isSuccess || isPrepareError || isError) &&
+        ((!isFree && !isCharacter) || isSuccess || isPrepareError || isError) &&
         <div className={`monospace-font white-text ${styles.mintMessagePadding}`}>
           {
-            !free && !isCharacter && (
+            !isFree && !isCharacter && (
               <p className={styles.mintContext}>
                 Meta ID is coming soon and will be <strong>free to mint</strong> for owners of{' '}
                 <a

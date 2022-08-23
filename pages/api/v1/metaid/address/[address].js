@@ -55,7 +55,7 @@ const get = async (address) => {
   const identityNftOptions = _getIdentityNftOptions(nftOptions)
 
   const freeMintNftOptions =  _.filter(
-    identityNftOptions,
+    nftOptions,
     (nft) => (
       _.indexOf(FREE_MINT_CONTRACTS, nft.contract) > -1
     )

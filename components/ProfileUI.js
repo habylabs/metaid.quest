@@ -192,7 +192,13 @@ const Cta = ({
         // it associated in the DB correctly from the getgo
         return (
           <div>
-            <Mint isDisabled free={hasFreeMint}/>
+            <Mint
+              // isDisabled
+              free={hasFreeMint}
+              identityNftOptions={identityNftOptions}
+              characterNftOptions={characterNftOptions}
+              equipmentNftOptions={equipmentNftOptions}
+            />
           </div>
         )
       case 2:
