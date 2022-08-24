@@ -137,7 +137,7 @@ const Mint = ({
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        {`${isCharacter ? '0.04 ETH' : !isFree ? '0.02 ETH' : 'Free'} to Mint`}. Coming Soon!
+        {`${isCharacter ? '0.04 ETH' : !isFree ? '0.02 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
         <Button 
@@ -157,7 +157,7 @@ const Mint = ({
           {
             !isFree && !isCharacter && (
               <p className={styles.mintContext}>
-                Meta ID is coming soon and will be <strong>free to mint</strong> for owners of{' '}
+                Meta ID will be <strong>free to mint</strong> for owners of{' '}
                 <a
                   href='https://docs.metaid.quest/overview/identity/eligible-projects'
                   target='_blank'
