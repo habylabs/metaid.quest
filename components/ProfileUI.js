@@ -195,7 +195,7 @@ const Cta = ({
         return (
           <div>
             <Mint
-              free={hasFreeMint}
+              isFree={hasFreeMint}
               identityNftOptions={identityNftOptions}
               characterNftOptions={characterNftOptions}
               equipmentNftOptions={equipmentNftOptions}
