@@ -32,7 +32,7 @@ const _getPrepareContractConfig = (
       functionName: 'mintPublic',
       args: [1],
       overrides: {
-        value: ethers.utils.parseEther('0.04'),
+        value: ethers.utils.parseEther('0.02'),
       },
     }
   }
@@ -137,7 +137,7 @@ const Mint = ({
   return (
     <div className="column align-center justify-center">
       <p className={`monospace-font ${styles.mintPriceText}`}>
-        {`${isCharacter ? '0.04 ETH' : !isFree ? '0.02 ETH' : 'Free'} to Mint`}
+        {`${(isCharacter || !isFree) ? '0.02 ETH' : 'Free'} to Mint`}
       </p>
       <div className="row align-center justify-center">
         <Button 
@@ -170,7 +170,7 @@ const Mint = ({
                   <a className='link-bright'>
                     Character
                   </a>
-                </Link>, which you can mint for for 0.04 ETH.
+                </Link>, which you can mint for for 0.02 ETH.
               </p>
             )
           }
